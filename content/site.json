@@ -2,6 +2,12 @@
   "brand": {
     "tagline": "Personas siendo posibilidad"
   },
+  "navigation": {
+    "conoceme": "Conoceme",
+    "mi_gente": "Mi equipo",
+    "lo_que_hago": "Lo que hago",
+    "hablemos": "Hablemos ↗"
+  },
   "hero": {
     "eyebrow": "Hola, qué bueno que llegaste!",
     "title_before": "¿Y si lo mejor de lo que viene ",
@@ -87,11 +93,5 @@
     "second_text": "Sea lo que sea, me gusta más una pregunta sincera que un formulario interminable. Contame un poquito sobre vos.",
     "button": "Hablemos, Hernán →",
     "whatsapp": "+542920596695"
-  },
-  "navigation": {
-    "conoceme": "Conoceme",
-    "mi_gente": "Mi gente",
-    "lo_que_hago": "Lo que hago",
-    "hablemos": "Hablemos ↗"
   }
 }
