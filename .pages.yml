@@ -1,0 +1,297 @@
+media:
+  - name: images
+    label: Fotografías
+    input: media/images
+    output: /media/images
+    categories: [image]
+  - name: videos
+    label: Videos
+    input: media/videos
+    output: /media/videos
+    categories: [video]
+content:
+  - name: landing
+    label: Editar landing NETWORKER 3.0
+    type: file
+    path: content/site.json
+    format: json
+    operations:
+      delete: false
+      rename: false
+    fields:
+      - name: brand
+        label: "00 · Identidad"
+        type: object
+        fields:
+          - name: tagline
+            label: "Lema debajo del nombre"
+            type: string
+      - name: hero
+        label: "01 · Portada"
+        type: object
+        fields:
+          - name: eyebrow
+            label: "Texto superior"
+            type: string
+          - name: title_before
+            label: "Título (negro)"
+            type: text
+          - name: title_accent
+            label: "Título (naranja)"
+            type: text
+          - name: lead
+            label: "Primer párrafo"
+            type: text
+          - name: about
+            label: "Presentación personal"
+            type: text
+          - name: primary_button
+            label: "Botón principal"
+            type: string
+          - name: secondary_button
+            label: "Botón secundario"
+            type: string
+          - name: micro
+            label: "Texto de tranquilidad"
+            type: text
+          - name: photo
+            label: "Foto de Hernán"
+            type: image
+            options:
+              media: images
+          - name: photo_note
+            label: "Frase sobre la foto"
+            type: string
+      - name: paths
+        label: "02 · Opciones del visitante"
+        type: object
+        fields:
+          - name: eyebrow
+            label: "Texto superior"
+            type: string
+          - name: title_before
+            label: "Título (negro)"
+            type: string
+          - name: title_accent
+            label: "Título (naranja)"
+            type: string
+          - name: intro
+            label: "Texto introductorio"
+            type: text
+          - name: first_title
+            label: "Opción 1 - título"
+            type: string
+          - name: first_text
+            label: "Opción 1 - descripción"
+            type: text
+          - name: second_title
+            label: "Opción 2 - título"
+            type: string
+          - name: second_text
+            label: "Opción 2 - descripción"
+            type: text
+          - name: third_title
+            label: "Opción 3 - título"
+            type: string
+          - name: third_text
+            label: "Opción 3 - descripción"
+            type: text
+      - name: about
+        label: "03 · Acerca de Hernán"
+        type: object
+        fields:
+          - name: eyebrow
+            label: "Texto superior"
+            type: string
+          - name: title_before
+            label: "Título (negro)"
+            type: string
+          - name: title_accent
+            label: "Título (naranja)"
+            type: string
+          - name: first_text
+            label: "Primer párrafo"
+            type: text
+          - name: second_text
+            label: "Segundo párrafo"
+            type: text
+          - name: button
+            label: "Botón"
+            type: string
+          - name: video
+            label: "Video de presentación MP4"
+            type: file
+            options:
+              media: videos
+          - name: quote
+            label: "Cita destacada"
+            type: text
+          - name: bottom_text
+            label: "Texto bajo la cita"
+            type: text
+      - name: reflection
+        label: "04 · Contenido de valor"
+        type: object
+        fields:
+          - name: eyebrow
+            label: "Texto superior"
+            type: string
+          - name: title_before
+            label: "Título (blanco)"
+            type: string
+          - name: title_accent
+            label: "Título (naranja)"
+            type: string
+          - name: introduction
+            label: "Introducción"
+            type: text
+          - name: first_title
+            label: "Pregunta 1"
+            type: string
+          - name: first_text
+            label: "Pregunta 1 - explicación"
+            type: text
+          - name: second_title
+            label: "Pregunta 2"
+            type: string
+          - name: second_text
+            label: "Pregunta 2 - explicación"
+            type: text
+          - name: third_title
+            label: "Pregunta 3"
+            type: string
+          - name: third_text
+            label: "Pregunta 3 - explicación"
+            type: text
+          - name: conclusion
+            label: "Conclusión"
+            type: text
+      - name: business
+        label: "05 · El negocio"
+        type: object
+        fields:
+          - name: eyebrow
+            label: "Texto superior"
+            type: string
+          - name: title_before
+            label: "Título (negro)"
+            type: text
+          - name: title_accent
+            label: "Título (naranja)"
+            type: string
+          - name: first_text
+            label: "Primer párrafo"
+            type: text
+          - name: second_text
+            label: "Segundo párrafo"
+            type: text
+          - name: primary_button
+            label: "Botón principal"
+            type: string
+          - name: secondary_button
+            label: "Botón secundario"
+            type: string
+          - name: disclosure
+            label: "Advertencia de resultados (mantener veraz)"
+            type: text
+          - name: benefit1
+            label: "Beneficio 1 - título"
+            type: string
+          - name: benefit1_text
+            label: "Beneficio 1 - explicación"
+            type: text
+          - name: benefit2
+            label: "Beneficio 2 - título"
+            type: string
+          - name: benefit2_text
+            label: "Beneficio 2 - explicación"
+            type: text
+          - name: benefit3
+            label: "Beneficio 3 - título"
+            type: string
+          - name: benefit3_text
+            label: "Beneficio 3 - explicación"
+            type: text
+          - name: benefit4
+            label: "Beneficio 4 - título"
+            type: string
+          - name: benefit4_text
+            label: "Beneficio 4 - explicación"
+            type: text
+      - name: stories
+        label: "06 · Historias y testimonios"
+        type: object
+        fields:
+          - name: eyebrow
+            label: "Texto superior"
+            type: string
+          - name: title_before
+            label: "Título (negro)"
+            type: string
+          - name: title_accent
+            label: "Título (naranja)"
+            type: string
+          - name: intro
+            label: "Introducción"
+            type: text
+          - name: first_title
+            label: "Historia 1 - título"
+            type: string
+          - name: first_text
+            label: "Historia 1 - descripción"
+            type: text
+          - name: first_photo
+            label: "Historia 1 - foto autorizada"
+            type: image
+            options:
+              media: images
+          - name: second_title
+            label: "Historia 2 - título"
+            type: string
+          - name: second_text
+            label: "Historia 2 - descripción"
+            type: text
+          - name: second_photo
+            label: "Historia 2 - foto autorizada"
+            type: image
+            options:
+              media: images
+          - name: third_title
+            label: "Historia 3 - título"
+            type: string
+          - name: third_text
+            label: "Historia 3 - descripción"
+            type: text
+          - name: third_photo
+            label: "Historia 3 - foto autorizada"
+            type: image
+            options:
+              media: images
+          - name: button
+            label: "Botón"
+            type: string
+      - name: contact
+        label: "07 · Contacto y WhatsApp"
+        type: object
+        fields:
+          - name: eyebrow
+            label: "Texto superior"
+            type: string
+          - name: title_before
+            label: "Título (negro)"
+            type: string
+          - name: title_accent
+            label: "Título (naranja)"
+            type: string
+          - name: first_text
+            label: "Primer párrafo"
+            type: text
+          - name: second_text
+            label: "Segundo párrafo"
+            type: text
+          - name: button
+            label: "Botón de formulario"
+            type: string
+          - name: whatsapp
+            label: "Número WhatsApp (549 + código + número, sin signos)"
+            type: string
