@@ -1,6 +1,5 @@
-/* Publicable: colocar SOLO URL + publishable/anon key.
-   NO introducir service_role, sb_secret, contraseñas ni tokens privados aquí. */
+/* Parámetros públicos. No incluir claves secretas ni service_role. */
 window.NETWORKER_CRM_CONFIG = {
-  url: "",
-  publishableKey: ""
+  url: "https://uhdkmgljczeuxzrimfaf.supabase.co",
+  publishableKey: "sb_publishable_yNv3mtKgUqL6h-51n9QAgg_KLhmy1Ur"
 };
