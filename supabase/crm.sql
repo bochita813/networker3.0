@@ -31,17 +31,11 @@ alter table public.crm_leads enable row level security;
 create index if not exists crm_leads_stage_idx on public.crm_leads(stage);
 create index if not exists crm_leads_followup_idx on public.crm_leads(follow_up);
 
--- Visitantes: solo alta voluntaria. No lectura, cambios ni borrado.
+-- Acceso público deshabilitado hasta incorporar validación del formulario
+-- y protección antispam. CRM solo con acceso autenticado.
 revoke all on public.crm_leads from anon, authenticated;
-grant insert (name,phone,email,source,interest,note,consent) on public.crm_leads to anon;
 grant select, insert, update, delete on public.crm_leads to authenticated;
 drop policy if exists "Visitante crea lead" on public.crm_leads;
-create policy "Visitante crea lead" on public.crm_leads
-  for insert to anon with check (
-    consent = true and source = 'Landing' and stage = 'Nuevo'
-    and priority = 'Media' and follow_up is null and last_contact is null
-    and char_length(note) <= 350
-  );
 
 -- Los contactos se leen y gestionan ÚNICAMENTE por usuarios autorizados.
 drop policy if exists "Administrar CRM" on public.crm_leads;
