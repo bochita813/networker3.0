@@ -3,7 +3,7 @@
     "tagline": "Personas. Negocios. Nuevas posibilidades."
   },
   "hero": {
-    "eyebrow": "Hola, qué bueno que llegaste",
+    "eyebrow": "Hola, qué bueno que llegaste!",
     "title_before": "¿Y si lo mejor de lo que viene ",
     "title_accent": "todavía no lo conocés?",
     "lead": "A veces no queremos cambiar nuestra vida entera. Solo necesitamos descubrir que todavía hay cosas que nos pueden entusiasmar.",
@@ -11,7 +11,6 @@
     "primary_button": "Contame qué estás buscando →",
     "secondary_button": "Conoceme un poquito",
     "micro": "Sin presiones. Sin promesas mágicas. Una conversación entre personas.",
-    "photo": "",
     "photo_note": "Un café y una buena charla."
   },
   "paths": {
@@ -33,7 +32,6 @@
     "first_text": "Soy de esos que pueden quedarse conversando horas con alguien que recién conocen. Me interesan las personas que tienen ganas de hacer cosas, las que están empezando y también las que alguna vez tuvieron que volver a empezar.",
     "second_text": "No necesito que pienses como yo. Ni convencerte de nada. Me gusta compartir lo que sé, escuchar lo que te pasa y ver si podemos aportarnos algo.",
     "button": "Me gustaría charlar con vos →",
-    "video": "",
     "quote": "«Hay personas que llegan a tu vida y te muestran posibilidades que antes ni estabas mirando».",
     "bottom_text": "Eso es lo que más disfruto de esta actividad: las conversaciones que no habría tenido de otra manera."
   },
@@ -75,13 +73,10 @@
     "intro": "Me gustaría que conozcas a personas reales, cómo llegaron, qué aprendieron, qué les costó y cómo viven esta experiencia. No solamente sus logros.",
     "first_title": "Alguien que empezó desde cero",
     "first_text": "Acá irá su historia en primera persona, con nombre y autorización.",
-    "first_photo": "",
     "second_title": "Alguien que ya tenía experiencia",
     "second_text": "Su mirada sobre el sistema, los desafíos y el trabajo cotidiano.",
-    "second_photo": "",
     "third_title": "Alguien que habla del equipo",
     "third_text": "Qué significa sentirse acompañado, sin guiones ni testimonios inventados.",
-    "third_photo": "",
     "button": "Quiero hacerte una pregunta →"
   },
   "contact": {
@@ -90,7 +85,6 @@
     "title_accent": "qué te trajo.",
     "first_text": "Tal vez estás buscando un negocio. Tal vez necesitás una segunda actividad. O simplemente conectaste con algo de lo que dije.",
     "second_text": "Sea lo que sea, me gusta más una pregunta sincera que un formulario interminable. Contame un poquito sobre vos.",
-    "button": "Hablemos, Hernán →",
-    "whatsapp": ""
+    "button": "Hablemos, Hernán →"
   }
 }
