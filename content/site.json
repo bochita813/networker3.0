@@ -1,0 +1,96 @@
+{
+  "brand": {
+    "tagline": "Personas. Negocios. Nuevas posibilidades."
+  },
+  "hero": {
+    "eyebrow": "Hola, qué bueno que llegaste",
+    "title_before": "¿Y si lo mejor de lo que viene ",
+    "title_accent": "todavía no lo conocés?",
+    "lead": "A veces no queremos cambiar nuestra vida entera. Solo necesitamos descubrir que todavía hay cosas que nos pueden entusiasmar.",
+    "about": "Soy Hernán. Me gusta conocer gente. Y también hacer negocios. Pero, sobre todo, me gusta escuchar historias, compartir lo que aprendí y descubrir lo que podemos construir cuando nos cruzamos con las personas adecuadas.",
+    "primary_button": "Contame qué estás buscando →",
+    "secondary_button": "Conoceme un poquito",
+    "micro": "Sin presiones. Sin promesas mágicas. Una conversación entre personas.",
+    "photo": "",
+    "photo_note": "Un café y una buena charla."
+  },
+  "paths": {
+    "eyebrow": "Antes de hablar de mí, hablemos de vos",
+    "title_before": "¿Qué te gustaría que pasara ",
+    "title_accent": "en esta etapa de tu vida?",
+    "intro": "No llegamos todos al mismo lugar ni estamos buscando lo mismo. Elegí la situación que más se parece a la tuya. Lo importante es que te lleves algo útil de esta visita.",
+    "first_title": "Estoy bien, pero tengo curiosidad.",
+    "first_text": "Ya tengo mi trabajo o profesión. No quiero tirar todo por la borda; me gustaría explorar qué más podría construir.",
+    "second_title": "Ya emprendí. Quiero evolucionar.",
+    "second_text": "Conozco el mundo comercial. Busco personas, ideas y una forma más organizada de trabajar.",
+    "third_title": "Estoy listo para evaluar algo concreto.",
+    "third_text": "Quiero saber qué se vende, cuánto cuesta, qué tendría que hacer y cómo se empieza."
+  },
+  "about": {
+    "eyebrow": "Un poco de mí, de verdad",
+    "title_before": "Me gustan los negocios. ",
+    "title_accent": "Pero más me gusta la gente.",
+    "first_text": "Soy de esos que pueden quedarse conversando horas con alguien que recién conocen. Me interesan las personas que tienen ganas de hacer cosas, las que están empezando y también las que alguna vez tuvieron que volver a empezar.",
+    "second_text": "No necesito que pienses como yo. Ni convencerte de nada. Me gusta compartir lo que sé, escuchar lo que te pasa y ver si podemos aportarnos algo.",
+    "button": "Me gustaría charlar con vos →",
+    "video": "",
+    "quote": "«Hay personas que llegan a tu vida y te muestran posibilidades que antes ni estabas mirando».",
+    "bottom_text": "Eso es lo que más disfruto de esta actividad: las conversaciones que no habría tenido de otra manera."
+  },
+  "reflection": {
+    "eyebrow": "Una idea para llevarte hoy",
+    "title_before": "No todas las oportunidades ",
+    "title_accent": "son para todas las personas.",
+    "introduction": "Antes de decirle que sí a un negocio —al mío o a cualquier otro— hay tres preguntas que te merecés responder con tranquilidad.",
+    "first_title": "¿Qué querés sumar a tu vida?",
+    "first_text": "¿Más relaciones? ¿Un desafío? ¿Aprender a vender? ¿Una actividad adicional?",
+    "second_title": "¿Qué estás dispuesto a poner?",
+    "second_text": "No solo dinero. Tiempo, constancia, energía y ganas reales de aprender.",
+    "third_title": "¿Con quién querés construirlo?",
+    "third_text": "Un buen sistema importa. Las personas con las que lo desarrollás, también.",
+    "conclusion": "Si hoy te llevás estas tres preguntas, nuestra primera conversación ya valió la pena."
+  },
+  "business": {
+    "eyebrow": "Si te interesa saber qué estoy construyendo",
+    "title_before": "No te voy a pedir que creas en una promesa. ",
+    "title_accent": "Te voy a mostrar un sistema.",
+    "first_text": "Desarrollo un negocio comercial independiente con productos de Nu Skin. Trabajo con personas que quieren aprender a desarrollar una actividad de venta, relacionarse con clientes y construir algo propio con acompañamiento.",
+    "second_text": "Si te interesa, te muestro qué comercializamos, cómo organizamos el trabajo, cuáles son los costos y qué podrías hacer durante tus primeros días. Con lo bueno y con lo que exige esfuerzo.",
+    "primary_button": "Quiero conocer el negocio →",
+    "secondary_button": "Primero quiero conocer a tu gente",
+    "disclosure": "Es una actividad independiente; no un empleo ni una promesa de ingresos. Los resultados dependen de múltiples factores y no están garantizados.",
+    "benefit1": "Todo claro desde el principio",
+    "benefit1_text": "Productos, funcionamiento, inversión, posibles gastos y condiciones.",
+    "benefit2": "Un trabajo que podés entender",
+    "benefit2_text": "Rutina, herramientas y actividades comerciales concretas.",
+    "benefit3": "Personas con las que conversar",
+    "benefit3_text": "Acompañamiento, preguntas, aprendizajes y trabajo colaborativo.",
+    "benefit4": "La decisión sigue siendo tuya",
+    "benefit4_text": "Si no encaja con tu situación, también está bien."
+  },
+  "stories": {
+    "eyebrow": "Más allá de lo que yo pueda contarte",
+    "title_before": "Las historias más lindas ",
+    "title_accent": "son las que cuentan sus protagonistas.",
+    "intro": "Me gustaría que conozcas a personas reales, cómo llegaron, qué aprendieron, qué les costó y cómo viven esta experiencia. No solamente sus logros.",
+    "first_title": "Alguien que empezó desde cero",
+    "first_text": "Acá irá su historia en primera persona, con nombre y autorización.",
+    "first_photo": "",
+    "second_title": "Alguien que ya tenía experiencia",
+    "second_text": "Su mirada sobre el sistema, los desafíos y el trabajo cotidiano.",
+    "second_photo": "",
+    "third_title": "Alguien que habla del equipo",
+    "third_text": "Qué significa sentirse acompañado, sin guiones ni testimonios inventados.",
+    "third_photo": "",
+    "button": "Quiero hacerte una pregunta →"
+  },
+  "contact": {
+    "eyebrow": "Si llegaste hasta acá...",
+    "title_before": "Me gustaría saber ",
+    "title_accent": "qué te trajo.",
+    "first_text": "Tal vez estás buscando un negocio. Tal vez necesitás una segunda actividad. O simplemente conectaste con algo de lo que dije.",
+    "second_text": "Sea lo que sea, me gusta más una pregunta sincera que un formulario interminable. Contame un poquito sobre vos.",
+    "button": "Hablemos, Hernán →",
+    "whatsapp": ""
+  }
+}
