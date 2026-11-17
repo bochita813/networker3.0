@@ -43,6 +43,11 @@ document.getElementById('lead-form').addEventListener('submit',e=>{e.preventDefa
     };
     const group=(name)=>data[name]||{};
     const h=group('hero'),p=group('paths'),a=group('about'),v=group('reflection'),b=group('business'),s=group('stories'),c=group('contact');
+    const nav=group('navigation');
+    set('.navlinks a[href="#conoceme"]',nav.conoceme);
+    set('.navlinks a[href="#historias"]',nav.mi_gente);
+    set('.navlinks a[href="#negocio"]',nav.lo_que_hago);
+    set('.navlinks a[href="#contacto"]',nav.hablemos);
     set('.brand .tag',group('brand').tagline);
     set('#inicio .eyebrow',h.eyebrow); pair('#inicio h1',h.title_before,h.title_accent);
     set('#inicio .lead',h.lead);set('#inicio .support',h.about);
