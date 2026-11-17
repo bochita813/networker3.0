@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es-AR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#141414"><title>NETWORKER 3.0 · CRM</title><link rel="stylesheet" href="/crm/styles.css">
+<script src="/crm/config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+</head><body>
+<div class="app">
+<aside class="sidebar"><div><div class="logo">NETWORKER <em>3.0</em></div><div class="brandnote">CRM · HERNÁN BOCCI</div></div>
+<nav aria-label="Secciones del CRM">
+<button class="navbutton active" type="button" data-tab="tablero"><span>▦ </span>▦<span> Tablero</span></button>
+<button class="navbutton" type="button" data-tab="contactos"><span>☷ </span>☷<span> Contactos</span></button>
+<button class="navbutton" type="button" data-tab="seguimientos"><span>◷ </span>◷<span> Seguimientos</span></button>
+</nav><div class="sidebarfooter"><div id="sessionEmail"></div><a href="/">↗ Ver landing pública</a><a href="#" id="logout">Cerrar sesión</a></div>
+</aside>
+<main class="main"><header class="top"><div><div class="eyebrow">TU CENTRO DE OPERACIONES</div><h1 id="pageTitle">Tablero comercial</h1></div><div class="actions">
+<button id="refresh" class="btn" type="button">↻ Actualizar</button><button id="export" class="btn" type="button">↓ Exportar CSV</button><button id="add" class="btn primary" type="button">＋ Nuevo contacto</button>
+</div></header><div id="notice" class="message" hidden></div>
+<section class="stats" aria-label="Indicadores">
+<div class="stat"><small>Total de contactos</small><b id="statTotal">0</b><span>Ingresaron al CRM</span></div>
+<div class="stat"><small>En gestión</small><b id="statActive">0</b><span>Conversaciones activas</span></div>
+<div class="stat"><small>Seguimiento pendiente</small><b id="statDue">0</b><span>Hoy o vencidos</span></div>
+<div class="stat"><small>Socios incorporados</small><b id="statWon">0</b><span>Etapa final</span></div>
+</section>
+<div class="filters"><input type="search" id="search" aria-label="Buscar contactos" placeholder="Buscar nombre, WhatsApp o notas…">
+<select id="filterSource" aria-label="Origen"><option value="">Todos los orígenes</option><option>Landing</option><option>Instagram</option><option>LinkedIn</option><option>Facebook</option><option>Referido</option><option>Otro</option></select>
+<select id="filterPriority" aria-label="Prioridad"><option value="">Todas las prioridades</option><option>Alta</option><option>Media</option><option>Baja</option></select></div>
+<h2 class="sectionhead" id="sectionTitle">Embudo de reclutamiento</h2>
+<div class="board" id="board"></div><div class="panel" id="tablePanel" hidden></div><div class="panel" id="followPanel" hidden></div>
+</main></div>
+<div class="overlay open" id="loginOverlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle"><div class="modal login">
+<div class="logo">NETWORKER <em>3.0</em></div><h2 id="loginTitle" style="margin-top:24px">Ingresá a tu CRM</h2>
+<p id="loginIntro">Ingresá con el usuario del CRM. Es independiente de tu cuenta de GitHub, ChatGPT y Supabase.</p>
+<form id="loginForm"><label for="loginEmail">Correo electrónico</label><input type="email" id="loginEmail" autocomplete="username" required>
+<label for="loginPassword">Contraseña</label><input type="password" id="loginPassword" autocomplete="current-password" minlength="8" required>
+<button class="btn primary" id="loginAction" type="submit">Ingresar</button></form>
+<button class="btn" type="button" id="switchAuth">Crear usuario por primera vez</button>
+<div class="error" id="loginError" role="status"></div><p>Tu contraseña es privada. No la envíes por chat.</p>
+</div></div>
+<div class="overlay" id="editorOverlay" role="dialog" aria-modal="true" aria-labelledby="editorTitle"><div class="modal">
+<div class="modaltop"><div><h2 id="editorTitle">Nuevo contacto</h2><p>Registrá la conversación y el próximo paso.</p></div><button class="close" type="button" id="closeEditor" aria-label="Cerrar">×</button></div>
+<form id="leadForm"><input id="leadId" type="hidden"><div class="formgrid">
+<label class="field">Nombre *<input id="name" required minlength="2" maxlength="120"></label>
+<label class="field">WhatsApp *<input id="phone" type="tel" required placeholder="549291xxxxxxx"></label>
+<label class="field">Origen<select id="source"><option>Landing</option><option>Instagram</option><option>LinkedIn</option><option>Facebook</option><option>Referido</option><option>Otro</option></select></label>
+<label class="field">Interés<select id="interest"><option>Explorando</option><option>Networker</option><option>Quiero comenzar</option></select></label>
+<label class="field">Etapa<select id="stage"><option>Nuevo</option><option>Conversación</option><option>Interés confirmado</option><option>Presentación</option><option>Evaluación</option><option>Socio</option><option>Descartado</option></select></label>
+<label class="field">Prioridad<select id="priority"><option>Media</option><option>Alta</option><option>Baja</option></select></label>
+<label class="field">Próximo seguimiento<input id="follow_up" type="date"></label>
+<label class="field">Última conversación<input id="last_contact" type="date"></label>
+<label class="field full">Correo (opcional)<input id="contact_email" type="email" maxlength="180"></label>
+<label class="field full">Notas<textarea id="note" maxlength="5000" placeholder="Qué busca, qué acordaron, próximo paso..."></textarea></label>
+</div><div class="modalactions"><div class="modalbuttons"><button type="button" id="deleteLead" class="btn danger" hidden>Eliminar</button><a id="waLink" class="btn" target="_blank" rel="noopener noreferrer" hidden>WhatsApp ↗</a></div>
+<div class="modalbuttons"><button type="button" id="cancelEditor" class="btn">Cancelar</button><button type="submit" class="btn primary" id="saveLead">Guardar</button></div></div></form>
+</div></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/crm/app.js"></script></body></html>
