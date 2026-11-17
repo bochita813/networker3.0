@@ -118,7 +118,10 @@ document.getElementById('lead-form').addEventListener('submit',e=>{e.preventDefa
     if(contactP[0]&&c.first_text!==undefined)contactP[0].textContent=c.first_text;
     if(contactP[1]&&c.second_text!==undefined)contactP[1].textContent=c.second_text;
     set('#contacto button[type=submit]',c.button);
-    if(typeof c.whatsapp==='string'&&/^\\d{10,15}$/.test(c.whatsapp.replace(/\\D/g,'')))window.NETWORKER_WHATSAPP=c.whatsapp.replace(/\\D/g,'');
+    if (typeof c.whatsapp === 'string') {
+      const phone = c.whatsapp.replace(/\D/g, '');
+      if (/^\d{10,15}$/.test(phone)) window.NETWORKER_WHATSAPP = phone;
+    }
   }catch(error){console.warn('Se muestra la versión de respaldo.',error);}
 })();
 </script>
