@@ -26,6 +26,22 @@ content:
           - name: tagline
             label: "Lema debajo del nombre"
             type: string
+      - name: navigation
+        label: "00 · Menú superior"
+        type: object
+        fields:
+          - name: conoceme
+            label: "Conoceme"
+            type: string
+          - name: mi_gente
+            label: "Mi gente"
+            type: string
+          - name: lo_que_hago
+            label: "Lo que hago"
+            type: string
+          - name: hablemos
+            label: "Hablemos (botón de menú)"
+            type: string
       - name: hero
         label: "01 · Portada"
         type: object
