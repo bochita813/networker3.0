@@ -14,8 +14,107 @@
 <footer><div class="container foot"><div><strong>HERNÁN BOCCI</strong><br><small>Lo importante empieza conversando.</small></div><small>@hernanbocci.ok · NETWORKER 3.0</small></div></footer>
 <script>
 // CONFIGURAR ANTES DE PUBLICAR: número de WhatsApp personal autorizado en formato internacional (ej.: 54911XXXXXXXX).
-const WHATSAPP_NUMBER = '';
+const WHATSAPP_NUMBER = ''; // Respaldo; configurar en Pages CMS
 const profiles={explorando:'Estoy explorando nuevas posibilidades',networker:'Ya tengo experiencia en network marketing',decidido:'Quiero evaluar cómo comenzar pronto'};
 document.querySelectorAll('[data-path]').forEach(b=>b.addEventListener('click',()=>{document.getElementById('interest').value=b.dataset.path;document.getElementById('contacto').scrollIntoView({behavior:'smooth'});document.getElementById('name').focus({preventScroll:true})}));
-document.getElementById('lead-form').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('name').value.trim();const type=document.getElementById('interest').value;const extra=document.getElementById('question').value.trim();const status=document.getElementById('status');if(!name)return;if(!WHATSAPP_NUMBER){status.textContent='La experiencia está preparada. Falta configurar el número de contacto antes de publicar.';return;}const msg=`Hola Hernán, soy ${name}. ${profiles[type]}.${extra?' Quería contarte: '+extra:''} Me gustaría conversar y conocer más.`;const url='https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(msg);window.open(url,'_blank','noopener,noreferrer');status.textContent='Se preparó tu mensaje. Revisalo y envialo solo si querés continuar.';});
-</script></body></html>
+document.getElementById('lead-form').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('name').value.trim();const type=document.getElementById('interest').value;const extra=document.getElementById('question').value.trim();const status=document.getElementById('status');if(!name)return;const destination=window.NETWORKER_WHATSAPP||WHATSAPP_NUMBER;if(!destination){status.textContent='La experiencia está preparada. Falta configurar el número de contacto antes de publicar.';return;}const msg=`Hola Hernán, soy ${name}. ${profiles[type]}.${extra?' Quería contarte: '+extra:''} Me gustaría conversar y conocer más.`;const url='https://wa.me/'+destination+'?text='+encodeURIComponent(msg);window.open(url,'_blank','noopener,noreferrer');status.textContent='Se preparó tu mensaje. Revisalo y envialo solo si querés continuar.';});
+</script>
+<script>
+/* NETWORKER 3.0: contenido administrado en Pages CMS */
+(async function(){
+  try {
+    const response = await fetch('/content/site.json',{cache:'no-store'});
+    if(!response.ok) return;
+    const data=await response.json();
+    const $=s=>document.querySelector(s);
+    const all=s=>Array.from(document.querySelectorAll(s));
+    const set=(selector,value)=>{const el=$(selector);if(el && typeof value==='string')el.textContent=value;};
+    const pair=(selector,before,accent)=>{
+      const el=$(selector);
+      if(!el)return;
+      if(typeof before==='string'){
+        const first=Array.from(el.childNodes).find(n=>n.nodeType===3);
+        if(first) first.textContent=before;
+      }
+      if(typeof accent==='string') {
+        const a=el.querySelector('.orange, span[style*="color"]');
+        if(a)a.textContent=accent;
+      }
+    };
+    const group=(name)=>data[name]||{};
+    const h=group('hero'),p=group('paths'),a=group('about'),v=group('reflection'),b=group('business'),s=group('stories'),c=group('contact');
+    set('.brand .tag',group('brand').tagline);
+    set('#inicio .eyebrow',h.eyebrow); pair('#inicio h1',h.title_before,h.title_accent);
+    set('#inicio .lead',h.lead);set('#inicio .support',h.about);
+    set('#inicio .actions .btn:first-child',h.primary_button);set('#inicio .actions .btn:last-child',h.secondary_button);
+    set('#inicio .micro',h.micro);set('#inicio .photo-note',h.photo_note);
+    if(h.photo){
+      const img=$('#inicio .portrait img');
+      if(img){img.onload=()=>{img.style.display='block';const placeholder=$('#inicio .portrait .placeholder');if(placeholder)placeholder.style.display='none';};img.onerror=()=>{img.style.display='none';};img.src=h.photo;}
+      const poster=$('#conoceme video');if(poster)poster.poster=h.photo;
+    }
+    set('#para-vos .eyebrow',p.eyebrow);pair('#para-vos h2',p.title_before,p.title_accent);set('#para-vos .subhead',p.intro);
+    const choices=all('#para-vos .choice');
+    for(const [i,prefix] of ['first','second','third'].entries()){
+      if(choices[i]){const title=choices[i].querySelector('strong');const desc=choices[i].querySelector('p');
+        if(title&&p[prefix+'_title']!==undefined)title.textContent=p[prefix+'_title'];
+        if(desc&&p[prefix+'_text']!==undefined)desc.textContent=p[prefix+'_text'];}
+    }
+    set('#conoceme .eyebrow',a.eyebrow);pair('#conoceme h2',a.title_before,a.title_accent);
+    const aboutP=all('#conoceme .human > div:first-child .support');
+    if(aboutP[0]&&a.first_text!==undefined)aboutP[0].textContent=a.first_text;
+    if(aboutP[1]&&a.second_text!==undefined)aboutP[1].textContent=a.second_text;
+    set('#conoceme .btn',a.button);set('#conoceme blockquote',a.quote);
+    set('#conoceme .quote > .support',a.bottom_text);
+    if(a.video){const video=$('#conoceme video'),source=$('#conoceme video source');if(video&&source){source.src=a.video;video.load();}}
+    const refl=$('.value');
+    if(refl){
+      set('.value .eyebrow',v.eyebrow);pair('.value h2',v.title_before,v.title_accent);
+      set('.value > p:first-of-type',v.introduction);
+      const qs=all('.value .q');
+      for(const [i,prefix] of ['first','second','third'].entries()){
+        if(qs[i]){const title=qs[i].querySelector('strong'),desc=qs[i].querySelector('p');
+          if(title&&v[prefix+'_title']!==undefined)title.textContent=v[prefix+'_title'];
+          if(desc&&v[prefix+'_text']!==undefined)desc.textContent=v[prefix+'_text'];}
+      }
+      set('.value > p:last-child',v.conclusion);
+    }
+    set('#negocio .eyebrow',b.eyebrow);pair('#negocio h2',b.title_before,b.title_accent);
+    const businessP=all('#negocio .biz > div:first-child > p.support');
+    if(businessP[0]&&b.first_text!==undefined)businessP[0].textContent=b.first_text;
+    if(businessP[1]&&b.second_text!==undefined)businessP[1].textContent=b.second_text;
+    set('#negocio .actions .btn:first-child',b.primary_button);set('#negocio .actions .btn:last-child',b.secondary_button);
+    set('#negocio .disclosure',b.disclosure);
+    const benefits=all('#negocio .checklist .item');
+    for(const [i,prefix] of ['benefit1','benefit2','benefit3','benefit4'].entries()){
+      if(benefits[i]){const title=benefits[i].querySelector('strong'),desc=benefits[i].querySelector('small');
+        if(title&&b[prefix]!==undefined)title.textContent=b[prefix];
+        if(desc&&b[prefix+'_text']!==undefined)desc.textContent=b[prefix+'_text'];}
+    }
+    set('#historias .eyebrow',s.eyebrow);pair('#historias h2',s.title_before,s.title_accent);
+    set('#historias .subhead',s.intro);set('#historias .actions .btn',s.button);
+    const stories=all('#historias .story');
+    for(const [i,prefix] of ['first','second','third'].entries()){
+      if(!stories[i])continue;
+      const card=stories[i],title=card.querySelector('strong'),desc=card.querySelector('p'),media=card.querySelector('.visual');
+      if(title&&s[prefix+'_title']!==undefined)title.textContent=s[prefix+'_title'];
+      if(desc&&s[prefix+'_text']!==undefined)desc.textContent=s[prefix+'_text'];
+      const src=s[prefix+'_photo'];
+      if(media&&typeof src==='string'&&src){
+        media.textContent='';
+        const img=document.createElement('img');
+        img.src=src;img.alt=s[prefix+'_title']||'Historia real';img.loading='lazy';
+        img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:11px';
+        media.appendChild(img);
+      }
+    }
+    set('#contacto .eyebrow',c.eyebrow);pair('#contacto h2',c.title_before,c.title_accent);
+    const contactP=all('#contacto .contact > div:first-child > p.support');
+    if(contactP[0]&&c.first_text!==undefined)contactP[0].textContent=c.first_text;
+    if(contactP[1]&&c.second_text!==undefined)contactP[1].textContent=c.second_text;
+    set('#contacto button[type=submit]',c.button);
+    if(typeof c.whatsapp==='string'&&/^\\d{10,15}$/.test(c.whatsapp.replace(/\\D/g,'')))window.NETWORKER_WHATSAPP=c.whatsapp.replace(/\\D/g,'');
+  }catch(error){console.warn('Se muestra la versión de respaldo.',error);}
+})();
+</script>
+</body></html>
