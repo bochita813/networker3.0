@@ -19,6 +19,7 @@ DIRECTORIES = [
     ("Comunidad de Emprendedorxs · Argentina", "https://comunidademprendedorxs.jimdofree.com/emprendimientos/", "catalog"),
     ("UNL · Feria de emprendimientos Santa Fe", "https://www.unl.edu.ar/test/wp-unl/bienal/feria/", "catalog"),
     ("EmprenZona · Directorio de ferias Argentina", "https://www.emprenzona.com.ar/emprende", "emprenzona"),
+    ("EmprenZona · Emprendedores de Córdoba", "https://anime.emprenzona.com.ar/ferias/cordoba", "emprenzona_cordoba"),
 ]
 HANDLE = re.compile(r"^[a-z0-9._]{3,30}$", flags=re.I)
 RESERVED = {"instagram", "explore", "accounts", "reel", "reels", "tv", "p", "stories", "direct", "web", "about", "developers", "api"}
@@ -195,6 +196,32 @@ def parse_directory(markup, url, label, kind):
                 entry["city"] = city if city.casefold() != "argentina" else ""
                 entry["location_evidence"] = "Ubicación publicada en directorio" if city.casefold() != "argentina" else "Directorio: país Argentina"
             entry["country"] = "Argentina"
+            found[handle] = entry
+    elif kind == "emprenzona_cordoba":
+        # Landing pública específica de la provincia de Córdoba.
+        # Solo usa enlaces explícitos a instagram.com/<usuario> en la ficha.
+        # En particular, "Córdoba - Cruz del Eje" NO equivale a Córdoba Capital.
+        for link, title, heading, country in parser.links:
+            handle = instagram_handle(link)
+            if not handle:
+                continue
+            near = [t for t, h, _ in parser.tokens if h == heading]
+            city = ""
+            for item in near:
+                match = re.search(r"Córdoba\s*[-–]\s*([A-Za-zÁÉÍÓÚáéíóúÑñÜü ]{3,75})", item)
+                if match:
+                    city = match.group(1).strip()[:90]
+                    break
+            entry = record(
+                handle, heading or ("Emprendimiento @" + handle),
+                "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+                label, url, 62
+            )
+            entry.update(country="Argentina", province="Córdoba", category="Emprendimiento",
+                         location_evidence="Directorio provincial explícito: Córdoba")
+            if city:
+                entry["city"] = city
+                entry["location_evidence"] = "Directorio provincial: Córdoba - " + city
             found[handle] = entry
     elif kind == "catalog":
         for link, title, heading, country in parser.links:
