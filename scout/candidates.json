@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T15:59:21+00:00",
-  "feeds_ok": 8,
-  "queries_attempted": 8,
-  "new_profiles": 244,
+  "last_scan": "2026-11-18T16:01:33+00:00",
+  "feeds_ok": 10,
+  "queries_attempted": 10,
+  "new_profiles": 213,
   "feed_inspection": [
     {
       "query": "\"instagram.com\" \"emprendedor\" \"Argentina\"",
@@ -93,6 +93,26 @@
         "/",
         "/"
       ]
+    },
+    {
+      "query": "instagram.com cosmetica bienestar emprendimientos argentina",
+      "rss_items": 10,
+      "instagram_direct_links": 3,
+      "instagram_text_mentions": 0,
+      "handles_matched": 0,
+      "instagram_path_examples": [
+        "/",
+        "/",
+        "/"
+      ]
+    },
+    {
+      "query": "site:instagram.com emprendimiento belleza bienestar argentina",
+      "rss_items": 10,
+      "instagram_direct_links": 0,
+      "instagram_text_mentions": 0,
+      "handles_matched": 0,
+      "instagram_path_examples": []
     }
   ],
   "directory_inspection": [
@@ -107,12 +127,6 @@
       "kind": "infloo",
       "handles_found": 9,
       "html_chars": 166571
-    },
-    {
-      "directory": "Climaps · Emprendimientos Argentina",
-      "kind": "climaps",
-      "handles_found": 31,
-      "html_chars": 605833
     },
     {
       "directory": "ADULP · Catálogo emprendedor La Plata",
@@ -139,8 +153,10 @@
       "html_chars": 2287333
     }
   ],
-  "directories_ok": 7,
-  "errors": [],
+  "directories_ok": 6,
+  "errors": [
+    "Climaps · Emprendimientos Argentina: URLError: <urlopen error timed out>"
+  ],
   "profiles": [
     {
       "handle": "1tyt_1",
