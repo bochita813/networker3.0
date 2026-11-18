@@ -34,7 +34,7 @@ const start=script.indexOf("const TOPICS=");
 const end=script.indexOf("function formSet(f)");
 assert.ok(start>=0&&end>start,"No se encontró la lógica de filtros");
 const context=vm.createContext({});
-vm.runInContext("const verifiedBios=new Map();const handle=s=>String(s||'').toLowerCase();",context);
+vm.runInContext("const verifiedBios=new Map();",context);
 vm.runInContext(script.slice(start,end)+";this.logic={fits,info,geoFits,interestFits,termsFit,keywordMatches};this.verifiedBios=verifiedBios;",context);
 const {fits,info,keywordMatches}=context.logic;
 assert.ok(ids.has("runNow"),"Falta el botón de búsqueda inmediata");
