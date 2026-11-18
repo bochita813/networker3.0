@@ -15,6 +15,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from scout_directory_sources import discover as discover_directories
 
 ROOT = Path(__file__).resolve().parents[1]
 QUERIES = ROOT / "scout" / "queries.json"
@@ -117,6 +118,19 @@ def main():
             feed_inspection.append(report)
         except (urllib.error.URLError, TimeoutError, ET.ParseError, ValueError, OSError) as exc:
             errors.append(f"{query}: {type(exc).__name__}: {exc}")
+    # Fuente nueva: directorios públicos con cuentas explícitas, más útil que RSS.
+    directory_profiles, directory_inspection, directory_errors = discover_directories()
+    for listing in directory_profiles:
+        handle = listing["handle"]
+        if handle in result:
+            if listing["score"] > int(result[handle].get("score", 0)):
+                first_seen = result[handle].get("first_seen", dt.datetime.now(dt.timezone.utc).date().isoformat())
+                result[handle].update(listing, first_seen=first_seen)
+        else:
+            result[handle] = dict(listing, first_seen=dt.datetime.now(dt.timezone.utc).date().isoformat())
+            new_count += 1
+    errors.extend(directory_errors)
+
     # No inventar perfiles; no eliminar los anteriores ante fallos o feeds sin resultados.
     profiles = sorted(result.values(), key=lambda x: (-int(x.get("score", 0)), x["handle"]))[:800]
     output = {
@@ -127,7 +141,9 @@ def main():
         "queries_attempted": len(queries),
         "new_profiles": new_count,
         "feed_inspection": feed_inspection,
-        "errors": errors[:8],
+        "directory_inspection": directory_inspection,
+        "directories_ok": len(directory_inspection),
+        "errors": errors[:12],
         "profiles": profiles,
     }
     OUTPUT.parent.mkdir(exist_ok=True)
@@ -136,8 +152,8 @@ def main():
     if errors:
         print("\n".join(errors), file=sys.stderr)
     # Si fallan todos los feeds, notificar fallos en Actions sin borrar los datos.
-    if feeds_ok == 0:
-        sys.exit("Ningún RSS respondió. No se actualizaron los candidatos previos.")
+    if feeds_ok == 0 and not directory_inspection:
+        sys.exit("Ningún RSS ni directorio público respondió. No se actualizaron candidatos.")
 
 if __name__ == "__main__":
     main()
