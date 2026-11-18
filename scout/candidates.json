@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "description": "Perfiles públicos indexados para revisión manual. Sin mensajería automática.",
+  "last_scan": null,
+  "feeds_ok": 0,
+  "queries_attempted": 0,
+  "new_profiles": 0,
+  "errors": [],
+  "profiles": []
+}
