@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T19:10:13+00:00",
+  "last_scan": "2026-11-18T22:01:59+00:00",
   "feeds_ok": 12,
   "queries_attempted": 12,
   "configured_searches": 7,
-  "new_profiles": 0,
+  "new_profiles": 3,
   "feed_inspection": [
     {
       "query": "site:instagram.com Emprendedores Cordoba Córdoba Argentina Cosmética Bienestar",
@@ -17,7 +17,7 @@
     },
     {
       "query": "site:instagram.com Salud y bienestar Jesús Maria Córdoba Argentina Cosmética Bienestar",
-      "rss_items": 9,
+      "rss_items": 10,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -33,7 +33,7 @@
     },
     {
       "query": "site:instagram.com Estética y belleza estética, cosmética, bienestar Argentina Estética Cosmética",
-      "rss_items": 10,
+      "rss_items": 0,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -41,7 +41,7 @@
     },
     {
       "query": "site:instagram.com Todos los rubros Argentina",
-      "rss_items": 10,
+      "rss_items": 9,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -164,8 +164,8 @@
     {
       "directory": "EmprenZona · Directorio de ferias Argentina",
       "kind": "emprenzona",
-      "handles_found": 890,
-      "html_chars": 2291276
+      "handles_found": 893,
+      "html_chars": 2297775
     },
     {
       "directory": "EmprenZona · Emprendedores de Córdoba",
@@ -213,7 +213,7 @@
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
       "handles_found": 1,
-      "html_chars": 110614
+      "html_chars": 110571
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
@@ -3085,6 +3085,20 @@
       "country": "Argentina",
       "location_evidence": "Directorio: país Argentina",
       "category": "Gastronomía"
+    },
+    {
+      "handle": "chocolstes.js",
+      "url": "https://www.instagram.com/chocolstes.js/",
+      "headline": "Chocolates js",
+      "snippet": "Vendemos pan dulce, roscas y budines, oreos bañadas en chocolate todo lo que es bombonería, alfajores artesanales y licores.",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "city": "",
+      "location_evidence": "Directorio: país Argentina",
+      "country": "Argentina",
+      "first_seen": "2026-11-18"
     },
     {
       "handle": "choquelos5.huellitas",
@@ -7456,6 +7470,36 @@
       "country": "Argentina",
       "city": "Tres de Febrero",
       "location_evidence": "Ubicación publicada en directorio"
+    },
+    {
+      "handle": "manke_shop",
+      "url": "https://www.instagram.com/manke_shop/",
+      "headline": "manke",
+      "snippet": "¿cómo están? Soy Natalia, de Manke. Estoy interesada en participar con un puesto. Mi propuesta está enfocada principalmente en remeras para mujeres e…",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "category": "Indumentaria",
+      "city": "",
+      "location_evidence": "Directorio: país Argentina",
+      "country": "Argentina",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "manosdemargaritas",
+      "url": "https://www.instagram.com/manosdemargaritas/",
+      "headline": "Manos de Margaritas",
+      "snippet": "Fabricación de Tote bag, delantales y bolsas porta maple.",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "category": "Indumentaria",
+      "city": "",
+      "location_evidence": "Directorio: país Argentina",
+      "country": "Argentina",
+      "first_seen": "2026-11-18"
     },
     {
       "handle": "manosyamor18",
