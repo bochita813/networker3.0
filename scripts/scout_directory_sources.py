@@ -170,11 +170,33 @@ def parse_directory(markup, url, label, kind):
                 if len(line) > 15 and not line.startswith(("Ver emprendimiento", "Ver perfil")):
                     next_words.append(line)
             summary = " ".join(next_words)[:580]
-            found[handle] = record(
+            entry = record(
                 handle, title,
                 summary or "Emprendimiento publicado en el directorio argentino de ferias.",
                 label, url, 47
             )
+            # El directorio declara explícitamente rubro y ubicación por ficha.
+            category = ""
+            for near, near_heading, _ in reversed(previous):
+                if near_heading != heading and near_heading != "":
+                    continue
+                if near in ("Gastronomía","Indumentaria","Accesorios","Artesanías","Decoración","Repostería","Cosmética","Librería","Velas Y Aromas","Arte Y Diseño","Impresión 3D","Bebidas","Juegos","Bijouterie","Emprendimiento"):
+                    category = near
+                    break
+            city = ""
+            for line, following_heading, _ in parser.tokens[i+1:i+13]:
+                if following_heading != heading:
+                    break
+                if line.startswith("⌖"):
+                    city = line.lstrip("⌖").strip()[:100]
+                    break
+            if category:
+                entry["category"] = category
+            if city:
+                entry["city"] = city if city.casefold() != "argentina" else ""
+                entry["location_evidence"] = "Ubicación publicada en directorio" if city.casefold() != "argentina" else "Directorio: país Argentina"
+            entry["country"] = "Argentina"
+            found[handle] = entry
     elif kind == "catalog":
         for link, title, heading, country in parser.links:
             handle = instagram_handle(link)
