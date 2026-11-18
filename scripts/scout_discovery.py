@@ -123,9 +123,16 @@ def main():
     for listing in directory_profiles:
         handle = listing["handle"]
         if handle in result:
-            if listing["score"] > int(result[handle].get("score", 0)):
-                first_seen = result[handle].get("first_seen", dt.datetime.now(dt.timezone.utc).date().isoformat())
-                result[handle].update(listing, first_seen=first_seen)
+            previous = result[handle]
+            if listing["score"] > int(previous.get("score", 0)):
+                first_seen = previous.get("first_seen", dt.datetime.now(dt.timezone.utc).date().isoformat())
+                previous.update(listing, first_seen=first_seen)
+            else:
+                # Conservar la mejor fuente, pero completar los nuevos metadatos
+                # explícitos (ciudad/rubro) desde los directorios públicos.
+                for field in ("country", "province", "city", "category", "location_evidence"):
+                    if listing.get(field) and not previous.get(field):
+                        previous[field] = listing[field]
         else:
             result[handle] = dict(listing, first_seen=dt.datetime.now(dt.timezone.utc).date().isoformat())
             new_count += 1
