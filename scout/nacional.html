@@ -55,7 +55,8 @@ footer{padding:22px 0;border-top:1px solid var(--line);font-size:11px;color:#746
 <div class="metric"><strong id="filtered">—</strong><span>Coinciden con filtros</span></div>
 <div class="metric"><strong id="page">—</strong><span>Página actual</span></div>
 </div>
-<div class="bar"><strong id="heading">Contactos y establecimientos</strong><button id="export" class="btn secondary" type="button">Exportar CSV filtrado</button></div>
+<div class="notice" style="margin:0 0 15px" id="importStatus" role="status">Comprobando estado de la importación de datos abiertos…</div>
+ <div class="bar"><strong id="heading">Contactos y establecimientos</strong><div class="buttons"><button id="refreshStatus" class="btn secondary" type="button">Actualizar estado</button><button id="export" class="btn secondary" type="button">Exportar CSV filtrado</button></div></div>
 <div id="progress" role="status" aria-live="polite">Cargando base…</div><div id="error" class="error" role="alert"></div><div id="results" class="results"><div class="empty">Los perfiles aparecen cuando inicia tu sesión.</div></div>
 <div class="buttons" style="margin-top:17px"><button class="btn secondary" type="button" id="previous">Anterior</button><button class="btn secondary" type="button" id="next">Siguiente</button></div>
 <p class="help">Cada ficha lleva un enlace a su fuente. Los registros de OpenStreetMap son establecimientos o lugares profesionales, no propietarios identificados. El contacto es comercial y público cuando figura, y su uso debe respetar las normas aplicables y las preferencias de las personas.</p>
@@ -179,18 +180,33 @@ async function exportAll(){
  }catch(err){failed=true;fail("No se pudo completar la exportación: "+(err.message||String(err)));}
  finally{exporting=false;$("#export").disabled=false;if(failed)note("La exportación no se completó.");}
 }
-async function auth(){
+async function showImportStatus(){
+  if(!authorized)return;
+  const {data,error}=await db.rpc("scout_national_import_status");
+  if(error){$("#importStatus").textContent="No se pudo consultar el progreso de importación: "+error.message;return}
+  const d=data||{};
+  const old=fmt(d.instagram_profiles||0),osm=fmt(d.openstreetmap_records||0);
+  if(!d.source_manifest_published){
+   $("#importStatus").textContent="Actualmente cargados: "+old+" perfiles de Instagram. Establecimientos nacionales de OpenStreetMap: "+osm+". El catálogo nacional todavía no está disponible para importar.";
+   return;
+  }
+  const processed=fmt(d.source_records_processed||0),expected=fmt(d.manifest_count||0);
+  $("#importStatus").textContent="Base nacional: "+old+" perfiles de Instagram + "+osm+" establecimientos cartográficos. Registros de origen procesados: "+processed+" / "+expected+". "+
+   (d.last_error?"Error de importación: "+d.last_error:"Sólo se cuentan los registros que ya están guardados.");
+ }
+ async function auth(){
  const {data,error}=await db.auth.getUser();
  if(error||!data?.user){$("#login").hidden=false;return}
  const {data:admin,error:adminErr}=await db.from("crm_admins").select("user_id").eq("user_id",data.user.id).maybeSingle();
  if(adminErr||!admin){$("#login").hidden=false;$("#loginError").textContent="Cuenta sin acceso de administrador.";return}
- authorized=true;$("#login").hidden=true;await load();
+ authorized=true;$("#login").hidden=true;await Promise.all([load(),showImportStatus()]);
 }
 $("#filters").onsubmit=e=>{e.preventDefault();load()};
 $("#clear").onclick=()=>{$("#filters").reset();load()};
 $("#previous").onclick=()=>{if(offset>0){offset-=pageSize;load(false)}};
 $("#next").onclick=()=>{if(offset+pageSize<currentCount){offset+=pageSize;load(false)}};
 $("#export").onclick=exportAll;
+$("#refreshStatus").onclick=showImportStatus;
 $("#loginForm").onsubmit=async e=>{e.preventDefault();$("#loginError").textContent="";
  const {error}=await db.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});
  if(error){$("#loginError").textContent=error.message;return}await auth()
