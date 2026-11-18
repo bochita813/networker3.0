@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T16:02:56+00:00",
+  "last_scan": "2026-11-18T16:35:28+00:00",
   "feeds_ok": 10,
   "queries_attempted": 10,
-  "new_profiles": 213,
+  "new_profiles": 0,
   "feed_inspection": [
     {
       "query": "\"instagram.com\" \"emprendedor\" \"Argentina\"",
@@ -16,7 +16,7 @@
         "/",
         "/",
         "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -29,7 +29,7 @@
         "/",
         "/",
         "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -42,7 +42,7 @@
         "/",
         "/",
         "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -55,7 +55,7 @@
         "/",
         "/",
         "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -76,7 +76,7 @@
         "/",
         "/",
         "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -97,7 +97,7 @@
         "/",
         "/",
         "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -110,7 +110,7 @@
         "/",
         "/",
         "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -134,6 +134,12 @@
       "kind": "infloo",
       "handles_found": 9,
       "html_chars": 166571
+    },
+    {
+      "directory": "Climaps · Emprendimientos Argentina",
+      "kind": "climaps",
+      "handles_found": 31,
+      "html_chars": 605833
     },
     {
       "directory": "ADULP · Catálogo emprendedor La Plata",
@@ -160,44 +166,9 @@
       "html_chars": 2287333
     }
   ],
-  "directories_ok": 6,
-  "errors": [
-    "Climaps · Emprendimientos Argentina: URLError: <urlopen error timed out>"
-  ],
+  "directories_ok": 7,
+  "errors": [],
   "profiles": [
-    {
-      "handle": "__cosmic4",
-      "url": "https://www.instagram.com/__cosmic4/",
-      "headline": "Cosmic4 Accesorios",
-      "snippet": "Perfil en construcción.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
-    {
-      "handle": "_alisados.ci",
-      "url": "https://www.instagram.com/_alisados.ci/",
-      "headline": "Cintia Natura&Avon",
-      "snippet": "Vendo productos de belleza de Natura y Avon , también algunas prendas nuevas de Lencería,no necesito un puesto muy grande ya que empeze hace poco y n…",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
-    {
-      "handle": "_umi__art",
-      "url": "https://www.instagram.com/_umi__art/",
-      "headline": "Umi",
-      "snippet": "Hago bordados para cuadros y parches, todo con tematica de anime, tambien realizo prendedores en cermica",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
     {
       "handle": "1tyt_1",
       "url": "https://www.instagram.com/1tyt_1/",
@@ -258,6 +229,39 @@
       "url": "https://www.instagram.com/9dejulio1934/",
       "headline": "Nueve de Julio",
       "snippet": "Perfil en construcción.",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "__cosmic4",
+      "url": "https://www.instagram.com/__cosmic4/",
+      "headline": "Cosmic4 Accesorios",
+      "snippet": "Perfil en construcción.",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "_alisados.ci",
+      "url": "https://www.instagram.com/_alisados.ci/",
+      "headline": "Cintia Natura&Avon",
+      "snippet": "Vendo productos de belleza de Natura y Avon , también algunas prendas nuevas de Lencería,no necesito un puesto muy grande ya que empeze hace poco y n…",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "_umi__art",
+      "url": "https://www.instagram.com/_umi__art/",
+      "headline": "Umi",
+      "snippet": "Hago bordados para cuadros y parches, todo con tematica de anime, tambien realizo prendedores en cermica",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -2366,10 +2370,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "deco_pipa",
-      "url": "https://www.instagram.com/deco_pipa/",
-      "headline": "Deco Pipa",
-      "snippet": "Lindas decoraciones para tus espacios.",
+      "handle": "deco050726",
+      "url": "https://www.instagram.com/deco050726/",
+      "headline": "L&S velas",
+      "snippet": "Estoy interesada en participar de su feria.. Vendo velas y set artesanales de yeso",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -2377,10 +2381,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "deco050726",
-      "url": "https://www.instagram.com/deco050726/",
-      "headline": "L&S velas",
-      "snippet": "Estoy interesada en participar de su feria.. Vendo velas y set artesanales de yeso",
+      "handle": "deco_pipa",
+      "url": "https://www.instagram.com/deco_pipa/",
+      "headline": "Deco Pipa",
+      "snippet": "Lindas decoraciones para tus espacios.",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -2685,28 +2689,6 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "dulce_cuna.ok",
-      "url": "https://www.instagram.com/dulce_cuna.ok/",
-      "headline": "Dulce cuna",
-      "snippet": "Somos un emprendimiento que vendemos ropa de bebe y accesorios.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
-    {
-      "handle": "dulce_lara_tejidos",
-      "url": "https://www.instagram.com/dulce_lara_tejidos/",
-      "headline": "Dulce Lara Tejidos",
-      "snippet": "Perfil en construcción.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
-    {
       "handle": "dulce.isa.reposteria",
       "url": "https://www.instagram.com/dulce.isa.reposteria/",
       "headline": "Dulce Isa reposteria artesanal",
@@ -2722,6 +2704,28 @@
       "url": "https://www.instagram.com/dulce.isabella.22/",
       "headline": "Dulce Isabella 22",
       "snippet": "Un poquito de dulzura para cada día. Budines artesanales & cosas ricas. Hecho a mano con mucho amor.",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "dulce_cuna.ok",
+      "url": "https://www.instagram.com/dulce_cuna.ok/",
+      "headline": "Dulce cuna",
+      "snippet": "Somos un emprendimiento que vendemos ropa de bebe y accesorios.",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "dulce_lara_tejidos",
+      "url": "https://www.instagram.com/dulce_lara_tejidos/",
+      "headline": "Dulce Lara Tejidos",
+      "snippet": "Perfil en construcción.",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -4588,17 +4592,6 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "la_callejera26",
-      "url": "https://www.instagram.com/la_callejera26/",
-      "headline": "LA CALLEJERA",
-      "snippet": "¿Cómo están? 😊 Soy parte de LA CALLEJERA, un foodtruck de Escobar que ofrece propuestas gastronómicas para eventos sociales, cumpleaños, fiestas de e…",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
-    {
       "handle": "la.caraquenita",
       "url": "https://www.instagram.com/la.caraquenita/",
       "headline": "La Caraqueñita",
@@ -4625,6 +4618,17 @@
       "url": "https://www.instagram.com/la.mermeleria/",
       "headline": "La Mermelería",
       "snippet": "Soy productora de dulces y mermeladas caseras hechas de forma artesanal. Con todos los cuidados bajo las normas de produccion e higiene de buenas pra…",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "la_callejera26",
+      "url": "https://www.instagram.com/la_callejera26/",
+      "headline": "LA CALLEJERA",
+      "snippet": "¿Cómo están? 😊 Soy parte de LA CALLEJERA, un foodtruck de Escobar que ofrece propuestas gastronómicas para eventos sociales, cumpleaños, fiestas de e…",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -5072,10 +5076,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "los_cachungals",
-      "url": "https://www.instagram.com/los_cachungals/",
-      "headline": "Los Cachungals",
-      "snippet": "Perfil en construcción. ⌖ Lomas de Zamora",
+      "handle": "los.malabares",
+      "url": "https://www.instagram.com/los.malabares/",
+      "headline": "Los Malabares",
+      "snippet": "Inspirados en el jazmín de nuestra historia. Velas artesanales & piezas en resina. Hecho a mano.",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -5083,10 +5087,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "los.malabares",
-      "url": "https://www.instagram.com/los.malabares/",
-      "headline": "Los Malabares",
-      "snippet": "Inspirados en el jazmín de nuestra historia. Velas artesanales & piezas en resina. Hecho a mano.",
+      "handle": "los_cachungals",
+      "url": "https://www.instagram.com/los_cachungals/",
+      "headline": "Los Cachungals",
+      "snippet": "Perfil en construcción. ⌖ Lomas de Zamora",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -8229,17 +8233,6 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "somos_entrehilos",
-      "url": "https://www.instagram.com/somos_entrehilos/",
-      "headline": "Entrehilos",
-      "snippet": "Somos un emprendimiento familiar de papelería y costura creativa. Hacemos productos hechos a mano y personalizados, como libretas, stickers, planners…",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
-    {
       "handle": "somos.enserio",
       "url": "https://www.instagram.com/somos.enserio/",
       "headline": "En Serio",
@@ -8255,6 +8248,17 @@
       "url": "https://www.instagram.com/somos.rosaura/",
       "headline": "Rosaura cocina natural",
       "snippet": "Panificados orgánicos",
+      "score": 47,
+      "source_query": "EmprenZona · Directorio de ferias Argentina",
+      "source_page": "https://www.emprenzona.com.ar/emprende",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "somos_entrehilos",
+      "url": "https://www.instagram.com/somos_entrehilos/",
+      "headline": "Entrehilos",
+      "snippet": "Somos un emprendimiento familiar de papelería y costura creativa. Hacemos productos hechos a mano y personalizados, como libretas, stickers, planners…",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -8383,10 +8387,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "store_hokage",
-      "url": "https://www.instagram.com/store_hokage/",
-      "headline": "Hokage Store",
-      "snippet": "Vendemos artículos de animé y KPOP de colección, recién arrancamos en el rubro",
+      "handle": "store.regina_",
+      "url": "https://www.instagram.com/store.regina_/",
+      "headline": "Regina",
+      "snippet": "Moda para Mujeres Reales. Casual, Elegante, Deportiva.",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -8394,10 +8398,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "store.regina_",
-      "url": "https://www.instagram.com/store.regina_/",
-      "headline": "Regina",
-      "snippet": "Moda para Mujeres Reales. Casual, Elegante, Deportiva.",
+      "handle": "store_hokage",
+      "url": "https://www.instagram.com/store_hokage/",
+      "headline": "Hokage Store",
+      "snippet": "Vendemos artículos de animé y KPOP de colección, recién arrancamos en el rubro",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -8768,10 +8772,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "the_buxus",
-      "url": "https://www.instagram.com/the_buxus/",
-      "headline": "The Buxus",
-      "snippet": "Perfil en construcción. ⌖ Lomas de Zamora",
+      "handle": "the.sunrize.indumentary.r.l",
+      "url": "https://www.instagram.com/the.sunrize.indumentary.r.l/",
+      "headline": "THE SUNRIZE",
+      "snippet": "Indumentaria unisex, casual y formal",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -8779,10 +8783,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "the.sunrize.indumentary.r.l",
-      "url": "https://www.instagram.com/the.sunrize.indumentary.r.l/",
-      "headline": "THE SUNRIZE",
-      "snippet": "Indumentaria unisex, casual y formal",
+      "handle": "the_buxus",
+      "url": "https://www.instagram.com/the_buxus/",
+      "headline": "The Buxus",
+      "snippet": "Perfil en construcción. ⌖ Lomas de Zamora",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -9384,10 +9388,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "usagi_tienda",
-      "url": "https://www.instagram.com/usagi_tienda/",
-      "headline": "Usagi Tienda",
-      "snippet": "Perfil en construcción.",
+      "handle": "usagi.tiendaanime",
+      "url": "https://www.instagram.com/usagi.tiendaanime/",
+      "headline": "Usagi Tiendaanime",
+      "snippet": "Perfil en construcción. ⌖ Centro Histórico",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -9395,10 +9399,10 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "usagi.tiendaanime",
-      "url": "https://www.instagram.com/usagi.tiendaanime/",
-      "headline": "Usagi Tiendaanime",
-      "snippet": "Perfil en construcción. ⌖ Centro Histórico",
+      "handle": "usagi_tienda",
+      "url": "https://www.instagram.com/usagi_tienda/",
+      "headline": "Usagi Tienda",
+      "snippet": "Perfil en construcción.",
       "score": 47,
       "source_query": "EmprenZona · Directorio de ferias Argentina",
       "source_page": "https://www.emprenzona.com.ar/emprende",
@@ -10625,17 +10629,6 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "feria_todes",
-      "url": "https://www.instagram.com/feria_todes/",
-      "headline": "Emprendimiento @feria_todes",
-      "snippet": "Cuenta de Instagram enlazada explícitamente desde un catálogo de emprendimientos argentinos. Revisar actividad actual.",
-      "score": 43,
-      "source_query": "ADULP · Catálogo emprendedor La Plata",
-      "source_page": "https://www.adulp.org.ar/index.php?Itemid=118&id=45&option=com_content&view=article",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18"
-    },
-    {
       "handle": "feria.lovelyrain1301",
       "url": "https://www.instagram.com/feria.lovelyrain1301/",
       "headline": "Emprendimiento @feria.lovelyrain1301",
@@ -10643,6 +10636,17 @@
       "score": 43,
       "source_query": "Comunidad de Emprendedorxs · Argentina",
       "source_page": "https://comunidademprendedorxs.jimdofree.com/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "feria_todes",
+      "url": "https://www.instagram.com/feria_todes/",
+      "headline": "Emprendimiento @feria_todes",
+      "snippet": "Cuenta de Instagram enlazada explícitamente desde un catálogo de emprendimientos argentinos. Revisar actividad actual.",
+      "score": 43,
+      "source_query": "ADULP · Catálogo emprendedor La Plata",
+      "source_page": "https://www.adulp.org.ar/index.php?Itemid=118&id=45&option=com_content&view=article",
       "discovery_method": "directorio_publico",
       "first_seen": "2026-11-18"
     },
@@ -10878,9 +10882,9 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "lagran_cocina",
-      "url": "https://www.instagram.com/lagran_cocina/",
-      "headline": "Emprendimiento @lagran_cocina",
+      "handle": "lagran7_arteycultura",
+      "url": "https://www.instagram.com/lagran7_arteycultura/",
+      "headline": "Emprendimiento @lagran7_arteycultura",
       "snippet": "Cuenta de Instagram enlazada explícitamente desde un catálogo de emprendimientos argentinos. Revisar actividad actual.",
       "score": 43,
       "source_query": "ADULP · Catálogo emprendedor La Plata",
@@ -10889,9 +10893,9 @@
       "first_seen": "2026-11-18"
     },
     {
-      "handle": "lagran7_arteycultura",
-      "url": "https://www.instagram.com/lagran7_arteycultura/",
-      "headline": "Emprendimiento @lagran7_arteycultura",
+      "handle": "lagran_cocina",
+      "url": "https://www.instagram.com/lagran_cocina/",
+      "headline": "Emprendimiento @lagran_cocina",
       "snippet": "Cuenta de Instagram enlazada explícitamente desde un catálogo de emprendimientos argentinos. Revisar actividad actual.",
       "score": 43,
       "source_query": "ADULP · Catálogo emprendedor La Plata",
@@ -11680,7 +11684,5 @@
       "discovery_method": "directorio_publico",
       "first_seen": "2026-11-18"
     }
-  ],
-  "restored_historical_candidates": 31,
-  "restored_note": "Cuentas de Climaps recuperadas de una búsqueda anterior verificada; no revalidadas en el último escaneo (fuente agotó el tiempo)."
+  ]
 }
