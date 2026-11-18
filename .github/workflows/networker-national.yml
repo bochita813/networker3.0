@@ -1,0 +1,46 @@
+name: NETWORKER - Base nacional abierta hasta 100000 contactos comerciales
+on:
+  push:
+    paths:
+      - "scripts/scout_national_osm.py"
+      - ".github/workflows/networker-national.yml"
+  schedule:
+    # Revisión nacional semanal (domingo, horario UTC). GitHub puede demorar.
+    - cron: "30 8 * * 0"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: networker-national-osm
+  cancel-in-progress: false
+jobs:
+  national_open_data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Dependencias de datos abiertos, OSM y límites provinciales
+        run: |
+          python -m pip install --disable-pip-version-check "osmium>=4,<5" "shapely>=2,<3" "requests>=2,<3"
+          python -m py_compile scripts/scout_national_osm.py
+      - name: Descargar extracto real de Argentina y construir base federal
+        run: python -u scripts/scout_national_osm.py --target 100000
+      - name: Publicar catálogo ODbL en fragmentos para la importación privada de Supabase
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "networker-national[bot]"
+          git config user.email "networker-national[bot]@users.noreply.github.com"
+          git add scout/national
+          if git diff --cached --quiet; then
+            echo "Fuente sin cambios"
+          else
+            git commit -m "data(scout): snapshot national OSM source with real businesses [skip ci]"
+            git push
+          fi
