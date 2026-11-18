@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T17:30:17+00:00",
+  "last_scan": "2026-11-18T17:33:31+00:00",
   "feeds_ok": 12,
   "queries_attempted": 12,
   "configured_searches": 4,
-  "new_profiles": 17,
+  "new_profiles": 0,
   "feed_inspection": [
     {
       "query": "site:instagram.com Salud y bienestar Jesús Maria Córdoba Argentina Cosmética Bienestar",
-      "rss_items": 0,
+      "rss_items": 10,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -17,7 +17,7 @@
     },
     {
       "query": "site:instagram.com Emprendedores Jesús Maria Córdoba Argentina Cosmética Bienestar",
-      "rss_items": 10,
+      "rss_items": 0,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -25,7 +25,7 @@
     },
     {
       "query": "site:instagram.com Emprendedores Cordoba Córdoba Argentina Cosmética Bienestar",
-      "rss_items": 10,
+      "rss_items": 0,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -42,48 +42,52 @@
     {
       "query": "\"instagram.com\" \"emprendedor\" \"Argentina\"",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
+        "/p/signin/",
         "/"
       ]
     },
     {
       "query": "\"instagram.com\" \"emprendedora\" \"Buenos Aires\"",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
+        "/p/signin/",
         "/"
       ]
     },
     {
       "query": "instagram emprendimiento Argentina cuentas",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
+        "/p/signin/",
         "/"
       ]
     },
     {
       "query": "instagram negocios emprendedores Argentina perfil",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
+        "/p/signin/",
         "/"
       ]
     },
@@ -98,12 +102,13 @@
     {
       "query": "Instagram emprendedoras Neuquén",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
+        "/p/signin/",
         "/"
       ]
     },
@@ -118,12 +123,13 @@
     {
       "query": "instagram.com emprendedoras Córdoba Argentina",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
+        "/p/signin/",
         "/"
       ]
     }
@@ -145,7 +151,7 @@
       "directory": "Climaps · Emprendimientos Argentina",
       "kind": "climaps",
       "handles_found": 31,
-      "html_chars": 605834
+      "html_chars": 605833
     },
     {
       "directory": "ADULP · Catálogo emprendedor La Plata",
@@ -158,12 +164,6 @@
       "kind": "catalog",
       "handles_found": 15,
       "html_chars": 52051
-    },
-    {
-      "directory": "UNL · Feria de emprendimientos Santa Fe",
-      "kind": "catalog",
-      "handles_found": 21,
-      "html_chars": 54641
     },
     {
       "directory": "EmprenZona · Directorio de ferias Argentina",
@@ -180,37 +180,37 @@
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 109954
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 108057
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 120024
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 116425
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 115098
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 115981
     },
     {
@@ -222,77 +222,63 @@
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 114828
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 107943
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 106705
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 122494
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 117833
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 119173
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 116036
     },
     {
       "directory": "Ágora · Peluquería Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 112625
     },
     {
       "directory": "Ágora · Peluquería Córdoba Capital",
       "kind": "agora_cordoba",
-      "handles_found": 2,
+      "handles_found": 1,
       "html_chars": 111550
     }
   ],
-  "directories_ok": 24,
-  "errors": [],
+  "directories_ok": 23,
+  "errors": [
+    "UNL · Feria de emprendimientos Santa Fe: TimeoutError: The read operation timed out"
+  ],
   "profiles": [
-    {
-      "handle": "agora.red",
-      "url": "https://www.instagram.com/agora.red/",
-      "headline": "Frida Estética integral",
-      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
-      "score": 67,
-      "source_query": "Ágora · Estética Córdoba Capital",
-      "source_page": "https://market.agora.red/directorio/0x9432a3d17a9c6a5b%3A0x11a66a668128ae2",
-      "discovery_method": "directorio_publico",
-      "country": "Argentina",
-      "province": "Córdoba",
-      "city": "Córdoba Capital",
-      "category": "Estética",
-      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
-      "first_seen": "2026-11-18"
-    },
     {
       "handle": "auraespacio.cba",
       "url": "https://www.instagram.com/auraespacio.cba/",
@@ -305,7 +291,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -321,7 +307,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -337,7 +323,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Peluquería",
+      "category": "Peluquería y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -353,7 +339,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -369,7 +355,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -385,7 +371,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -401,7 +387,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -417,7 +403,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -433,7 +419,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -449,7 +435,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -465,7 +451,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -481,7 +467,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -497,7 +483,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -513,7 +499,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -529,7 +515,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Estética",
+      "category": "Estética y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -545,7 +531,7 @@
       "country": "Argentina",
       "province": "Córdoba",
       "city": "Córdoba Capital",
-      "category": "Peluquería",
+      "category": "Peluquería y belleza",
       "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
       "first_seen": "2026-11-18"
     },
@@ -628,22 +614,6 @@
       "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
       "category": "Emprendimiento",
       "province": "Córdoba"
-    },
-    {
-      "handle": "emprenzona",
-      "url": "https://www.instagram.com/emprenzona/",
-      "headline": "Marla Accesorios",
-      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
-      "score": 62,
-      "source_query": "EmprenZona · Emprendedores de Córdoba",
-      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
-      "discovery_method": "directorio_publico",
-      "country": "Argentina",
-      "province": "Córdoba",
-      "category": "Emprendimiento",
-      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
-      "city": "Cruz del Eje",
-      "first_seen": "2026-11-18"
     },
     {
       "handle": "gaticoscosmicos",
