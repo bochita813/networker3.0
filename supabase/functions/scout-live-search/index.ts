@@ -6,6 +6,20 @@ const clean=(x:any,n=150)=>String(x??"").replace(/[\u0000-\u001f<>]/g," ").trim(
 const norm=(x:any)=>clean(x,500).toLocaleLowerCase("es").normalize("NFKD").replace(/[\u0300-\u036f]/g,"");
 const blocked=new Set(["instagram","stories","explore","accounts","reel","reels","p","tv","direct","about","developers","privacy","terms","web","api","help","tags","download","challenge","audio","login","signup","profilecard"]);
 const sources=[
+ ["Modash · Córdoba · Fitness","https://www.modash.io/find-influencers/argentina/c%C3%B3rdoba/fitness","cordoba"],
+ ["Modash · Córdoba · Belleza","https://www.modash.io/find-influencers/argentina/c%C3%B3rdoba/beauty","cordoba"],
+ ["Modash · Córdoba · General","https://www.modash.io/find-influencers/argentina/c%C3%B3rdoba","cordoba"],
+ ["Modash · Argentina · Salud","https://www.modash.io/find-influencers/argentina/health","general"],
+ ["Modash · Argentina · Fitness","https://www.modash.io/find-influencers/argentina/fitness","general"],
+ ["Modash · Argentina · Gastronomía","https://www.modash.io/find-influencers/argentina/food","general"],
+ ["Modash · Argentina · Moda","https://www.modash.io/find-influencers/argentina/fashion","general"],
+ ["Modash · Buenos Aires · General","https://www.modash.io/find-influencers/argentina/buenos-aires","buenos aires"],
+ ["Modash · Buenos Aires · Fitness","https://www.modash.io/find-influencers/argentina/buenos-aires/fitness","buenos aires"],
+ ["Modash · Buenos Aires · Belleza","https://www.modash.io/find-influencers/argentina/buenos-aires/beauty","buenos aires"],
+ ["Modash · Buenos Aires · Gastronomía","https://www.modash.io/find-influencers/argentina/buenos-aires/food","buenos aires"],
+ ["Modash · Rosario · General","https://www.modash.io/find-influencers/argentina/rosario","santa fe"],
+ ["Modash · Mendoza · General","https://www.modash.io/find-influencers/argentina/mendoza","mendoza"],
+ ["Modash · Santa Fe · General","https://www.modash.io/find-influencers/argentina/santa-fe","santa fe"],
  ["Modash · Fitness Córdoba","https://www.modash.io/find-influencers/argentina/c%C3%B3rdoba/fitness","cordoba"],
  ["Famadex · Emprendedores Argentina","https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/","general"],
  ["Infloo · Negocios Argentina","https://infloo.io/es/influencers/ar/all/business","general"],
@@ -58,32 +72,36 @@ function profile(h:string,title:string,snippet:string,url:string,label:string,f:
 }
 const strip=(s:string)=>s.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi," ").replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&nbsp;|&#160;/g," ").replace(/&amp;/g,"&").replace(/\s+/g," ").trim();
 // Perfiles con ficha propia publicada en el catálogo: nunca asociar la biografía de una tarjeta a otra.
+// Cada tarjeta se aísla antes de atribuir nombre, @usuario y descripción a una cuenta.
 function fromModash(html:string,label:string,url:string,f:any){
  const seen=new Map<string,any>();
- const anchors=/<a\b[^>]*href=["'](https:\/\/www\.instagram\.com\/([a-z0-9._]{3,30}))["'][^>]*>\s*@\2\s*<\/a>/gi;
- const keys=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
- const desiredCity=norm(f.city).replace(/ capital$/,"").trim();
- for(const m of html.matchAll(anchors)){
-  const h=getHandle(m[1]);if(!h||seen.has(h))continue;
-  const before=html.slice(Math.max(0,m.index-3600),m.index);
-  const headlines=[...before.matchAll(/<h[234]\b[^>]*>([\s\S]*?)<\/h[234]>/gi)];
-  const bios=[...before.matchAll(/<p\b[^>]*class=["'][^"']*line-clamp-3[^"']*["'][^>]*>([\s\S]*?)<\/p>/gi)];
-  const heading=strip(headlines.at(-1)?.[1]||"").replace(/^\d+\.\s*/,"").slice(0,190);
-  const bio=strip(bios.at(-1)?.[1]||"").slice(0,850);
-  if(!bio||!heading)continue;
-  const text=norm(h+" "+heading+" "+bio);
-  if(keys.length&&!keys.some(k=>text.includes(k)))continue;
-  if(desiredCity&&!text.includes(desiredCity))continue;
-  // La página agrupa audiencia por Córdoba; no implica que la persona resida allí.
-  // Sólo acreditar provincia si la propia ficha lo indica explícitamente.
-  const hasCordoba=text.includes("cordoba");
-  const region=hasCordoba?{country:"Argentina",province:"Córdoba"}:{};
-  const row=profile(h,heading,bio,url,label,f,region);
-  row.category="Fitness y entrenamiento";
-  row.match_evidence=hasCordoba?
-    "La biografía menciona Córdoba; perfil publicado en el catálogo; privacidad de Instagram no verificada":
-    "Cuenta con nombre y biografía publicados en catálogo regional; domicilio y privacidad sin verificar";
-  if(region.province)row.location_evidence="Córdoba mencionada en biografía reproducida por catálogo público";
+ const cards=html.split('<div class="relative w-full" country="Argentina">').slice(1);
+ const words=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
+ const cityWanted=norm(f.city).replace(/ capital$/,"").trim();
+ const region=label.includes("Córdoba")?"Córdoba":label.includes("Buenos Aires")?"Buenos Aires":
+  label.includes("Rosario")||label.includes("Santa Fe")?"Santa Fe":label.includes("Mendoza")?"Mendoza":"";
+ for(const card of cards.slice(0,25)){
+  const anchor=card.match(/<a\b[^>]*href=["'](https:\/\/www\.instagram\.com\/([a-z0-9._]{3,30}))["'][^>]*>\s*@\2\s*<\/a>/i);
+  if(!anchor)continue;
+  const h=getHandle(anchor[1]);if(!h||seen.has(h))continue;
+  const name=strip((card.match(/<h2\b[^>]*>\s*<span>([\s\S]*?)<\/span>/i)||[])[1]||"")
+    .replace(/^\d+\.\s*/,"").slice(0,190);
+  const bio=strip((card.match(/<p\b[^>]*class=["'][^"']*line-clamp-3[^"']*["'][^>]*>([\s\S]*?)<\/p>/i)||[])[1]||"").slice(0,850);
+  if(!name||!bio)continue;
+  const searchable=norm(h+" "+name+" "+bio);
+  if(words.length&&!words.some(k=>searchable.includes(k)))continue;
+  if(cityWanted&&!searchable.includes(cityWanted))continue;
+  const hasRegion=region!==""&&searchable.includes(norm(region));
+  const confirmed=hasRegion?{country:"Argentina",province:region}:{};
+  const row=profile(h,name,bio,url,label,f,confirmed);
+  row.category=label.includes("Belleza")?"Belleza":label.includes("Salud")?"Salud":
+   label.includes("Fitness")?"Fitness y entrenamiento":label.includes("Gastronomía")?"Gastronomía":
+   label.includes("Moda")?"Moda":"Profesionales y creadores";
+  row.search_province=region||clean(f.province,100);
+  row.match_evidence=hasRegion?
+   "Nombre y biografía publicados por catálogo; la biografía menciona "+region+" pero la privacidad de Instagram no está verificada":
+   "Nombre, Instagram y biografía publicados por catálogo; región de audiencia, no domicilio verificado";
+  if(!hasRegion)row.location_evidence="Catálogo por región/audiencia; residencia personal sin verificar";
   seen.set(h,row);
  }
  return [...seen.values()];
@@ -147,7 +165,7 @@ function queryFor(f:any,b:number){
 function matchesDirectory(p:any,f:any){
  const a=(x:any)=>norm(x).replace(/ capital$/,"").replace(/^ciudad de /,"");
  if(f.country && a(f.country)!=="argentina")return false;
- const sourceRegion=p.source_provider?.startsWith("Modash · Fitness Córdoba")&&a(f.province)==="cordoba";
+ const sourceRegion=Boolean(p.source_provider?.startsWith("Modash ·") && p.search_province && a(p.search_province)===a(f.province));
  if(f.province && (!p.location_confirmed || a(p.province)!==a(f.province))&&!sourceRegion)return false;
  if(f.city && (!p.location_confirmed || !p.city || !(a(p.city)===a(f.city)||a(p.city).includes(a(f.city)))))return false;
  const hay=a([p.handle,p.headline,p.snippet,p.category].filter(Boolean).join(" "));
@@ -319,7 +337,12 @@ Deno.serve(async(req:Request)=>{
       (f.province&&s[2]===norm(f.province)?30:0)+
       (f.city&&norm(s[0]).includes(norm(f.city))?18:0)+
       (norm(f.focus).includes("estetica")&&s[0].includes("Ágora")?16:0)+
-      (s[0].startsWith("Modash")&&/educacion fisica|ed fisica|fitness|entren|preparador fisico|profesor|personal trainer|deporte|gimnasio|musculacion/i.test(norm(f.keywords))?65:0)+
+      (s[0].startsWith("Modash")?25:0)+
+      (s[0].startsWith("Modash")&&/medic|salud|nutri|doctor|bienestar|odont|kinesi|enfermer/i.test(norm(f.keywords))&&s[0].includes("Salud")?95:0)+
+      (s[0].startsWith("Modash")&&/educacion fisica|fitness|entren|preparador fisico|profesor|personal trainer|deporte|gimnasio|musculacion/i.test(norm(f.keywords))&&s[0].includes("Fitness")?85:0)+
+      (s[0].startsWith("Modash")&&/estetic|belleza|maquill|cosmet|peluquer/i.test(norm(f.keywords))&&s[0].includes("Belleza")?85:0)+
+      (s[0].startsWith("Modash")&&/gastronom|chef|cocin|restaur|aliment/i.test(norm(f.keywords))&&s[0].includes("Gastronomía")?80:0)+
+      (s[0].startsWith("Modash")&&/contador|contable|emprend|negoci|comerc|influenc|profesional/i.test(norm(f.keywords))&&s[0].includes("General")?85:0)+
       (s[0].startsWith("EmprenZona")?12:0)+
       (s[0].startsWith("Infloo")?4:0);
     return priority(b)-priority(a);
