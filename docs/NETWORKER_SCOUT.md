@@ -6,7 +6,7 @@
 - Creado: panel `https://networker3.netlify.app/scout/` que comparte autenticación con el CRM, muestra candidatos públicos y permite guardarlos, revisarlos o descartarlos.
 - Creado: programa `scripts/scout_discovery.py`, que consulta el RSS de un buscador público, deduplica coincidencias de URLs de Instagram y calcula una puntuación indicativa.
 - Programado: GitHub Actions `.github/workflows/networker-scout.yml` con ejecución diaria a las **12:17 UTC (09:17 Argentina)**, sujeta a demoras, disponibilidad, cuotas y permisos de GitHub.
-- **Pruebas reales ejecutadas el 18 de noviembre de 2026:** GitHub Actions sí ejecuta el script y actualiza el archivo. En la última ronda, 8 feeds respondieron y 0 perfiles válidos se encontraron. La inspección de RSS mostró enlaces a `instagram.com/` (página inicial), sin rutas `/usuario/`. **La fuente Bing RSS, con estas consultas, no sirve todavía para descubrir perfiles.** No inventar resultados ni confundir ejecución técnica con éxito comercial.
+- **Búsqueda real exitosa el 18 de noviembre de 2026:** la automatización de GitHub Actions incorporó 60 handles listados por tres directorios públicos: 31 Climaps, 20 Famadex, 9 Infloo. GitHub actualizó `scout/candidates.json`. No se verificó directamente que cada cuenta de Instagram continúe accesible ni que tenga interés en la propuesta. Directorio CreatorReach devolvió HTTP 403 y fue excluido de la ejecución posterior; no se intentó evadir el bloqueo. La fuente RSS de Bing seguía sin descubrir URLs de cuentas.
 - Se añadió disparador `push` en cambios de script, configuración o workflow para probar el motor sin botones de interfaz, además de las ejecuciones diarias y manuales.
 - Diagnósticos por consulta: `feed_inspection` dentro de `scout/candidates.json`.
 
@@ -41,3 +41,7 @@ Esto no consulta la API privada de Instagram ni asegura encontrar perfiles públ
 - Si la acción dice `403 Permission denied to github-actions[bot]` durante `git push`, cambiar permisos de workflow a escritura en el repositorio.
 - Si el panel no abre, verificar despliegue Netlify, acceso por URL correcta y sesión del CRM.
 - Si el radar no guarda: revisar credenciales CRM, existencia de la tabla y políticas RLS.
+
+## Datos reales y trazabilidad
+
+Los candidatos importados aparecen en `scout/candidates.json` con `source_query`, `source_page` y `discovery_method=directorio_publico`, que indican qué directorio publicó cada nombre de usuario. En el panel SCOUT se puede abrir tanto el perfil de Instagram como la fuente original para verificar la información. **No se debe interpretar que 60 cuentas listadas son 60 prospectos interesados**; el interés de emprender no se infiere de forma segura ni se verificó por contacto directo. Las entradas estáticas de los directorios pueden agotarse sin nuevas cuentas; el escaneo diario compara y no duplica resultados.
