@@ -11,7 +11,9 @@ for(const id of ids){assert.ok(!seen.has(id),"ID duplicado: "+id);seen.add(id)}
 for(const ref of m[1].matchAll(/\$\("#([a-zA-Z0-9_-]+)"\)/g))assert.ok(seen.has(ref[1]),"Elemento no encontrado: "+ref[1]);
 for(const id of ["searchForm","provider","country","province","city","keywords","progress","liveCards","dbCards","dbProvince","dbCity","dbCategory","dbCountry","dbFrom","dbProvider","dbFocus","dbVerification","exportDb","exportLive","stop","loadMore"]){assert.ok(seen.has(id),"Falta filtro/botón: "+id)}
 assert.ok(html.includes('db.functions.invoke("scout-live-search"'),"Falta consulta de función remota");
-assert.ok(html.includes('<option value="serper" selected>'),"El buscador automático necesita un proveedor gratuito confiable por defecto");
+assert.ok(html.includes('<option value="directories" selected>'),"Debe permitir encontrar perfiles en fuentes públicas sin API por defecto");
+assert.ok(html.includes('id="showExisting"'),"Debe permitir examinar los perfiles previamente encontrados");
+assert.ok(html.includes('normalize("NFKD")'),"Debe indexar textos de Instagram con tipografías estilizadas");
 assert.ok(html.includes('id="webLink"'),"Debe ofrecer un enlace de búsqueda manual cuando no se conecta una API");
 assert.ok(html.includes('id="advancedSearch"'),"Debe abrirse el bloque de conexión cuando falte clave");
 assert.ok(html.includes('["serper","tavily","serpapi"].includes(provider)'),"Debe exigir clave antes de llamar al buscador");
@@ -48,6 +50,10 @@ assert.ok(backend.includes('provider==="web"'),"La búsqueda web gratuita debe e
 assert.ok(backend.includes('if(!keys.some(k=>relevant.includes(k)))continue;'),"No debe guardar cuentas de rubros que no coincidan");
 assert.ok(backend.includes('start:String((batch%3)*10)'),"No existe paginación real del buscador externo");
 assert.ok(backend.includes("entrepreneur-card"),"Falta extracción por ficha individual del directorio");
+assert.ok(backend.includes("function fromModash"),"Falta nuevo detector de perfiles Instagram de fuente pública");
+assert.ok(backend.includes("Modash · Fitness Córdoba"),"Falta fuente indexada de cuentas de educación física en Córdoba");
+assert.ok(backend.includes('return fromModash(html,label,url,f)'),"El motor debe separar las biografías por perfil");
+assert.ok(backend.includes('normalize("NFKD")'),"El detector debe reconocer letras especiales en la biografía");
 assert.ok(backend.includes("p.handle,p.headline,p.snippet"),"La coincidencia de palabra debe buscar en @usuario y nombre");
 assert.ok(backend.includes('const text=norm(h+" "+title+" "+snippet);'),"El score debe reconocer la palabra en el nombre de usuario");
 assert.ok(backend.includes('if(!h||seen.has(h))continue;'),"No introducir URLs de reels/posts o cuentas duplicadas");
