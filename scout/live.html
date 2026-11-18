@@ -21,15 +21,15 @@ button,input,select{font:inherit;max-width:100%}button{cursor:pointer}button:dis
 @media(max-width:560px){.twocol{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:9px}.stat strong{font-size:20px}.filtersdb{grid-template-columns:repeat(2,minmax(0,1fr))}.top{padding:14px}.headline{font-size:33px}.toolbar .input{flex-basis:100%}.card .buttons .btn{flex:1 1 44%}}
 @media(prefers-reduced-motion:reduce){.progress.busy .orb{animation:none}}
 </style></head><body>
-<header class="top"><a class="logo" href="/scout/live.html">NETWORKER <span>SCOUT</span> · LIVE 3.1</a><nav><a href="/scout/configurar.html">Búsquedas guardadas</a><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
+<header class="top"><a class="logo" href="/scout/live.html">NETWORKER <span>SCOUT</span> · LIVE 3.2</a><nav><a href="/scout/configurar.html">Búsquedas guardadas</a><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
 <main class="wrap"><div class="eyebrow">PROSPECCIÓN · FUENTES EXTERNAS</div><h1 class="headline">Buscá cuentas<br><em>que sí coincidan.</em></h1>
 <p class="lead">Buscá por actividad y ubicación. Para sumar perfiles nuevos sin bloqueos necesitás activar un proveedor de búsqueda con un plan gratuito.</p>
-<div class="layout"><div><section class="panel"><h2>Buscá cuentas públicas</h2>
+<div class="layout"><div><section class="panel"><h2>Detectar perfiles de Instagram</h2>
 <details class="advanced"><summary>Guardar o recuperar una búsqueda (opcional)</summary><div class="field" style="margin-top:13px"><label for="searchName">Nombre para guardarla</label><input id="searchName" maxlength="90" placeholder="Ej.: Nutricionistas de Córdoba"></div>
 <div class="saved-filter"><label class="micro" for="rule">Recuperar una búsqueda anterior (opcional)</label><select id="rule"><option value="">Búsqueda nueva · configurar manualmente</option></select></div>
 <div class="buttons" style="margin-bottom:15px"><button id="saveRule" type="button" class="btn secondary small">Guardar esta configuración</button></div>
 <p id="ruleMessage" class="micro" role="status" style="margin:0 0 15px"></p></details>
-<form id="searchForm"><div class="field"><label for="keywords">Persona o actividad</label><input id="keywords" type="search" maxlength="120" placeholder="Ej.: contador" required autocomplete="off"><small class="help">El término debe estar en el usuario, nombre o texto público del perfil.</small></div><div class="field"><label for="country">País</label><select id="country"><option>Argentina</option><option>Uruguay</option><option>Chile</option><option>Paraguay</option><option>Bolivia</option><option>Perú</option><option>Colombia</option><option>México</option><option>España</option><option>Brasil</option></select></div>
+<form id="searchForm"><div class="field"><label for="keywords">Persona o actividad</label><input id="keywords" type="search" maxlength="120" placeholder="Ej.: contador" required autocomplete="off"><small class="help">Encontramos @usuarios de Instagram que aparecen en fuentes públicas y coinciden con tu actividad.</small></div><div class="field"><label for="country">País</label><select id="country"><option>Argentina</option><option>Uruguay</option><option>Chile</option><option>Paraguay</option><option>Bolivia</option><option>Perú</option><option>Colombia</option><option>México</option><option>España</option><option>Brasil</option></select></div>
 <div class="twocol"><div class="field"><label for="province">Provincia / estado</label><input id="province" list="provinces" placeholder="Córdoba"></div><div class="field"><label for="city">Ciudad</label><input id="city" placeholder="Jesús María"></div></div>
 <datalist id="provinces"><option>Córdoba</option><option>Buenos Aires</option><option>Ciudad Autónoma de Buenos Aires</option><option>Santa Fe</option><option>Río Negro</option><option>Mendoza</option><option>Neuquén</option><option>Entre Ríos</option><option>Salta</option></datalist>
 
@@ -39,15 +39,15 @@ button,input,select{font:inherit;max-width:100%}button{cursor:pointer}button:dis
 <div class="provider"><strong id="providerTitle">Directorios públicos · fuentes limitadas</strong><small id="providerInfo">Consulta listados de negocios en este momento. No busca todas las cuentas de Instagram por biografía y ciudad; para búsqueda web amplia seleccioná Google con SerpApi.</small>
 <div id="keyArea"><div class="field" style="margin:10px 0 0"><label id="keyLabel" for="apiKey">Clave de tu buscador gratuito</label><input id="apiKey" type="password" autocomplete="off" placeholder="Pegá la clave acá"></div><small>La clave se usa solo para esta consulta. No se guarda en la base.</small><p class="micro"><a id="keyLink" href="https://serper.dev/" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:900">Crear cuenta gratuita para buscar</a></p></div></div>
 <div class="field"><label for="batches">Consultas</label><select id="batches"><option value="1" selected>1 consulta</option><option value="3">3 consultas</option><option value="6">6 consultas</option><option value="10">10 consultas</option></select></div></details>
-<div class="buttons"><button id="go" type="submit" class="btn black">⌕ Buscar cuentas nuevas</button><button id="stop" type="button" class="btn secondary" disabled>Detener</button></div></form><a id="webLink" href="https://www.google.com/" class="directsearch" target="_blank" rel="noopener noreferrer">Ver resultados en Google sin clave ↗</a><p class="help" style="margin:6px 0 0">La búsqueda manual abre Google en otra pestaña; no importa datos al CRM.</p>
-<p class="note" style="margin:14px 0 0">No se envían mensajes a los perfiles. La herramienta no inicia sesión en Instagram, no accede a cuentas privadas y evita inventar usuarios cuando no hay resultados.</p>
+<div class="buttons"><button id="go" type="submit" class="btn black">⌕ Buscar perfiles nuevos</button><button id="stop" type="button" class="btn secondary" disabled>Detener</button></div></form><div class="buttons" style="margin-top:10px"><button id="showExisting" class="btn secondary" type="button">Ver perfiles de Instagram ya encontrados</button></div><a id="webLink" href="https://www.google.com/" class="directsearch" target="_blank" rel="noopener noreferrer">Ver resultados en Google sin clave ↗</a><p class="help" style="margin:6px 0 0">La búsqueda manual abre Google en otra pestaña; no importa datos al CRM.</p>
+<p class="note" style="margin:14px 0 0"><strong>Sobre cuentas abiertas:</strong> identificamos cuentas con enlaces y datos publicados en la web. Instagram no permite confirmar desde aquí si cada cuenta sigue activa o tiene privacidad abierta. Podés abrir el perfil para comprobarlo.</p>
 </section></div>
 <div><section class="panel">
 <div id="progress" class="progress" role="status" aria-live="polite"><span id="orb" class="orb">⌕</span><div><strong id="progressTitle">Listo para explorar</strong><small id="progressDetail">Elegí filtros y ejecutá una búsqueda real.</small></div></div>
 <div class="stats"><div class="stat"><strong id="liveCount">0</strong><span>En esta búsqueda</span></div><div class="stat"><strong id="storedCount">—</strong><span>Base histórica y nueva</span></div><div class="stat"><strong id="batchCount">0</strong><span>Lotes consultados</span></div></div>
 <div id="error" class="error" role="alert"></div>
-<div class="tabs"><button id="tabLive" class="tab active" type="button">Resultados de esta búsqueda</button><button id="tabDb" class="tab" type="button">Base segmentada</button></div>
-<div id="livePanel"><div class="toolbar"><input id="liveText" class="input" type="search" placeholder="Filtrar resultados visibles…"><button id="exportLive" type="button" class="btn secondary small">Exportar resultados CSV</button></div>
+<div class="tabs"><button id="tabLive" class="tab active" type="button">Instagram · encontrados ahora</button><button id="tabDb" class="tab" type="button">Perfiles guardados</button></div>
+<div id="livePanel"><p class="help" style="margin:-4px 0 13px">Solo enlaces directos de perfiles de Instagram, no publicaciones ni reels. «Indexado» significa que una fuente pública lo encontró, no privacidad verificada.</p><div class="toolbar"><input id="liveText" class="input" type="search" placeholder="Filtrar resultados visibles…"><button id="exportLive" type="button" class="btn secondary small">Exportar resultados CSV</button></div>
 <div id="liveMeta" class="count">Todavía no realizaste una búsqueda.</div><div class="cards" id="liveCards"><div class="empty">Los perfiles externos aparecerán acá, sin mezclarse con la base anterior.</div></div>
 <div class="buttons" style="margin-top:13px"><button id="loadMore" type="button" class="btn secondary" disabled>Buscar otro lote</button></div></div>
 <div id="dbPanel" hidden><div class="filtersdb">
@@ -58,7 +58,7 @@ button,input,select{font:inherit;max-width:100%}button{cursor:pointer}button:dis
 <select id="dbCategory"><option value="">Todos los rubros identificados</option></select>
 <input id="dbCountry" placeholder="País de la búsqueda / fuente">
 <input id="dbFrom" type="date" title="Descubiertos desde esta fecha">
-<select id="dbProvider"><option value="">Todas las fuentes</option></select>
+<select id="dbProvider"><option value="">Todas las fuentes</option></select><select id="dbOrigin" title="Tipo de procedencia"><option value="">Todas las procedencias</option><option value="indexed">Indexados en buscador web</option><option value="directory">Mencionados o listados en otras webs</option></select>
 <select id="dbStage"><option value="">Todas las etapas</option><option>Por revisar</option><option>Interesante</option><option>Revisado</option><option>Contactado</option><option>Descartado</option></select>
 <select id="dbVerification"><option value="">Todas las ubicaciones</option><option value="true">Ubicación indicada en fuente</option><option value="false">Ubicación sin comprobar</option></select></div>
 <div class="toolbar"><button id="refreshDb" class="btn black small" type="button">Actualizar base</button><button id="exportDb" class="btn secondary small" type="button">Exportar base filtrada CSV</button><span class="micro" id="dbMeta">Sin cargar</span></div>
@@ -74,6 +74,8 @@ let db=null,user=null,searchRows=[],dbRows=[],runId="",nextBatch=0,provider="ser
 const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
 const txt=(tag,str,cls)=>{const x=document.createElement(tag);x.textContent=String(str??"");if(cls)x.className=cls;return x};
 const valid=h=>/^[a-z0-9._]{3,30}$/.test(h||"")&&!h.includes("..");
+const isWebIndexed=p=>/^(Serper|Tavily|SerpApi|Brave Search)/i.test(String(p.source_provider||""));
+const publicEvidence=p=>isWebIndexed(p)?"Perfil indexado en web":"Instagram mencionado públicamente";
 function filters(){return {name:$("#searchName").value.trim(),country:$("#country").value,province:$("#province").value.trim(),city:$("#city").value.trim(),focus:"Todos los rubros",keywords:$("#keywords").value.trim(),interests:[]}}
 function showProgress(title,detail,loading){$("#progress").classList.toggle("busy",!!loading);$("#orb").textContent=loading?"↻":"⌕";$("#progressTitle").textContent=title;$("#progressDetail").textContent=detail}
 function error(msg){$("#error").textContent=msg||""}
@@ -81,7 +83,7 @@ function csv(rows,name){const body=rows.map(r=>r.map(v=>{let s=String(v??"");if(
 function asRows(list){return [["usuario","instagram","nombre","descripcion_publica","fuente","pagina_fuente","pais_confirmado","provincia_confirmada","ciudad_confirmada","ubicacion_indicada_en_fuente","pais_busqueda","provincia_busqueda","ciudad_busqueda","interes_busqueda","rubro_estimado","palabras_coincidentes","etapa","encontrado_primera_vez"],...list.map(p=>[p.handle,p.profile_url,p.headline,p.snippet,p.source_provider,p.source_page,p.country,p.province,p.city,p.location_confirmed?"SI":"NO",p.search_country,p.search_province,p.search_city,p.search_focus,p.category,(p.match_keywords||[]).join("; "),p.stage||"Por revisar",p.first_seen_at||""])]}
 function card(p,storage){
  const box=txt("article","","card"),head=txt("div","","cardhead"),h=txt("strong","@"+p.handle,"handle"),loc=p.location_confirmed;
- head.append(h,txt("span",loc?"Ubicación indicada en fuente":"Ubicación por verificar","mini-tag"+(loc?" ok":"")));
+ head.append(h,txt("span",publicEvidence(p),"mini-tag"),txt("span",loc?"Ubicación indicada en fuente":"Ubicación por verificar","mini-tag"+(loc?" ok":"")));
  box.append(head,txt("div",p.headline||"Perfil mencionado públicamente","name"));
  if(p.snippet)box.append(txt("p",p.snippet.slice(0,460)));
  if(p.match_evidence)box.append(txt("div",p.match_evidence,"detail"));
@@ -97,7 +99,7 @@ function card(p,storage){
 function renderLive(){const q=norm($("#liveText").value),rows=searchRows.filter(p=>!q||norm([p.handle,p.headline,p.snippet,p.category,p.city,p.province,p.source_provider].join(" ")).includes(q));$("#liveCount").textContent=searchRows.length.toLocaleString("es-AR");$("#batchCount").textContent=String(nextBatch);$("#liveMeta").textContent=rows.length+" perfiles visibles · "+searchRows.length+" resultados únicos de esta búsqueda, sin mezclar la base anterior";const list=$("#liveCards");list.replaceChildren();if(!rows.length){list.append(txt("div",searchRows.length?"Tus filtros de texto no coinciden con los resultados.":"Aún no hay perfiles encontrados en esta búsqueda.","empty"));return}rows.slice(0,240).forEach(p=>list.appendChild(card(p,false)));if(rows.length>240)list.append(txt("p","Mostrando 240 de "+rows.length+" fichas. Exportá el CSV para verlas todas.","micro"))}
 function filteredDb(){
  const q=norm($("#dbText").value),province=norm($("#dbProvince").value),city=norm($("#dbCity").value),
- focus=$("#dbFocus").value,stage=$("#dbStage").value,verified=$("#dbVerification").value,
+ focus=$("#dbFocus").value,stage=$("#dbStage").value,verified=$("#dbVerification").value,origin=$("#dbOrigin").value,
  category=$("#dbCategory").value,country=norm($("#dbCountry").value),from=$("#dbFrom").value,provider=$("#dbProvider").value;
  const matchesFocus=p=>{
   if(!focus)return true;
@@ -111,7 +113,7 @@ function filteredDb(){
   if(focus==="Profesionales")return /profesional/.test(cat);
   return focus==="Todos los rubros";
  };
- return dbRows.filter(p=>(!q||norm([p.handle,p.headline,p.snippet,p.category,p.source_provider,(p.match_keywords||[]).join(" ")].join(" ")).includes(q))&&(!province||norm(p.search_province).includes(province)||norm(p.province).includes(province))&&(!city||norm(p.search_city).includes(city)||norm(p.city).includes(city))&&matchesFocus(p)&&(!category||p.category===category)&&(!country||norm(p.search_country).includes(country)||norm(p.country).includes(country))&&(!from||String(p.first_seen_at||"").slice(0,10)>=from)&&(!provider||p.source_provider===provider)&&(!stage||p.stage===stage)&&(!verified||String(!!p.location_confirmed)===verified))}
+ return dbRows.filter(p=>(!q||norm([p.handle,p.headline,p.snippet,p.category,p.source_provider,(p.match_keywords||[]).join(" ")].join(" ")).includes(q))&&(!province||norm(p.search_province).includes(province)||norm(p.province).includes(province))&&(!city||norm(p.search_city).includes(city)||norm(p.city).includes(city))&&matchesFocus(p)&&(!category||p.category===category)&&(!country||norm(p.search_country).includes(country)||norm(p.country).includes(country))&&(!from||String(p.first_seen_at||"").slice(0,10)>=from)&&(!provider||p.source_provider===provider)&&(!origin||(origin==="indexed"?isWebIndexed(p):!isWebIndexed(p)))&&(!stage||p.stage===stage)&&(!verified||String(!!p.location_confirmed)===verified))}
 function renderDb(){const rows=filteredDb();$("#dbMeta").textContent=rows.length.toLocaleString("es-AR")+" de "+dbRows.length.toLocaleString("es-AR")+" fichas cargadas";const list=$("#dbCards");list.replaceChildren();if(!rows.length){list.append(txt("div","Sin perfiles para estos filtros; probá ampliar la búsqueda.","empty"));$("#nextDb").hidden=true;return}rows.slice(0,dbVisible).forEach(p=>list.appendChild(card(p,true)));$("#nextDb").hidden=rows.length<=dbVisible;$("#nextDb").textContent="Mostrar más ("+(rows.length-dbVisible)+")"}
 async function refreshTotal(){const {count,error:e}=await db.from("scout_live_profiles").select("handle",{count:"exact",head:true});if(!e)$("#storedCount").textContent=Number(count||0).toLocaleString("es-AR")}
 async function refreshDb(){error("");showProgress("Leyendo base segmentada","Cargando fichas de tu repositorio privado…",true);dbRows=[];let page=0;while(page<20){const {data,error:e}=await db.from("scout_live_profiles").select("*").order("last_seen_at",{ascending:false}).range(page*500,page*500+499);if(e){error("No se pudo cargar la base: "+e.message);break}dbRows.push(...data);if(data.length<500)break;page++}const setOptions=(id,values,defaultLabel)=>{const sel=$(id),keep=sel.value;sel.replaceChildren();const none=document.createElement("option");none.value="";none.textContent=defaultLabel;sel.append(none);values.filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")).forEach(v=>{const opt=document.createElement("option");opt.value=v;opt.textContent=v;sel.append(opt)});sel.value=values.includes(keep)?keep:""};
@@ -221,11 +223,28 @@ $("#provider").onchange=settingsProvider;
 $("#searchForm").onsubmit=e=>{e.preventDefault();start(true,false)};
 $("#stop").onclick=()=>{abort=true;$("#stop").disabled=true};
 $("#loadMore").onclick=()=>start(false,true);
+$("#showExisting").onclick=async()=>{
+ if(!user){error("Iniciá sesión en SCOUT para consultar la base.");return}
+ const f=filters();
+ if(!f.keywords){error("Indicá primero una actividad para buscar entre los perfiles guardados.");$("#keywords").focus();return}
+ $("#dbText").value=f.keywords;
+ $("#dbProvince").value=f.province;
+ $("#dbCity").value=f.city;
+ $("#dbCountry").value=f.country;
+ $("#dbCategory").value="";
+ $("#dbProvider").value="";
+ $("#dbOrigin").value="";
+ $("#dbFocus").value="";
+ await refreshDb();
+ switchTab("db");
+ const count=filteredDb().length;
+ showProgress("Cuentas de Instagram ya detectadas",count+" perfiles coincidentes con los filtros de tu base. Son fichas existentes, no una búsqueda nueva.",false);
+};
 $("#tabLive").onclick=()=>switchTab("live");$("#tabDb").onclick=()=>switchTab("db");
 $("#liveText").oninput=renderLive;
 $("#refreshDb").onclick=refreshDb;
 $("#nextDb").onclick=()=>{dbVisible+=40;renderDb()};
-["dbText","dbProvince","dbCity","dbFocus","dbCategory","dbCountry","dbFrom","dbProvider","dbStage","dbVerification"].forEach(id=>$("#"+id).addEventListener("input",()=>{dbVisible=40;renderDb()}));
+["dbText","dbProvince","dbCity","dbFocus","dbCategory","dbCountry","dbFrom","dbProvider","dbOrigin","dbStage","dbVerification"].forEach(id=>$("#"+id).addEventListener("input",()=>{dbVisible=40;renderDb()}));
 $("#exportLive").onclick=()=>{if(!searchRows.length){error("Primero buscá perfiles para exportar.");return}csv(asRows(searchRows),"networker-busqueda-en-vivo.csv")};
 $("#exportDb").onclick=()=>{const rows=filteredDb();if(!rows.length){error("No hay perfiles con estos filtros para exportar.");return}csv(asRows(rows),"networker-base-segmentada.csv")};
 $("#loginForm").onsubmit=async e=>{e.preventDefault();$("#loginError").textContent="";const {error:x}=await db.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});if(x){$("#loginError").textContent=x.message;return}await auth()};
