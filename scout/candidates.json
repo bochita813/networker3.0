@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T17:24:29+00:00",
+  "last_scan": "2026-11-18T17:30:17+00:00",
   "feeds_ok": 12,
   "queries_attempted": 12,
   "configured_searches": 4,
-  "new_profiles": 0,
+  "new_profiles": 17,
   "feed_inspection": [
     {
       "query": "site:instagram.com Salud y bienestar Jesús Maria Córdoba Argentina Cosmética Bienestar",
-      "rss_items": 10,
+      "rss_items": 0,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -42,53 +42,49 @@
     {
       "query": "\"instagram.com\" \"emprendedor\" \"Argentina\"",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
       "query": "\"instagram.com\" \"emprendedora\" \"Buenos Aires\"",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
       "query": "instagram emprendimiento Argentina cuentas",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
       "query": "instagram negocios emprendedores Argentina perfil",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -102,14 +98,13 @@
     {
       "query": "Instagram emprendedoras Neuquén",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -123,14 +118,13 @@
     {
       "query": "instagram.com emprendedoras Córdoba Argentina",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     }
   ],
@@ -151,7 +145,7 @@
       "directory": "Climaps · Emprendimientos Argentina",
       "kind": "climaps",
       "handles_found": 31,
-      "html_chars": 605833
+      "html_chars": 605834
     },
     {
       "directory": "ADULP · Catálogo emprendedor La Plata",
@@ -170,14 +164,391 @@
       "kind": "catalog",
       "handles_found": 21,
       "html_chars": 54641
+    },
+    {
+      "directory": "EmprenZona · Directorio de ferias Argentina",
+      "kind": "emprenzona",
+      "handles_found": 889,
+      "html_chars": 2289276
+    },
+    {
+      "directory": "EmprenZona · Emprendedores de Córdoba",
+      "kind": "emprenzona_cordoba",
+      "handles_found": 9,
+      "html_chars": 82719
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 109954
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 108057
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 120024
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 116425
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 115098
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 115981
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 1,
+      "html_chars": 110614
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 114828
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 107943
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 106705
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 122494
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 117833
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 119173
+    },
+    {
+      "directory": "Ágora · Estética Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 116036
+    },
+    {
+      "directory": "Ágora · Peluquería Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 112625
+    },
+    {
+      "directory": "Ágora · Peluquería Córdoba Capital",
+      "kind": "agora_cordoba",
+      "handles_found": 2,
+      "html_chars": 111550
     }
   ],
-  "directories_ok": 6,
-  "errors": [
-    "EmprenZona · Directorio de ferias Argentina: TimeoutError: The read operation timed out",
-    "EmprenZona · Emprendedores de Córdoba: TimeoutError: The read operation timed out"
-  ],
+  "directories_ok": 24,
+  "errors": [],
   "profiles": [
+    {
+      "handle": "agora.red",
+      "url": "https://www.instagram.com/agora.red/",
+      "headline": "Frida Estética integral",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a3d17a9c6a5b%3A0x11a66a668128ae2",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "auraespacio.cba",
+      "url": "https://www.instagram.com/auraespacio.cba/",
+      "headline": "Aura Espacio",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a1003653bd8f%3A0x187002a4c3e63142",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "bienestarintegral.ac",
+      "url": "https://www.instagram.com/bienestarintegral.ac/",
+      "headline": "Bienestar Integral by AC",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a3fa150fe481%3A0xe23b299aaf8c5958",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "blond.professionalstudio",
+      "url": "https://www.instagram.com/blond.professionalstudio/",
+      "headline": "Blond. Professional Studio",
+      "snippet": "Ágora · Peluquería Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Peluquería Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a30a41b4ea25%3A0x1484f5f192d41f0f",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Peluquería",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "circe.estetica",
+      "url": "https://www.instagram.com/circe.estetica/",
+      "headline": "Circe Estetica",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x94329197e72bbcbd%3A0xec98e6ba96cfe1c8",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "divinails.cba",
+      "url": "https://www.instagram.com/divinails.cba/",
+      "headline": "DIVINAILS - Salón de belleza en Córdoba | Ágora",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x943299eacaec5f95%3A0x8b8b5b321dd5235b",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "evelynreyna_nails",
+      "url": "https://www.instagram.com/evelynreyna_nails/",
+      "headline": "Studio ER 💜",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432bd034d749a49%3A0x96301b9835b1c5cd",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "francioslourdes_studio",
+      "url": "https://www.instagram.com/francioslourdes_studio/",
+      "headline": "Francios Lourdes Studio",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x943299002bc281a3%3A0xbf4bbf98383dffc3",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "fridaesteticaintegral_",
+      "url": "https://www.instagram.com/fridaesteticaintegral_/",
+      "headline": "Frida Estética integral",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a3d17a9c6a5b%3A0x11a66a668128ae2",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "glamdepidefinitiva",
+      "url": "https://www.instagram.com/glamdepidefinitiva/",
+      "headline": "Estética Glam",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a3b1d59e5a4f%3A0x563262606d2cddea",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "glowside.esteticaintegral",
+      "url": "https://www.instagram.com/glowside.esteticaintegral/",
+      "headline": "Glowside Estética Integral",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x943299002bc5beb9%3A0x67c418519278b741",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "imagoesthetic.cba",
+      "url": "https://www.instagram.com/imagoesthetic.cba/",
+      "headline": "IMAGO ESTHETIC",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a3e5e7d0d64b%3A0x417815a712c195c2",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "lorenacollestetica",
+      "url": "https://www.instagram.com/lorenacollestetica/",
+      "headline": "Lorena Coll Estética",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x943299002c813f6f%3A0x3068af4e93dccf58",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "natyh.cosmiatria",
+      "url": "https://www.instagram.com/natyh.cosmiatria/",
+      "headline": "Natalia Herrera",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a3eea07ef057%3A0xb3dc17506fe68cc6",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "padilladuranestetica",
+      "url": "https://www.instagram.com/padilladuranestetica/",
+      "headline": "Padilla Duran Estetica y Salud",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x94329f33ad95c857%3A0x67930abe2484fba3",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "piacereestetica",
+      "url": "https://www.instagram.com/piacereestetica/",
+      "headline": "Piacere Espacio de Estética",
+      "snippet": "Ágora · Estética Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Estética Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a1e6bb7bbe4b%3A0xc8e5260e4586ba3f",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Estética",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "sheyka.peluqueria",
+      "url": "https://www.instagram.com/sheyka.peluqueria/",
+      "headline": "Sheyka Peluquería",
+      "snippet": "Ágora · Peluquería Córdoba Capital. Cuenta de Instagram enlazada directamente desde una ficha pública.",
+      "score": 67,
+      "source_query": "Ágora · Peluquería Córdoba Capital",
+      "source_page": "https://market.agora.red/directorio/0x9432a35cf6a254c3%3A0x3e9afe9e59927465",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "city": "Córdoba Capital",
+      "category": "Peluquería",
+      "location_evidence": "Ficha pública de negocio ubicado en Córdoba Capital",
+      "first_seen": "2026-11-18"
+    },
     {
       "handle": "accesorios_.juli",
       "url": "https://www.instagram.com/accesorios_.juli/",
