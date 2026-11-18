@@ -54,3 +54,18 @@ Se incorporó el directorio público [EmprenZona](https://www.emprenzona.com.ar/
 La primera ejecución ampliada guardó 800 cuentas porque existía un límite de salida de 800; ese límite fue corregido a 2.400 cuentas y se configuró una ejecución adicional de verificación. **Nunca confundir la cantidad de perfiles publicados con personas que quieren asociarse, ni dar por activo o verificado el perfil dentro de Instagram.** Un catálogo puede tener cuentas antiguas. La búsqueda automática corre cada mañana y conservará candidatos previos aunque alguna fuente deje de responder.
 
 El panel ahora pagina en bloques de 100 resultados, permite buscar por nombre y descripción y muestra enlaces a la fuente pública de cada candidato. No modifica \`crm_leads\` ni envía DMs.
+
+
+## SCOUT 2.0: configurador avanzado y acciones (18 de noviembre de 2026)
+
+**Abrir:** https://networker3.netlify.app/scout/configurar.html
+
+- El formulario permite configurar y **guardar en Supabase** reglas por país, provincia, localidad, tipo de proyecto, intereses, palabras clave y afinidad temática mínima. Se pueden editar, activar, pausar o eliminar; máximo 8 activas a la vez.
+- La tabla \`public.scout_search_rules\` tiene RLS; solo los usuarios administradores del CRM pueden modificar las reglas. Las reglas **activas sin datos personales** son legibles públicamente por la automatización gratuita (solo campos necesarios para buscar; no el UUID del administrador).
+- \`scripts/scout_discovery.py\` carga diariamente los términos de hasta ocho búsquedas activas desde Supabase (API de solo lectura) y los agrega a las consultas RSS; los directorios de cuentas siguen consultándose enteros. **Búsqueda RSS no garantiza nuevos candidatos**, como demostró la primera prueba; filtrar la base no implica descubrimiento dirigido garantizado.
+- Con la fuente pública EmprenZona se incorporó localidad en 421 registros y rubro en 642 de 1.044 perfiles del último escaneo. Provincia solo se muestra si aparece explícita o si la localidad permite asignarla sin ambigüedad; lo desconocido se mantiene sin determinar.
+- El filtro de **afinidad temática** se calcula por coincidencias de palabras en fichas públicas. No es una probabilidad real de querer participar ni utiliza atributos sensibles.
+- Acciones disponibles: seleccionar coincidencias, guardar candidatos seleccionados en el radar privado, exportar CSV y **preparar saludos personalizados para revisión**. No hay envío automático de DMs a desconocidos.
+- Para ejecutar sin esperar el horario diario, abrir GitHub Actions del buscador y seleccionar **Run workflow**. La programación diaria sigue vigente.
+- \`.github/workflows/scout-ui-validation.yml\` ejecuta \`node --check\` para verificar sintaxis de los scripts de SCOUT al modificarse las pantallas; resultado en \`scout/ui-check.json\`.
+- Los usuarios deben abrir/verificar cada cuenta y el contexto del mensaje antes del contacto. No usar los CSV como prueba de consentimiento ni cargar automáticamente esos nombres en \`crm_leads\`.
