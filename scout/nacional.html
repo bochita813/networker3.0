@@ -88,7 +88,35 @@ function formValues(){return {
 function request(){
  const f=formValues();
  let q=db.from("scout_national_leads").select("*",{count:"exact"});
- if(f.query)q=q.or("name.ilike.%"+f.query+"%,activity.ilike.%"+f.query+"%,sector.ilike.%"+f.query+"%,instagram.ilike.%"+f.query+"%");
+ if(f.query){
+  const normalized=f.query.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").trim();
+  // Alias explícitos: interpretar palabras argentinas sin añadir rubros ajenos.
+  const aliases={
+   "contador":["office:accountant","office:tax_advisor"],
+   "contadora":["office:accountant","office:tax_advisor"],
+   "contable":["office:accountant"],
+   "abogado":["office:lawyer"],"abogada":["office:lawyer"],
+   "arquitecto":["office:architect"],"arquitecta":["office:architect"],
+   "medico":["healthcare:doctor","amenity:doctors","office:physician"],
+   "medica":["healthcare:doctor","amenity:doctors","office:physician"],
+   "odontologo":["amenity:dentist","healthcare:dentist"],
+   "odontologa":["amenity:dentist","healthcare:dentist"],
+   "farmacia":["healthcare:pharmacy","amenity:pharmacy"],
+   "estetica":["shop:beauty","leisure:beauty_salon"],
+   "peluqueria":["shop:hairdresser"],
+   "educacion fisica":["leisure:fitness_centre","leisure:sports_centre"],
+   "entrenador":["leisure:fitness_centre"],
+   "gimnasio":["leisure:fitness_centre","leisure:sports_centre"],
+   "fitness":["leisure:fitness_centre"],
+   "restaurante":["amenity:restaurant"],
+   "ferreteria":["shop:hardware"],
+   "hotel":["tourism:hotel"]
+  };
+  const terms=[f.query,...(aliases[normalized]||[])];
+  const conditions=terms.flatMap(t=>["name.ilike.%"+t+"%","activity.ilike.%"+t+"%","sector.ilike.%"+t+"%"]);
+  conditions.push("instagram.ilike.%"+f.query+"%");
+  q=q.or(conditions.join(","));
+ }
  if(f.province)q=q.eq("province",f.province);
  if(f.city)q=q.ilike("city","%"+safeSearch(f.city)+"%");
  if(f.sector)q=q.eq("sector",f.sector);
@@ -107,7 +135,23 @@ function card(p){
  top.append(el("h3",p.name||"Establecimiento sin nombre"));
  const type=p.lead_kind==="instagram_profile"?"Instagram":p.lead_kind==="professional"?"Profesional":"Negocio";
  top.append(el("span",type,"tag"));root.append(top);
- root.append(el("p",[p.activity,p.sector].filter(Boolean).join(" · ")));
+ const categories={
+  "office:accountant":"Estudio contable / contaduría",
+  "office:lawyer":"Abogacía",
+  "office:architect":"Arquitectura",
+  "healthcare:doctor":"Consultorio médico",
+  "healthcare:pharmacy":"Farmacia",
+  "amenity:restaurant":"Restaurante",
+  "amenity:dentist":"Odontología",
+  "leisure:fitness_centre":"Gimnasio / entrenamiento",
+  "leisure:sports_centre":"Centro deportivo",
+  "shop:hairdresser":"Peluquería",
+  "shop:beauty":"Estética y belleza",
+  "shop:hardware":"Ferretería",
+  "tourism:hotel":"Hotel"
+ };
+ const activityLabel=categories[p.activity]||p.activity;
+ root.append(el("p",[activityLabel,p.sector].filter(Boolean).join(" · ")));
  const place=[p.city,p.province].filter(Boolean).join(", ");
  root.append(el("p",place||"Provincia o ciudad no confirmada"));
  if(p.region_hint&&!p.province)root.append(el("p","Región de búsqueda: "+p.region_hint+" (sin verificar)","help"));
