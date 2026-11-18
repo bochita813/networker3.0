@@ -124,7 +124,7 @@ def main():
             prior = json.loads(OUTPUT.read_text(encoding="utf-8"))
         except Exception as exc:
             print("Archivo anterior inválido; iniciamos limpio:", exc, file=sys.stderr)
-    result = {p["handle"]: p for p in prior.get("profiles", []) if isinstance(p, dict) and "handle" in p and p["handle"] != "emprenzona"}
+    result = {p["handle"]: p for p in prior.get("profiles", []) if isinstance(p, dict) and "handle" in p and p["handle"] not in ("emprenzona", "agora.red")}
     new_count, feeds_ok, errors = 0, 0, []
     feed_inspection = []
     for query in queries:
@@ -175,7 +175,9 @@ def main():
                 # Conservar la mejor fuente, pero completar los nuevos metadatos
                 # explícitos (ciudad/rubro) desde los directorios públicos.
                 for field in ("country", "province", "city", "category", "location_evidence"):
-                    if listing.get(field) and not previous.get(field):
+                    # Actualizar categoría si la ficha original es la misma.
+                    if listing.get(field) and (not previous.get(field) or
+                      (field == "category" and listing.get("source_page") == previous.get("source_page"))):
                         previous[field] = listing[field]
         else:
             result[handle] = dict(listing, first_seen=dt.datetime.now(dt.timezone.utc).date().isoformat())
