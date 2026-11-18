@@ -48,7 +48,7 @@ def fetch_feed(query):
     for item in root.findall(".//item")[:45]:
         yield {
             "title": html.unescape(text(item, "title"))[:250],
-            "snippet": re.sub(r"<[^>]+>", " ", html.unescape(text(item, "description")))[:800],
+            "snippet": re.sub(r"<[^>]+>", " ", html.unescape(text(item, "description")))[:2400],
             "link": html.unescape(text(item, "link")),
         }
 
