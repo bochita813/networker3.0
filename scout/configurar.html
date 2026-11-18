@@ -54,6 +54,10 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--orange)}
 footer{margin-top:20px;padding:20px 0;border-top:1px solid var(--line);color:#81766c;font-size:11px}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.rowfields{grid-template-columns:1fr 1fr}.panel{padding:19px}}
 @media(max-width:520px){.statgrid{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:21px}.top{padding:16px}.top nav{gap:9px}.rowfields{grid-template-columns:1fr}.wrap{padding-top:24px}}
+.shortcuts{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:18px 0 2px}
+.shortcuts-title{font-size:12px;font-weight:850;color:#53473d}
+.shortcuts .btn{min-height:38px}
+@media(max-width:550px){.shortcuts .btn{flex:1 1 auto;min-width:140px;white-space:normal}}
 /* Auditoría visual SCOUT: tamaños, textos largos, mobile y sliders */
 html{scroll-behavior:smooth}
 body{min-width:320px}
@@ -109,6 +113,12 @@ body{min-width:320px}
 <div class="actions" style="margin:8px 0 17px"><a class="btn alt sm" href="https://github.com/bochita813/networker3.0/actions/workflows/networker-scout.yml" target="_blank" rel="noopener noreferrer">↻ Ejecutar descubrimiento ahora (GitHub Actions) ↗</a></div>
 <h1>Configurá a quién <em>querés encontrar.</em></h1>
 <p class="lead">Filtrá los perfiles que SCOUT ya encontró por ubicación, rubro e intereses. Cuando guardás una búsqueda, sus términos también se usan en el próximo escaneo programado. <strong>Filtrar esta base no equivale a encontrar cuentas nuevas en Instagram en tiempo real.</strong></p>
+<div class="shortcuts" aria-label="Pruebas rápidas de filtros">
+ <span class="shortcuts-title">Probá una búsqueda:</span>
+ <button class="btn alt sm" type="button" id="presetCordoba">Córdoba · toda la provincia</button>
+ <button class="btn alt sm" type="button" id="presetEsteticas">Estética · Córdoba Capital</button>
+ <button class="btn alt sm" type="button" id="presetAll">Ver toda la base</button>
+</div>
 <div class="layout">
 <div>
 <section class="panel">
@@ -366,6 +376,15 @@ TOPICS.forEach(t=>{const label=document.createElement("label"),input=document.cr
  $('#'+id).addEventListener("input",()=>{if(id==="affinity")$('#affinityValue').textContent=$('#affinity').value;if(id!=="name")preview()});
 });
 $('#textSearch').addEventListener("input",preview);
+function preset(f){
+ editing=null;$('#saveRule').textContent="Guardar y activar búsqueda";$('#textSearch').value="";
+ formSet(f);
+ document.getElementById("resultPanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$('#presetCordoba').addEventListener("click",()=>preset({name:"Emprendedores en Córdoba",country:"Argentina",province:"Córdoba",city:"",focus:"Todos los rubros",interests:[],keywords:"",min_affinity:0}));
+$('#presetEsteticas').addEventListener("click",()=>preset({name:"Estéticas de Córdoba Capital",country:"Argentina",province:"Córdoba",city:"Córdoba Capital",focus:"Estética y belleza",interests:["Estética","Cosmética"],keywords:"",min_affinity:0}));
+$('#presetAll').addEventListener("click",()=>preset({name:"Exploración nacional",country:"Argentina",province:"",city:"",focus:"Todos los rubros",interests:[],keywords:"",min_affinity:0}));
+
 $('#removeCity').addEventListener("click",()=>{$('#city').value="";preview()});
 $('#removeTopics').addEventListener("click",()=>{
  $('#focus').value="Todos los rubros";$('#keywords').value="";$('#affinity').value="0";$('#affinityValue').textContent="0";
