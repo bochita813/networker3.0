@@ -11,7 +11,11 @@ for(const id of ids){assert.ok(!seen.has(id),"ID duplicado: "+id);seen.add(id)}
 for(const ref of m[1].matchAll(/\$\("#([a-zA-Z0-9_-]+)"\)/g))assert.ok(seen.has(ref[1]),"Elemento no encontrado: "+ref[1]);
 for(const id of ["searchForm","provider","country","province","city","keywords","progress","liveCards","dbCards","dbProvince","dbCity","dbCategory","dbCountry","dbFrom","dbProvider","dbFocus","dbVerification","exportDb","exportLive","stop","loadMore"]){assert.ok(seen.has(id),"Falta filtro/botón: "+id)}
 assert.ok(html.includes('db.functions.invoke("scout-live-search"'),"Falta consulta de función remota");
-assert.ok(html.includes('<option value="web" selected>'),"El buscador web público debe ser el proveedor por defecto");
+assert.ok(html.includes('<option value="serper" selected>'),"El buscador automático necesita un proveedor gratuito confiable por defecto");
+assert.ok(html.includes('id="webLink"'),"Debe ofrecer un enlace de búsqueda manual cuando no se conecta una API");
+assert.ok(html.includes('id="advancedSearch"'),"Debe abrirse el bloque de conexión cuando falte clave");
+assert.ok(html.includes('["serper","tavily","serpapi"].includes(provider)'),"Debe exigir clave antes de llamar al buscador");
+assert.ok(html.includes('apiKey:["serper","tavily","serpapi"].includes(p)'),"Debe remitir clave al proveedor correcto");
 assert.equal([...html.matchAll(/<label for="keywords">/g)].length,1,"Debe haber una única palabra o actividad");
 assert.ok(!html.includes('<label for="focus">Persona o actividad</label>'),"No mostrar la selección confusa de tipo de persona");
 assert.ok(!html.includes('id="topics"'),"No mostrar filtros de interés adicionales que cruzan rubros");
@@ -29,6 +33,11 @@ assert.ok(html.includes('db.from("scout_search_rules").insert'),"No se pueden gu
 const backend=fs.readFileSync("supabase/functions/scout-live-search/index.ts","utf8");
 assert.ok(backend.includes('engine:"google"'),"El proveedor debe consultar Google, no un RSS irrelevante");
 assert.ok(backend.includes("function fromBraveResults"),"El buscador gratuito debe extraer perfiles de resultados públicos");
+assert.ok(backend.includes('provider==="serper"||provider==="tavily"'),"Deben existir proveedores gratuitos estables");
+assert.ok(backend.includes("https://google.serper.dev/search"),"Falta Serper");
+assert.ok(backend.includes("https://api.tavily.com/search"),"Falta Tavily");
+assert.ok(backend.includes('if(!needles.some(k=>searchable.includes(k)))continue;'),"No se deben mezclar actividades");
+
 assert.ok(backend.includes('provider==="web"'),"La búsqueda web gratuita debe estar conectada a la función remota");
 assert.ok(backend.includes('if(!keys.some(k=>relevant.includes(k)))continue;'),"No debe guardar cuentas de rubros que no coincidan");
 assert.ok(backend.includes('start:String((batch%3)*10)'),"No existe paginación real del buscador externo");
