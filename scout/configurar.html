@@ -54,6 +54,53 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--orange)}
 footer{margin-top:20px;padding:20px 0;border-top:1px solid var(--line);color:#81766c;font-size:11px}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.rowfields{grid-template-columns:1fr 1fr}.panel{padding:19px}}
 @media(max-width:520px){.statgrid{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:21px}.top{padding:16px}.top nav{gap:9px}.rowfields{grid-template-columns:1fr}.wrap{padding-top:24px}}
+/* Auditoría visual SCOUT: tamaños, textos largos, mobile y sliders */
+html{scroll-behavior:smooth}
+body{min-width:320px}
+.layout>*{min-width:0}
+.panel{min-width:0}
+.profile{min-width:0;overflow-wrap:anywhere;align-items:start}
+.profile>div{min-width:0}
+.rule{min-width:0}
+.rule>div:first-child{min-width:0;overflow-wrap:anywhere}
+.rule-buttons{flex-shrink:0}
+.profile-head{align-items:flex-start}
+.profile .buttons{row-gap:9px}
+.profile .buttons a,.profile .buttons button{min-height:34px;display:inline-flex;align-items:center}
+.field input[type=range]{border:0;box-shadow:none;min-height:28px;padding:0;background:transparent;accent-color:var(--orange)}
+.field input[type=checkbox]{accent-color:var(--orange)}
+.top nav{flex-wrap:wrap}
+.coverage{background:#f5f0e9;border:1px solid #e3d7c9;border-radius:7px;padding:13px 15px;font-size:12px;margin-bottom:12px;line-height:1.6}
+.coverage strong{font-weight:850}
+.coverage .small{display:block;font-size:11px;color:#695f55;margin-top:3px}
+.diagnosis{border:1px solid #ead8c9;background:#fff8f2;border-radius:7px;padding:15px;margin:12px 0;font-size:12px}
+.diagnosis[hidden]{display:none}
+.diagnosis strong{display:block;margin-bottom:5px}
+.diagnosis p{margin-bottom:9px;color:#6d5445}
+.diagnosis .btn{margin:4px 5px 0 0}
+.filters-note{font-size:11px;color:#776a60;margin-bottom:12px}
+#profiles .empty{line-height:1.6}
+.result-tools .searchbox{flex-basis:100%}
+@media(max-width:1050px){.layout{grid-template-columns:1fr;gap:14px}.wrap{max-width:780px;padding:25px 16px 65px}.panel{padding:20px}}
+@media(max-width:550px){
+ body{font-size:13px}.wrap{padding:22px 12px 65px}
+ .panel{padding:15px;border-radius:7px}.top strong{font-size:14px}
+ h1{font-size:34px;letter-spacing:-1.4px}
+ .top nav{gap:11px}.rowfields{grid-template-columns:1fr;gap:0}
+ .statgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .statgrid .stat:last-child{grid-column:span 2}
+ .stat small{font-size:11px}
+ .rule{flex-direction:column;align-items:stretch}
+ .rule-buttons{justify-content:flex-start}
+ .result-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .result-tools .searchbox{grid-column:span 2;min-width:0}
+ .profile{grid-template-columns:20px minmax(0,1fr);padding:12px;gap:8px}
+ .profile-head{align-items:flex-start}
+ .profile .buttons a,.profile .buttons button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+ .actions{display:grid;grid-template-columns:1fr}
+ .actions .btn,.actions a.btn{width:100%}
+ .pills label{padding:8px 9px}
+}
 </style></head>
 <body>
 <header class="top"><a href="/scout/"><strong>NETWORKER <span>SCOUT</span> 2.0</strong></a><nav><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
@@ -61,7 +108,7 @@ footer{margin-top:20px;padding:20px 0;border-top:1px solid var(--line);color:#81
 <div class="eyebrow">CENTRO DE INTELIGENCIA COMERCIAL</div>
 <div class="actions" style="margin:8px 0 17px"><a class="btn alt sm" href="https://github.com/bochita813/networker3.0/actions/workflows/networker-scout.yml" target="_blank" rel="noopener noreferrer">↻ Ejecutar descubrimiento ahora (GitHub Actions) ↗</a></div>
 <h1>Configurá a quién <em>querés encontrar.</em></h1>
-<p class="lead">Elegí país, provincia, ciudad, intereses y rubros. SCOUT filtra los perfiles públicos recopilados y guarda las configuraciones activas para usarlas también en la búsqueda diaria. Las señales de afinidad no son probabilidades ni demuestran intención de asociarse.</p>
+<p class="lead">Filtrá los perfiles que SCOUT ya encontró por ubicación, rubro e intereses. Cuando guardás una búsqueda, sus términos también se usan en el próximo escaneo programado. <strong>Filtrar esta base no equivale a encontrar cuentas nuevas en Instagram en tiempo real.</strong></p>
 <div class="layout">
 <div>
 <section class="panel">
@@ -70,23 +117,26 @@ footer{margin-top:20px;padding:20px 0;border-top:1px solid var(--line);color:#81
 <div class="field"><label for="name">Nombre de esta búsqueda</label><input id="name" maxlength="90" required placeholder="Ej.: Estéticas en Buenos Aires"></div>
 <div class="rowfields">
 <div class="field"><label for="country">País</label><select id="country"><option>Argentina</option><option>Uruguay</option><option>Chile</option><option>Paraguay</option><option>Bolivia</option><option>Perú</option><option>Colombia</option><option>México</option><option>España</option><option>Brasil</option></select></div>
-<div class="field"><label for="province">Provincia / estado</label><input id="province" maxlength="100" placeholder="Ej.: Buenos Aires"></div>
+<div class="field"><label for="province">Provincia / estado</label><input id="province" maxlength="100" list="provinces" placeholder="Ej.: Córdoba"><datalist id="provinces"><option value="Buenos Aires"><option value="Córdoba"><option value="Santa Fe"><option value="Neuquén"><option value="Río Negro"><option value="Mendoza"><option value="Entre Ríos"><option value="Salta"></datalist></div>
 </div>
-<div class="field"><label for="city">Ciudad / localidad</label><input id="city" maxlength="100" placeholder="Ej.: La Plata"></div>
+<div class="field"><label for="city">Ciudad / localidad (opcional)</label><input id="city" maxlength="100" placeholder="Ej.: Córdoba Capital, Jesús María"><div class="helper" style="margin:0">Para ver toda una provincia, dejá ciudad vacía. No confundimos Córdoba Capital con Cruz del Eje.</div></div>
 <div class="field"><label for="focus">Tipo de persona o proyecto</label><select id="focus"><option>Emprendedores</option><option>Estética y belleza</option><option>Salud y bienestar</option><option>Profesionales</option><option>Comercio y ventas</option><option>Marca personal y liderazgo</option><option>Todos los rubros</option></select></div>
 <div class="field"><label>Intereses y señales visibles (podés elegir varias)</label><div class="pills" id="interestChoices"></div></div>
 <div class="field"><label for="keywords">Palabras clave adicionales</label><input id="keywords" maxlength="300" placeholder="Ej.: cosmética, negocio, emprender"><div class="helper">Separadas por comas. Solo encontramos coincidencias cuando hay evidencia en la ficha.</div></div>
 <div class="field"><label for="affinity">Afinidad temática mínima: <strong id="affinityValue">0</strong> puntos</label><input id="affinity" type="range" min="0" max="90" step="10" value="0" style="padding:0"><div class="helper">Puntaje heurístico sobre información pública; NO es porcentaje de interés en un negocio.</div></div>
-<div class="actions"><button class="btn" type="submit" id="saveRule">Guardar y activar búsqueda</button><button class="btn alt" type="button" id="clear">Limpiar filtros</button></div>
+<div class="actions"><button class="btn" type="submit" id="saveRule">Guardar y activar búsqueda</button><button class="btn alt" type="button" id="clear">Limpiar filtros</button><a class="btn alt" href="#resultPanel">Ver resultados de estos filtros ↓</a></div>
 <div class="notice" id="configNotice">Al activar una búsqueda, sus términos no personales se publican para que los lea la automatización gratuita. No incluyas información privada.</div>
 </form>
 </section>
 <section class="panel" style="margin-top:17px"><h2>2. Búsquedas guardadas</h2><div class="rules" id="savedRules"></div><p class="note">Hasta 8 reglas activas alimentan las búsquedas RSS programadas. Los directorios existentes se siguen revisando completos; los filtros geográficos solo seleccionan perfiles con ubicación conocida. Las cuentas de países no presentes en las fuentes actuales podrían arrojar cero resultados. No se prometen resultados para cada región.</p></section>
 </div>
 <div>
-<section class="panel">
-<h2>3. Perfiles encontrados</h2>
-<div class="statgrid"><div class="stat"><strong id="total">—</strong><small>En la base</small></div><div class="stat"><strong id="matched">—</strong><small>Coinciden con filtros</small></div><div class="stat"><strong id="selected">0</strong><small>Seleccionados</small></div></div>
+<section class="panel" id="resultPanel">
+<h2>3. Resultados de tus filtros</h2>
+<div class="statgrid"><div class="stat"><strong id="total">—</strong><small>En la base</small></div><div class="stat"><strong id="matched">—</strong><small>Coinciden con filtros</small></div><div class="stat"><strong id="selected">0</strong><small>Seleccionados (acumulados)</small></div></div>
+<div id="coverage" class="coverage" role="status">Cargando la cobertura geográfica de los perfiles encontrados…</div>
+<div id="filterDiagnosis" class="diagnosis" hidden><strong id="diagnosisTitle"></strong><p id="diagnosisText"></p><button class="btn alt sm" id="removeCity" type="button">Quitar filtro de ciudad</button><button class="btn alt sm" id="removeTopics" type="button">Quitar rubros e intereses</button><a class="btn alt sm" href="https://github.com/bochita813/networker3.0/actions/workflows/networker-scout.yml" target="_blank" rel="noopener noreferrer">Buscar más en las fuentes ↗</a></div>
+<p class="filters-note" id="scanMeta"></p>
 <div class="result-tools"><input class="searchbox" id="textSearch" type="search" placeholder="Buscar en resultados…"><button id="selectAll" type="button" class="btn alt sm">Seleccionar coincidencias</button><button id="deselect" type="button" class="btn alt sm">Quitar selección</button></div>
 <div class="actions" style="margin-bottom:14px">
 <button class="btn dark" id="batchSave" type="button">Guardar seleccionados en radar</button>
