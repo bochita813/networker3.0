@@ -1,12 +1,36 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T16:45:29+00:00",
-  "feeds_ok": 11,
-  "queries_attempted": 11,
-  "configured_searches": 1,
-  "new_profiles": 0,
+  "last_scan": "2026-11-18T17:22:24+00:00",
+  "feeds_ok": 12,
+  "queries_attempted": 12,
+  "configured_searches": 4,
+  "new_profiles": 1,
   "feed_inspection": [
+    {
+      "query": "site:instagram.com Salud y bienestar Jesús Maria Córdoba Argentina Cosmética Bienestar",
+      "rss_items": 10,
+      "instagram_direct_links": 0,
+      "instagram_text_mentions": 0,
+      "handles_matched": 0,
+      "instagram_path_examples": []
+    },
+    {
+      "query": "site:instagram.com Emprendedores Jesús Maria Córdoba Argentina Cosmética Bienestar",
+      "rss_items": 10,
+      "instagram_direct_links": 0,
+      "instagram_text_mentions": 0,
+      "handles_matched": 0,
+      "instagram_path_examples": []
+    },
+    {
+      "query": "site:instagram.com Emprendedores Cordoba Córdoba Argentina Cosmética Bienestar",
+      "rss_items": 10,
+      "instagram_direct_links": 0,
+      "instagram_text_mentions": 0,
+      "handles_matched": 0,
+      "instagram_path_examples": []
+    },
     {
       "query": "site:instagram.com Estética y belleza estética, cosmética, bienestar Argentina Estética Cosmética",
       "rss_items": 10,
@@ -102,26 +126,6 @@
         "/",
         "/"
       ]
-    },
-    {
-      "query": "instagram.com cosmetica bienestar emprendimientos argentina",
-      "rss_items": 10,
-      "instagram_direct_links": 3,
-      "instagram_text_mentions": 0,
-      "handles_matched": 0,
-      "instagram_path_examples": [
-        "/",
-        "/",
-        "/"
-      ]
-    },
-    {
-      "query": "site:instagram.com emprendimiento belleza bienestar argentina",
-      "rss_items": 10,
-      "instagram_direct_links": 0,
-      "instagram_text_mentions": 0,
-      "handles_matched": 0,
-      "instagram_path_examples": []
     }
   ],
   "directory_inspection": [
@@ -166,11 +170,177 @@
       "kind": "emprenzona",
       "handles_found": 889,
       "html_chars": 2289276
+    },
+    {
+      "directory": "EmprenZona · Emprendedores de Córdoba",
+      "kind": "emprenzona_cordoba",
+      "handles_found": 10,
+      "html_chars": 82719
     }
   ],
-  "directories_ok": 7,
+  "directories_ok": 8,
   "errors": [],
   "profiles": [
+    {
+      "handle": "accesorios_.juli",
+      "url": "https://www.instagram.com/accesorios_.juli/",
+      "headline": "Accesorios Juli",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "amartebycande",
+      "url": "https://www.instagram.com/amartebycande/",
+      "headline": "Amartebycande",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "animarte_encuadernaciones",
+      "url": "https://www.instagram.com/animarte_encuadernaciones/",
+      "headline": "Animarte Encuadernaciones",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "complementscde",
+      "url": "https://www.instagram.com/complementscde/",
+      "headline": "Complementscde",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "dulceanitapasteleria2022",
+      "url": "https://www.instagram.com/dulceanitapasteleria2022/",
+      "headline": "Dulce Anita",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "emprenzona",
+      "url": "https://www.instagram.com/emprenzona/",
+      "headline": "Marla Accesorios",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "country": "Argentina",
+      "province": "Córdoba",
+      "category": "Emprendimiento",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "city": "Cruz del Eje",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "gaticoscosmicos",
+      "url": "https://www.instagram.com/gaticoscosmicos/",
+      "headline": "Gaticos Cósmicos",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "marla_accesorios",
+      "url": "https://www.instagram.com/marla_accesorios/",
+      "headline": "Marla Accesorios",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "matflorbijou",
+      "url": "https://www.instagram.com/matflorbijou/",
+      "headline": "Matflor Bijou",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
+    {
+      "handle": "vybes.sport",
+      "url": "https://www.instagram.com/vybes.sport/",
+      "headline": "Vybes Sport",
+      "snippet": "Cuenta enlazada desde el directorio provincial de emprendedores de Córdoba.",
+      "score": 62,
+      "source_query": "EmprenZona · Emprendedores de Córdoba",
+      "source_page": "https://anime.emprenzona.com.ar/ferias/cordoba",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18",
+      "country": "Argentina",
+      "city": "Cruz del Eje",
+      "location_evidence": "Directorio provincial: Córdoba - Cruz del Eje",
+      "category": "Emprendimiento",
+      "province": "Córdoba"
+    },
     {
       "handle": "1tyt_1",
       "url": "https://www.instagram.com/1tyt_1/",
@@ -339,21 +509,6 @@
       "first_seen": "2026-11-18",
       "country": "Argentina",
       "city": "La Plata",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Accesorios"
-    },
-    {
-      "handle": "accesorios_.juli",
-      "url": "https://www.instagram.com/accesorios_.juli/",
-      "headline": "Accesorios Juli",
-      "snippet": "Tus complementos en un solo lugar. Maquillaje seleccionado. Accesorios personalizados.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
       "location_evidence": "Ubicación publicada en directorio",
       "category": "Accesorios"
     },
@@ -855,21 +1010,6 @@
       "category": "Indumentaria"
     },
     {
-      "handle": "amartebycande",
-      "url": "https://www.instagram.com/amartebycande/",
-      "headline": "Amartebycande",
-      "snippet": "También hago personalizados de mascotas.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Arte Y Diseño"
-    },
-    {
       "handle": "amatistabags.ok",
       "url": "https://www.instagram.com/amatistabags.ok/",
       "headline": "Amatistabags Ok",
@@ -1064,21 +1204,6 @@
       "country": "Argentina",
       "location_evidence": "Directorio: país Argentina",
       "category": "Repostería"
-    },
-    {
-      "handle": "animarte_encuadernaciones",
-      "url": "https://www.instagram.com/animarte_encuadernaciones/",
-      "headline": "Animarte Encuadernaciones",
-      "snippet": "Soy Ana y te acompaño a conectarte con tu mejor versión a través de cuadernos únicos y originales. Te invito a elegirlo.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Arte Y Diseño"
     },
     {
       "handle": "annapottery23",
@@ -2790,21 +2915,6 @@
       "category": "Gastronomía"
     },
     {
-      "handle": "complementscde",
-      "url": "https://www.instagram.com/complementscde/",
-      "headline": "Complementscde",
-      "snippet": "Te ayudo a encontrar tu makeup ideal. Marcas BBB(buenas, bonitas y baratas).",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Accesorios"
-    },
-    {
       "handle": "conitoon",
       "url": "https://www.instagram.com/conitoon/",
       "headline": "Coni Toon",
@@ -3502,21 +3612,6 @@
       "first_seen": "2026-11-18",
       "country": "Argentina",
       "city": "Lanús",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Gastronomía"
-    },
-    {
-      "handle": "dulceanitapasteleria2022",
-      "url": "https://www.instagram.com/dulceanitapasteleria2022/",
-      "headline": "Dulce Anita",
-      "snippet": "Pastelería artesanal hecha con amor. Silvia & Juan con sabor a hogar. Habilitación EPADEL 619/2026.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
       "location_evidence": "Ubicación publicada en directorio",
       "category": "Gastronomía"
     },
@@ -4633,21 +4728,6 @@
       "city": "Almirante Brown",
       "location_evidence": "Ubicación publicada en directorio",
       "category": "Bijouterie"
-    },
-    {
-      "handle": "gaticoscosmicos",
-      "url": "https://www.instagram.com/gaticoscosmicos/",
-      "headline": "Gaticos Cósmicos",
-      "snippet": "Accesorios, Souvenirs, Regalería y Más. Mayoristas y Minoristas.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Accesorios"
     },
     {
       "handle": "gatito.rey.bordados",
@@ -7199,21 +7279,6 @@
       "location_evidence": "Directorio: país Argentina"
     },
     {
-      "handle": "marla_accesorios",
-      "url": "https://www.instagram.com/marla_accesorios/",
-      "headline": "Marla Accesorios",
-      "snippet": "Perfil en construcción.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Accesorios"
-    },
-    {
       "handle": "martu_de_essen",
       "url": "https://www.instagram.com/martu_de_essen/",
       "headline": "martu de essen",
@@ -7311,21 +7376,6 @@
       "first_seen": "2026-11-18",
       "country": "Argentina",
       "location_evidence": "Directorio: país Argentina",
-      "category": "Accesorios"
-    },
-    {
-      "handle": "matflorbijou",
-      "url": "https://www.instagram.com/matflorbijou/",
-      "headline": "Matflor Bijou",
-      "snippet": "Joyería en acero blanco, dorado y quirurgico. Todo lo que buscas en un solo lugar.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
-      "location_evidence": "Ubicación publicada en directorio",
       "category": "Accesorios"
     },
     {
@@ -12508,21 +12558,6 @@
       "country": "Argentina",
       "location_evidence": "Directorio: país Argentina",
       "category": "Artesanías"
-    },
-    {
-      "handle": "vybes.sport",
-      "url": "https://www.instagram.com/vybes.sport/",
-      "headline": "Vybes Sport",
-      "snippet": "Indumentaria deportiva de alto rendimiento. Comodidad, calidad, estilo.",
-      "score": 47,
-      "source_query": "EmprenZona · Directorio de ferias Argentina",
-      "source_page": "https://www.emprenzona.com.ar/emprende",
-      "discovery_method": "directorio_publico",
-      "first_seen": "2026-11-18",
-      "country": "Argentina",
-      "city": "Cruz del Eje",
-      "location_evidence": "Ubicación publicada en directorio",
-      "category": "Indumentaria"
     },
     {
       "handle": "wapasa.cuadernos",
