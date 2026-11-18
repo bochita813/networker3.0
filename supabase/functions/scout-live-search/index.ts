@@ -3,7 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2.95.0";
 const H={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization,apikey,content-type,x-client-info","Access-Control-Allow-Methods":"POST,OPTIONS","Content-Type":"application/json;charset=utf-8"};
 const respond=(data:any,status=200)=>new Response(JSON.stringify(data),{status,headers:H});
 const clean=(x:any,n=150)=>String(x??"").replace(/[\u0000-\u001f<>]/g," ").trim().slice(0,n);
-const norm=(x:any)=>clean(x,500).toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const norm=(x:any)=>clean(x,500).toLocaleLowerCase("es").normalize("NFKD").replace(/[\u0300-\u036f]/g,"");
 const blocked=new Set(["instagram","stories","explore","accounts","reel","reels","p","tv","direct","about","developers","privacy","terms","web","api","help","tags","download","challenge","audio","login","signup","profilecard"]);
 const sources=[
  ["Modash · Fitness Córdoba","https://www.modash.io/find-influencers/argentina/c%C3%B3rdoba/fitness","cordoba"],
