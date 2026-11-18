@@ -26,7 +26,7 @@ assert.ok(html.includes('db.from("crm_scout_profiles")'),"Falta vínculo con rad
 assert.ok(html.includes("source_provider"),"Falta traza de fuente");
 assert.ok(html.includes('id="showExisting"'),"Debe poder ver perfiles de Instagram ya detectados sin comprar consultas");
 assert.ok(html.includes('id="dbOrigin"'),"Debe poder filtrar índice web versus usuarios publicados en directorios");
-assert.ok(html.includes('function publicEvidence(p)'),"Se debe mostrar procedencia de perfil y no asumir privacidad pública");
+assert.ok(html.includes('const publicEvidence=p=>'),"Se debe mostrar procedencia de perfil y no asumir privacidad pública");
 assert.ok(html.includes('$("#showExisting").onclick=async()=>'),"El botón de perfiles existentes debe consultar la base");
 assert.ok(html.includes('Instagram no permite confirmar'),"No debe llamarse cuenta pública verificada sin evidencia directa");
 
