@@ -29,6 +29,51 @@ PATTERN = re.compile(
 KEYWORDS = ("emprender", "emprendedor", "emprendedora", "negocios", "emprendimiento", "networking", "marca personal", "independiente")
 SKIP = {"instagram", "reels", "reel", "p", "explore", "stories", "about", "accounts", "help", "tv", "direct", "business"}
 
+# Configuraciones activas del panel SCOUT. Solo incluyen términos de búsqueda
+# publicados; no contienen credenciales de Instagram ni datos de prospectos.
+SEARCH_API="https://uhdkmgljczeuxzrimfaf.supabase.co/rest/v1/scout_search_rules"
+SCOUT_PUBLISHABLE_KEY="sb_publishable_yNv3mtKgUqL6h-51n9QAgg_KLhmy1Ur"
+
+def fetch_live_search_rules():
+    params=urllib.parse.urlencode({
+        "enabled":"eq.true",
+        "select":"name,country,province,city,interests,keywords,focus,min_affinity",
+        "order":"updated_at.desc",
+        "limit":"8",
+    })
+    # No se solicita updated_at; ordenar por una columna permitida funciona con RLS.
+    request=urllib.request.Request(SEARCH_API+"?"+params,headers={
+        "apikey":SCOUT_PUBLISHABLE_KEY,
+        "Authorization":"Bearer "+SCOUT_PUBLISHABLE_KEY,
+        "Accept":"application/json",
+    })
+    try:
+        with urllib.request.urlopen(request,timeout=14) as response:
+            rows=json.loads(response.read(60_000).decode("utf-8"))
+        return rows if isinstance(rows,list) else []
+    except (urllib.error.URLError,TimeoutError,ValueError,OSError) as exc:
+        print("Configuraciones online no disponibles; se usan las búsquedas base:",exc,file=sys.stderr)
+        return []
+
+def assemble_search_queries(base):
+    rules=fetch_live_search_rules()
+    suggested=[]
+    for rule in rules:
+        words=["site:instagram.com"]
+        for field in ("focus","keywords","city","province","country"):
+            value=rule.get(field,"")
+            if isinstance(value,str) and value.strip():
+                words.append(value.strip()[:85])
+        interests=rule.get("interests",[])
+        if isinstance(interests,list):
+            words.extend(str(x)[:36] for x in interests[:2] if isinstance(x,str))
+        suggested.append(" ".join(words)[:245])
+    # Las fuentes RSS pueden no indexar perfiles; los directorios públicos se
+    # siguen consultando completos y la geolocalización se filtra en el panel.
+    queries=(suggested+base)[:12] if suggested else base[:12]
+    return queries,len(rules)
+
+
 def text(node, name):
     child = node.find(name)
     return "".join(child.itertext()).strip() if child is not None else ""
@@ -71,7 +116,7 @@ def score(item, search_query):
 
 def main():
     config = json.loads(QUERIES.read_text(encoding="utf-8"))
-    queries = config.get("queries", [])[:12]
+    queries, enabled_searches = assemble_search_queries(config.get("queries", []))
     if not isinstance(queries, list) or not all(isinstance(s, str) and len(s) < 250 for s in queries):
         raise ValueError("scout/queries.json debe contener una lista de hasta 12 búsquedas cortas.")
     prior = {"profiles": [], "last_scan": None}
@@ -146,6 +191,7 @@ def main():
         "last_scan": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds") if feeds_ok else prior.get("last_scan"),
         "feeds_ok": feeds_ok,
         "queries_attempted": len(queries),
+        "configured_searches": enabled_searches,
         "new_profiles": new_count,
         "feed_inspection": feed_inspection,
         "directory_inspection": directory_inspection,
