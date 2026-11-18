@@ -38,7 +38,7 @@ def fetch_live_search_rules():
     params=urllib.parse.urlencode({
         "enabled":"eq.true",
         "select":"name,country,province,city,interests,keywords,focus,min_affinity",
-        "order":"updated_at.desc",
+        "order":"name.asc",
         "limit":"8",
     })
     # No se solicita updated_at; ordenar por una columna permitida funciona con RLS.
