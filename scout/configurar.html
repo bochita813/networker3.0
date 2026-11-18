@@ -59,6 +59,7 @@ footer{margin-top:20px;padding:20px 0;border-top:1px solid var(--line);color:#81
 <header class="top"><a href="/scout/"><strong>NETWORKER <span>SCOUT</span> 2.0</strong></a><nav><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
 <main class="wrap">
 <div class="eyebrow">CENTRO DE INTELIGENCIA COMERCIAL</div>
+<div class="actions" style="margin:8px 0 17px"><a class="btn alt sm" href="https://github.com/bochita813/networker3.0/actions/workflows/networker-scout.yml" target="_blank" rel="noopener noreferrer">↻ Ejecutar descubrimiento ahora (GitHub Actions) ↗</a></div>
 <h1>Configurá a quién <em>querés encontrar.</em></h1>
 <p class="lead">Elegí país, provincia, ciudad, intereses y rubros. SCOUT filtra los perfiles públicos recopilados y guarda las configuraciones activas para usarlas también en la búsqueda diaria. Las señales de afinidad no son probabilidades ni demuestran intención de asociarse.</p>
 <div class="layout">
@@ -80,7 +81,7 @@ footer{margin-top:20px;padding:20px 0;border-top:1px solid var(--line);color:#81
 <div class="notice" id="configNotice">Al activar una búsqueda, sus términos no personales se publican para que los lea la automatización gratuita. No incluyas información privada.</div>
 </form>
 </section>
-<section class="panel" style="margin-top:17px"><h2>2. Búsquedas guardadas</h2><div class="rules" id="savedRules"></div><p class="note">Las activas alimentan las búsquedas RSS programadas. Los directorios existentes se siguen revisando completos; los filtros geográficos solo seleccionan perfiles con ubicación conocida. No se prometen resultados para cada región.</p></section>
+<section class="panel" style="margin-top:17px"><h2>2. Búsquedas guardadas</h2><div class="rules" id="savedRules"></div><p class="note">Hasta 8 reglas activas alimentan las búsquedas RSS programadas. Los directorios existentes se siguen revisando completos; los filtros geográficos solo seleccionan perfiles con ubicación conocida. Las cuentas de países no presentes en las fuentes actuales podrían arrojar cero resultados. No se prometen resultados para cada región.</p></section>
 </div>
 <div>
 <section class="panel">
@@ -252,7 +253,7 @@ function drawRules(){
   const row=el("div",null,"rule"),infoBox=el("div");infoBox.append(el("strong",r.name),el("small",[r.city,r.province,r.country].filter(Boolean).join(" · ")+" · "+r.focus),el("small",r.enabled?"● Activa · búsqueda diaria":"○ Pausada"));
   const ops=el("div",null,"rule-buttons");
   const use=el("button","Usar","btn alt sm");use.type="button";use.onclick=()=>{editing=r.id;formSet(r);$('#saveRule').textContent="Actualizar esta búsqueda";status("Filtros cargados: "+r.name)};
-  const toggle=el("button",r.enabled?"Pausar":"Activar","btn alt sm");toggle.type="button";toggle.onclick=async()=>{const {error}=await db.from("scout_search_rules").update({enabled:!r.enabled,updated_at:new Date().toISOString()}).eq("id",r.id);if(error)status(error.message);else await loadRules()};
+  const toggle=el("button",r.enabled?"Pausar":"Activar","btn alt sm");toggle.type="button";toggle.onclick=async()=>{if(!r.enabled&&rules.filter(x=>x.enabled).length>=8){status("Ya hay 8 búsquedas activas. Pausá una antes de activar otra.");return}const {error}=await db.from("scout_search_rules").update({enabled:!r.enabled,updated_at:new Date().toISOString()}).eq("id",r.id);if(error)status(error.message);else await loadRules()};
   const del=el("button","Eliminar","btn alt sm");del.type="button";del.onclick=async()=>{if(!confirm("¿Eliminar la búsqueda '"+r.name+"'?"))return;const {error}=await db.from("scout_search_rules").delete().eq("id",r.id);if(error)status(error.message);else{if(editing===r.id){editing=null;$('#saveRule').textContent="Guardar y activar búsqueda"}await loadRules()}};
   ops.append(use,toggle,del);row.append(infoBox,ops);area.appendChild(row)
  });
@@ -278,6 +279,7 @@ $('#clear').addEventListener("click",()=>{editing=null;$('#saveRule').textConten
 $('#configForm').addEventListener("submit",async event=>{
  event.preventDefault();if(!user){status("Ingresá primero al CRM.");return}
  const form=filterForm();if(form.name.length<3){status("Escribí un nombre de búsqueda.");return}
+ if(!editing&&rules.filter(r=>r.enabled).length>=8){status("Hay 8 búsquedas activas. Pausá una antes de activar otra.");return}
  const row={...form,enabled:true,updated_at:new Date().toISOString()};
  $('#saveRule').disabled=true;
  let result;
