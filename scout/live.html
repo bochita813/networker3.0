@@ -21,9 +21,9 @@ button,input,select{font:inherit;max-width:100%}button{cursor:pointer}button:dis
 @media(max-width:560px){.twocol{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:9px}.stat strong{font-size:20px}.filtersdb{grid-template-columns:repeat(2,minmax(0,1fr))}.top{padding:14px}.headline{font-size:33px}.toolbar .input{flex-basis:100%}.card .buttons .btn{flex:1 1 44%}}
 @media(prefers-reduced-motion:reduce){.progress.busy .orb{animation:none}}
 </style></head><body>
-<header class="top"><a class="logo" href="/scout/live.html">NETWORKER <span>SCOUT</span> · LIVE 3.2</a><nav><a href="/scout/configurar.html">Búsquedas guardadas</a><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
+<header class="top"><a class="logo" href="/scout/live.html">NETWORKER <span>SCOUT</span> · LIVE 3.3</a><nav><a href="/scout/configurar.html">Búsquedas guardadas</a><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
 <main class="wrap"><div class="eyebrow">PROSPECCIÓN · FUENTES EXTERNAS</div><h1 class="headline">Buscá cuentas<br><em>que sí coincidan.</em></h1>
-<p class="lead">Buscá por actividad y ubicación. Para sumar perfiles nuevos sin bloqueos necesitás activar un proveedor de búsqueda con un plan gratuito.</p>
+<p class="lead">Detectá perfiles de Instagram encontrados en fuentes públicas. Podés buscar gratis en catálogos abiertos; para ampliar a buscadores web conectá una clave de un proveedor gratuito.</p>
 <div class="layout"><div><section class="panel"><h2>Detectar perfiles de Instagram</h2>
 <details class="advanced"><summary>Guardar o recuperar una búsqueda (opcional)</summary><div class="field" style="margin-top:13px"><label for="searchName">Nombre para guardarla</label><input id="searchName" maxlength="90" placeholder="Ej.: Nutricionistas de Córdoba"></div>
 <div class="saved-filter"><label class="micro" for="rule">Recuperar una búsqueda anterior (opcional)</label><select id="rule"><option value="">Búsqueda nueva · configurar manualmente</option></select></div>
@@ -35,7 +35,7 @@ button,input,select{font:inherit;max-width:100%}button{cursor:pointer}button:dis
 
 
 
-<details class="advanced" id="advancedSearch"><summary>Buscador y opciones</summary><div class="field" style="margin-top:13px"><label for="provider">Motor de búsqueda</label><select id="provider"><option value="serper" selected>Serper · Google (2.500 consultas gratis iniciales)</option><option value="tavily">Tavily · web (1.000 créditos mensuales gratis)</option><option value="serpapi">SerpApi · Google (250 consultas mensuales gratis)</option><option value="web">Buscador experimental · puede bloquearse</option><option value="directories">Directorios limitados</option></select></div>
+<details class="advanced" id="advancedSearch"><summary>Buscador y opciones</summary><div class="field" style="margin-top:13px"><label for="provider">Motor de búsqueda</label><select id="provider"><option value="serper">Serper · Google (2.500 consultas gratis iniciales)</option><option value="tavily">Tavily · web (1.000 créditos mensuales gratis)</option><option value="serpapi">SerpApi · Google (250 consultas mensuales gratis)</option><option value="web">Buscador experimental · puede bloquearse</option><option value="directories" selected>Fuentes públicas de Instagram · sin clave (cobertura limitada)</option></select></div>
 <div class="provider"><strong id="providerTitle">Directorios públicos · fuentes limitadas</strong><small id="providerInfo">Consulta listados de negocios en este momento. No busca todas las cuentas de Instagram por biografía y ciudad; para búsqueda web amplia seleccioná Google con SerpApi.</small>
 <div id="keyArea"><div class="field" style="margin:10px 0 0"><label id="keyLabel" for="apiKey">Clave de tu buscador gratuito</label><input id="apiKey" type="password" autocomplete="off" placeholder="Pegá la clave acá"></div><small>La clave se usa solo para esta consulta. No se guarda en la base.</small><p class="micro"><a id="keyLink" href="https://serper.dev/" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:900">Crear cuenta gratuita para buscar</a></p></div></div>
 <div class="field"><label for="batches">Consultas</label><select id="batches"><option value="1" selected>1 consulta</option><option value="3">3 consultas</option><option value="6">6 consultas</option><option value="10">10 consultas</option></select></div></details>
@@ -70,8 +70,8 @@ button,input,select{font:inherit;max-width:100%}button{cursor:pointer}button:dis
 <script>
 (()=>{"use strict";
 const $=s=>document.querySelector(s), config=window.NETWORKER_CRM_CONFIG||{};
-let db=null,user=null,searchRows=[],dbRows=[],runId="",nextBatch=0,provider="serper",busy=false,abort=false,activeTab="live",dbVisible=40,allRules=[],searchFingerprint="";
-const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+let db=null,user=null,searchRows=[],dbRows=[],runId="",nextBatch=0,provider="directories",busy=false,abort=false,activeTab="live",dbVisible=40,allRules=[],searchFingerprint="";
+const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").trim();
 const txt=(tag,str,cls)=>{const x=document.createElement(tag);x.textContent=String(str??"");if(cls)x.className=cls;return x};
 const valid=h=>/^[a-z0-9._]{3,30}$/.test(h||"")&&!h.includes("..");
 const isWebIndexed=p=>/^(Serper|Tavily|SerpApi|Brave Search)/i.test(String(p.source_provider||""));
@@ -126,10 +126,10 @@ function settingsProvider(){
  $("#keyArea").hidden=!["serper","tavily","serpapi"].includes(p);
  const names={serper:"Serper",tavily:"Tavily",serpapi:"SerpApi",web:"Motor experimental",directories:"Directorios"};
  const urls={serper:"https://serper.dev/",tavily:"https://tavily.com/",serpapi:"https://serpapi.com/"};
- const n=names[p]||names.serper;
+ const n=p==="directories"?"Fuentes públicas de Instagram":names[p]||names.serper;
  $("#providerTitle").textContent=n;
  $("#providerInfo").textContent=p==="web"?"Este buscador abierto está bloqueando consultas (HTTP 429); no es estable.":
- p==="directories"?"Busca únicamente en directorios de alcance limitado, no en todo Instagram.":
+ p==="directories"?"Busca @usuarios de Instagram en directorios y catálogos públicos; cobertura parcial, sin acceder a cuentas privadas.":
  "Este proveedor permite búsquedas nuevas con su clave gratuita. Su cuota depende del plan seleccionado.";
  $("#keyLabel").textContent="Clave de "+n;$("#apiKey").placeholder="Pegá tu clave de "+n;
  $("#keyLink").href=urls[p]||"https://serper.dev/";$("#keyLink").textContent="Crear cuenta gratuita en "+n;
