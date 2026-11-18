@@ -1,15 +1,23 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T18:55:05+00:00",
+  "last_scan": "2026-11-18T19:10:13+00:00",
   "feeds_ok": 12,
   "queries_attempted": 12,
-  "configured_searches": 5,
-  "new_profiles": 1,
+  "configured_searches": 7,
+  "new_profiles": 0,
   "feed_inspection": [
     {
-      "query": "site:instagram.com Salud y bienestar Jesús Maria Córdoba Argentina Cosmética Bienestar",
+      "query": "site:instagram.com Emprendedores Cordoba Córdoba Argentina Cosmética Bienestar",
       "rss_items": 10,
+      "instagram_direct_links": 0,
+      "instagram_text_mentions": 0,
+      "handles_matched": 0,
+      "instagram_path_examples": []
+    },
+    {
+      "query": "site:instagram.com Salud y bienestar Jesús Maria Córdoba Argentina Cosmética Bienestar",
+      "rss_items": 9,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -24,7 +32,7 @@
       "instagram_path_examples": []
     },
     {
-      "query": "site:instagram.com Emprendedores Cordoba Córdoba Argentina Cosmética Bienestar",
+      "query": "site:instagram.com Estética y belleza estética, cosmética, bienestar Argentina Estética Cosmética",
       "rss_items": 10,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
@@ -32,7 +40,15 @@
       "instagram_path_examples": []
     },
     {
-      "query": "site:instagram.com Estética y belleza estética, cosmética, bienestar Argentina Estética Cosmética",
+      "query": "site:instagram.com Todos los rubros Argentina",
+      "rss_items": 10,
+      "instagram_direct_links": 0,
+      "instagram_text_mentions": 0,
+      "handles_matched": 0,
+      "instagram_path_examples": []
+    },
+    {
+      "query": "site:instagram.com Emprendedores negocio jesus Córdoba Argentina Estética Cosmética",
       "rss_items": 10,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
@@ -50,74 +66,58 @@
     {
       "query": "\"instagram.com\" \"emprendedor\" \"Argentina\"",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
       "query": "\"instagram.com\" \"emprendedora\" \"Buenos Aires\"",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
       "query": "instagram emprendimiento Argentina cuentas",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
       "query": "instagram negocios emprendedores Argentina perfil",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
       "query": "www.instagram.com emprendedores Argentina",
       "rss_items": 10,
-      "instagram_direct_links": 0,
-      "instagram_text_mentions": 0,
-      "handles_matched": 0,
-      "instagram_path_examples": []
-    },
-    {
-      "query": "Instagram emprendedoras Neuquén",
-      "rss_items": 10,
-      "instagram_direct_links": 3,
-      "instagram_text_mentions": 0,
-      "handles_matched": 0,
-      "instagram_path_examples": [
-        "/",
-        "/",
-        "/"
-      ]
-    },
-    {
-      "query": "site:instagram.com emprendedores",
-      "rss_items": 8,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -154,6 +154,12 @@
       "kind": "catalog",
       "handles_found": 15,
       "html_chars": 52051
+    },
+    {
+      "directory": "UNL · Feria de emprendimientos Santa Fe",
+      "kind": "catalog",
+      "handles_found": 21,
+      "html_chars": 54641
     },
     {
       "directory": "EmprenZona · Directorio de ferias Argentina",
@@ -264,10 +270,8 @@
       "html_chars": 111550
     }
   ],
-  "directories_ok": 23,
-  "errors": [
-    "UNL · Feria de emprendimientos Santa Fe: TimeoutError: The read operation timed out"
-  ],
+  "directories_ok": 24,
+  "errors": [],
   "profiles": [
     {
       "handle": "auraespacio.cba",
