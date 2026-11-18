@@ -51,6 +51,7 @@ assert.ok(backend.includes('if(!keys.some(k=>relevant.includes(k)))continue;'),"
 assert.ok(backend.includes('start:String((batch%3)*10)'),"No existe paginación real del buscador externo");
 assert.ok(backend.includes("entrepreneur-card"),"Falta extracción por ficha individual del directorio");
 assert.ok(backend.includes("function fromModash"),"Falta nuevo detector de perfiles Instagram de fuente pública");
+assert.ok(backend.includes('const sourceRegion=p.source_provider?.startsWith("Modash · Fitness Córdoba")'),"No se deben perder los perfiles de alcance regional cuando la ubicación no es verificable");
 assert.ok(backend.includes("Modash · Fitness Córdoba"),"Falta fuente indexada de cuentas de educación física en Córdoba");
 assert.ok(backend.includes('return fromModash(html,label,url,f)'),"El motor debe separar las biografías por perfil");
 assert.ok(backend.includes('normalize("NFKD")'),"El detector debe reconocer letras especiales en la biografía");
