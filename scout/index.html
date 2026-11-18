@@ -41,7 +41,7 @@ input:focus,select:focus{outline:2px solid #f3613666;border-color:var(--orange)}
 .item h3{font-size:13px;margin:9px 0 6px;line-height:1.45}.item p{font-size:12px;color:#6f665d;margin:6px 0 12px;line-height:1.65}
 .buttons{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:16px}
 .buttons a,.buttons button{font-size:11px;padding:8px 12px;min-height:36px;border-radius:5px;font-weight:750}
-.buttons a{background:#fff;border:1px solid #d5cbc1;color:#3c302a}
+.buttons a{background:#fff;border:1px solid #d5cbc1;color:#3c302a}.buttons .ig-direct{background:#252321;border-color:#252321;color:#fff}.buttons .copy-handle{background:#fff;border:1px solid #d5cbc1;color:#3c302a}.help-link{font-size:11px;color:#755c4c;margin-top:9px;line-height:1.55}
 .status{font-size:11px;color:#776d63;word-break:break-word}
 .error{color:#a33f2a}
 .notice{background:#f1e5d7;color:#5e4b3c;padding:15px 18px;border-radius:7px;font-size:12px;margin:16px 0}
@@ -63,7 +63,7 @@ footer{border-top:1px solid var(--line);color:#897f74;font-size:11px;margin-top:
 <div class="page">
   <div class="eyebrow">Prospección sin costo · Proyecto NETWORKER 3.0</div>
   <h1>El radar encuentra.<br><span>Vos elegís.</span></h1>
-  <p class="intro">SCOUT reúne cuentas mencionadas en directorios públicos argentinos y buscadores, para que revises si realmente son relevantes. No lee cuentas privadas, no extrae seguidores de Instagram y no envía mensajes por tu cuenta.</p>
+  <p class="intro">SCOUT reúne usuarios de Instagram mencionados en directorios públicos argentinos. Su presencia en un directorio no garantiza que la cuenta siga existiendo o esté activa. Si Instagram no abre un enlace, copiá el usuario y buscalo desde la app. No lee cuentas privadas ni envía mensajes por tu cuenta.</p>
   <div class="stats">
     <div class="stat"><strong id="found">—</strong><small>Perfiles descubiertos en fuentes públicas</small></div>
     <div class="stat"><strong id="saved">—</strong><small>Guardados en tu radar privado</small></div>
@@ -87,7 +87,7 @@ footer{border-top:1px solid var(--line);color:#897f74;font-size:11px;margin-top:
     <form class="manual" id="manualForm"><input type="text" id="manualUrl" placeholder="https://www.instagram.com/usuario/" aria-label="URL de perfil público"/><button class="btn" type="submit">Guardar perfil</button></form>
     <div class="cards" style="margin-top:20px" id="savedList"></div>
   </section>
-  <footer>SCOUT no automatiza envíos de DMs. No se almacenan conversaciones ni datos privados. El contenido público es una pista que siempre necesita revisión humana. Búsqueda diaria gratuita sujeta a disponibilidad y límites de GitHub Actions y de los buscadores.</footer>
+  <footer>Si Instagram muestra «Página no disponible», la cuenta pudo cambiar o eliminarse; algunos navegadores internos también bloquean la apertura. Usá «Copiar @usuario» y buscalo desde la app. SCOUT no envía DMs, no verifica automáticamente la existencia de las cuentas y requiere revisión humana. Búsqueda gratuita sujeta a disponibilidad de las fuentes.</footer>
 </div>
 <div class="overlay" id="authOverlay"><form class="login" id="authForm">
   <div class="eyebrow">Acceso protegido con Supabase</div><h2>Entrá a NETWORKER SCOUT</h2>
@@ -111,7 +111,11 @@ function cardBase(handle,headline,snippet,score){const item=document.createEleme
  if(score!==null){const points=document.createElement('span');points.className='score';points.textContent=score+' puntos*';head.appendChild(points)}item.appendChild(head);
  const h=document.createElement('h3');h.textContent=String(headline||'Perfil por verificar').slice(0,250);item.appendChild(h);
  const p=document.createElement('p');p.textContent=String(snippet||'Revisá su biografía pública antes de considerarlo relevante.').slice(0,430);item.appendChild(p);
- const buttons=document.createElement('div');buttons.className='buttons';const link=document.createElement('a');link.href=profileUrl(handle);link.target='_blank';link.rel='noopener noreferrer';link.textContent='Ver Instagram ↗';buttons.appendChild(link);item.appendChild(buttons);
+ const buttons=document.createElement('div');buttons.className='buttons';
+ const link=document.createElement('a');link.className='ig-direct';link.href=profileUrl(handle);link.rel='noreferrer';link.textContent='Abrir Instagram ↗';link.title='Enlace web canónico; la cuenta debe existir. Se abre en esta misma pestaña para evitar bloqueos de ventanas emergentes.';buttons.appendChild(link);
+ const copy=document.createElement('button');copy.className='copy-handle';copy.type='button';copy.textContent='Copiar @usuario';copy.title='Copiar para pegar en la búsqueda de la app de Instagram';copy.addEventListener('click',async()=>{const value=handle;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value)}else{const temp=document.createElement('textarea');temp.value=value;temp.style.position='fixed';temp.style.top='-1000px';document.body.appendChild(temp);temp.focus();temp.select();const copied=document.execCommand('copy');temp.remove();if(!copied)throw Error('Portapapeles no disponible')}copy.textContent='Copiado ✓';msg('@'+value+' copiado. Abrí Instagram, tocá Buscar y pegá ese usuario.',false)}catch(e){copy.textContent='@'+value;copy.title='Seleccioná el usuario y copialo manualmente';msg('No se pudo copiar automáticamente. El usuario es @'+value+'. Mantené presionado para copiarlo.',true)}setTimeout(()=>{copy.textContent='Copiar @usuario'},2700)});buttons.appendChild(copy);
+ const search=document.createElement('a');search.href='https://www.google.com/search?q='+encodeURIComponent('site:instagram.com/'+handle+' "'+handle+'"');search.rel='noreferrer';search.textContent='Buscar cuenta ↗';search.title='Buscar una referencia pública por si Instagram no abre el enlace';buttons.appendChild(search);
+ item.appendChild(buttons);
  return {item,buttons};
 }
 function empty(target,text){const el=document.createElement('div');el.className='empty';el.textContent=text;target.appendChild(el)}
