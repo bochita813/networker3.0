@@ -44,7 +44,6 @@ def fetch_live_search_rules():
     # No se solicita updated_at; ordenar por una columna permitida funciona con RLS.
     request=urllib.request.Request(SEARCH_API+"?"+params,headers={
         "apikey":SCOUT_PUBLISHABLE_KEY,
-        "Authorization":"Bearer "+SCOUT_PUBLISHABLE_KEY,
         "Accept":"application/json",
     })
     try:
@@ -125,7 +124,7 @@ def main():
             prior = json.loads(OUTPUT.read_text(encoding="utf-8"))
         except Exception as exc:
             print("Archivo anterior inválido; iniciamos limpio:", exc, file=sys.stderr)
-    result = {p["handle"]: p for p in prior.get("profiles", []) if isinstance(p, dict) and "handle" in p}
+    result = {p["handle"]: p for p in prior.get("profiles", []) if isinstance(p, dict) and "handle" in p and p["handle"] != "emprenzona"}
     new_count, feeds_ok, errors = 0, 0, []
     feed_inspection = []
     for query in queries:
