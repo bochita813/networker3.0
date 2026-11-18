@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T22:01:59+00:00",
+  "last_scan": "2026-11-18T22:05:24+00:00",
   "feeds_ok": 12,
   "queries_attempted": 12,
   "configured_searches": 7,
-  "new_profiles": 3,
+  "new_profiles": 0,
   "feed_inspection": [
     {
       "query": "site:instagram.com Emprendedores Cordoba Córdoba Argentina Cosmética Bienestar",
@@ -33,7 +33,7 @@
     },
     {
       "query": "site:instagram.com Estética y belleza estética, cosmética, bienestar Argentina Estética Cosmética",
-      "rss_items": 0,
+      "rss_items": 10,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -41,7 +41,7 @@
     },
     {
       "query": "site:instagram.com Todos los rubros Argentina",
-      "rss_items": 9,
+      "rss_items": 10,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -219,7 +219,7 @@
       "directory": "Ágora · Estética Córdoba Capital",
       "kind": "agora_cordoba",
       "handles_found": 1,
-      "html_chars": 114828
+      "html_chars": 114731
     },
     {
       "directory": "Ágora · Estética Córdoba Capital",
