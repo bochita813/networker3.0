@@ -18,6 +18,15 @@ for(const x of script.matchAll(/\$\('#([^']+)'\)/g)){
   assert.ok(ids.has(x[1]),"Falta elemento #"+x[1]);
 }
 assert.ok(html.includes("@media(max-width:550px)"),"Faltan estilos para celulares");
+assert.ok(html.includes(".field input:not([type=checkbox]):not([type=range])"),
+  "Los checkboxes no deben heredar width:100% ni padding de los campos de texto");
+assert.ok(html.includes(".field .pills input[type=checkbox]"),
+  "Falta regla específica de tamaño para checkboxes");
+assert.ok(html.includes("flex:0 0 18px;width:18px;height:18px"),
+  "El checkbox debe tener tamaño fijo de 18px");
+assert.ok(html.includes(".pills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))"),
+  "Las opciones deben tener grilla adaptativa de 2 columnas en celular");
+
 assert.ok(ids.has("filterDiagnosis"),"Falta diagnóstico del embudo de filtros");
 assert.ok(ids.has("coverage"),"Falta medidor de cobertura geográfica");
 
