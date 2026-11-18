@@ -15,6 +15,9 @@ DIRECTORIES = [
     ("Famadex · Emprendedores Argentina", "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/", "famadex"),
     ("Infloo · Negocios Argentina", "https://infloo.io/es/influencers/ar/all/business", "infloo"),
     ("Climaps · Emprendimientos Argentina", "https://www.climaps.org/emprendimientos/", "climaps"),
+    ("ADULP · Catálogo emprendedor La Plata", "https://www.adulp.org.ar/index.php?Itemid=118&id=45&option=com_content&view=article", "catalog"),
+    ("Comunidad de Emprendedorxs · Argentina", "https://comunidademprendedorxs.jimdofree.com/emprendimientos/", "catalog"),
+    ("UNL · Feria de emprendimientos Santa Fe", "https://www.unl.edu.ar/test/wp-unl/bienal/feria/", "catalog"),
 ]
 HANDLE = re.compile(r"^[a-z0-9._]{3,30}$", flags=re.I)
 RESERVED = {"instagram", "explore", "accounts", "reel", "reels", "tv", "p", "stories", "direct", "web", "about", "developers", "api"}
@@ -142,6 +145,13 @@ def parse_directory(markup, url, label, kind):
             handle = instagram_handle(link)
             if handle and country.casefold() == "argentina":
                 found[handle] = record(handle, heading, "Emprendimiento listado en directorio de proyectos de Argentina.", label, url, 45)
+    elif kind == "catalog":
+        for link, title, heading, country in parser.links:
+            handle = instagram_handle(link)
+            if handle:
+                display = title.strip() if title and not title.lower().startswith(("http", "www.", "@")) and len(title) <= 90 else "Emprendimiento @" + handle
+                # El catálogo está dedicado a proyectos argentinos; el perfil puede cambiar con el tiempo.
+                found[handle] = record(handle, display, "Cuenta de Instagram enlazada explícitamente desde un catálogo de emprendimientos argentinos. Revisar actividad actual.", label, url, 43)
     return list(found.values()), {"directory": label, "kind": kind, "handles_found": len(found), "html_chars": len(markup)}
 
 def fetch_directory(url):
