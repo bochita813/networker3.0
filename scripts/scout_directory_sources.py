@@ -20,6 +20,22 @@ DIRECTORIES = [
     ("UNL · Feria de emprendimientos Santa Fe", "https://www.unl.edu.ar/test/wp-unl/bienal/feria/", "catalog"),
     ("EmprenZona · Directorio de ferias Argentina", "https://www.emprenzona.com.ar/emprende", "emprenzona"),
     ("EmprenZona · Emprendedores de Córdoba", "https://anime.emprenzona.com.ar/ferias/cordoba", "emprenzona_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432a3d17a9c6a5b%3A0x11a66a668128ae2", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432a3eea07ef057%3A0xb3dc17506fe68cc6", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x94329197e72bbcbd%3A0xec98e6ba96cfe1c8", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x94329f33ad95c857%3A0x67930abe2484fba3", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432a3b1d59e5a4f%3A0x563262606d2cddea", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432a1e6bb7bbe4b%3A0xc8e5260e4586ba3f", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x943299eacaec5f95%3A0x8b8b5b321dd5235b", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432a3e5e7d0d64b%3A0x417815a712c195c2", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432a1003653bd8f%3A0x187002a4c3e63142", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432bd034d749a49%3A0x96301b9835b1c5cd", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x943299002bc5beb9%3A0x67c418519278b741", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x943299002c813f6f%3A0x3068af4e93dccf58", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x943299002bc281a3%3A0xbf4bbf98383dffc3", "agora_cordoba"),
+    ("Ágora · Estética Córdoba Capital", "https://market.agora.red/directorio/0x9432a3fa150fe481%3A0xe23b299aaf8c5958", "agora_cordoba"),
+    ("Ágora · Peluquería Córdoba Capital", "https://market.agora.red/directorio/0x9432a30a41b4ea25%3A0x1484f5f192d41f0f", "agora_cordoba"),
+    ("Ágora · Peluquería Córdoba Capital", "https://market.agora.red/directorio/0x9432a35cf6a254c3%3A0x3e9afe9e59927465", "agora_cordoba"),
 ]
 HANDLE = re.compile(r"^[a-z0-9._]{3,30}$", flags=re.I)
 RESERVED = {"instagram", "explore", "accounts", "reel", "reels", "tv", "p", "stories", "direct", "web", "about", "developers", "api"}
@@ -100,7 +116,7 @@ def instagram_handle(url):
     if (url_parts.hostname or "").lower() not in ("instagram.com", "www.instagram.com"):
         return None
     pieces = [p for p in url_parts.path.split("/") if p]
-    if len(pieces) != 1:
+    if len(pieces) != 1 and not (len(pieces) == 2 and pieces[1] == "profilecard"):
         return None
     return pieces[0].lower() if valid(pieces[0]) else None
 
@@ -225,6 +241,21 @@ def parse_directory(markup, url, label, kind):
                 entry["city"] = city
                 entry["location_evidence"] = "Directorio provincial: Córdoba - " + city
             found[handle] = entry
+    elif kind == "agora_cordoba":
+        # Solo enlaces a perfiles publicados por fichas de negocios cordobeses.
+        # Córdoba Capital está verificada en la URL y encabezado de cada ficha.
+        title_match = re.search(r"<title[^>]*>(.*?)</title>", markup, flags=re.I | re.S)
+        display = re.sub(r"<[^>]+>", " ", title_match.group(1)).strip() if title_match else label
+        display = display.split("·")[0].strip()[:130]
+        for link, title, heading, country in parser.links:
+            handle = instagram_handle(link)
+            if not handle:
+                continue
+            rec = record(handle, display, label + ". Cuenta de Instagram enlazada directamente desde una ficha pública.", label, url, 67)
+            rec.update(country="Argentina", province="Córdoba", city="Córdoba Capital",
+                       category="Peluquería" if "Peluquería" in label else "Estética",
+                       location_evidence="Ficha pública de negocio ubicado en Córdoba Capital")
+            found[handle] = rec
     elif kind == "catalog":
         for link, title, heading, country in parser.links:
             handle = instagram_handle(link)
