@@ -154,9 +154,9 @@ def get_regions():
     resp.raise_for_status()
     geo = resp.json()
     reg = Regions(geo.get("features", []))
-    if len(reg.items) < 20:
+    if len(reg.names) < 20:
         raise RuntimeError("GeoBoundaries no entregó suficientes polígonos provinciales")
-    print("Provincias geográficas:", len(reg.items), "Licencia:", meta.get("boundaryLicense"))
+    print("Provincias geográficas:", len(reg.names), "Licencia:", meta.get("boundaryLicense"))
     return reg
 
 
