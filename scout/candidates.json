@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T17:22:24+00:00",
+  "last_scan": "2026-11-18T17:24:29+00:00",
   "feeds_ok": 12,
   "queries_attempted": 12,
   "configured_searches": 4,
-  "new_profiles": 1,
+  "new_profiles": 0,
   "feed_inspection": [
     {
       "query": "site:instagram.com Salud y bienestar Jesús Maria Córdoba Argentina Cosmética Bienestar",
@@ -42,49 +42,53 @@
     {
       "query": "\"instagram.com\" \"emprendedor\" \"Argentina\"",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
       "query": "\"instagram.com\" \"emprendedora\" \"Buenos Aires\"",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
       "query": "instagram emprendimiento Argentina cuentas",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
       "query": "instagram negocios emprendedores Argentina perfil",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
@@ -98,13 +102,14 @@
     {
       "query": "Instagram emprendedoras Neuquén",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     },
     {
@@ -118,13 +123,14 @@
     {
       "query": "instagram.com emprendedoras Córdoba Argentina",
       "rss_items": 10,
-      "instagram_direct_links": 3,
+      "instagram_direct_links": 4,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/"
+        "/",
+        "/p/signin/"
       ]
     }
   ],
@@ -145,7 +151,7 @@
       "directory": "Climaps · Emprendimientos Argentina",
       "kind": "climaps",
       "handles_found": 31,
-      "html_chars": 605834
+      "html_chars": 605833
     },
     {
       "directory": "ADULP · Catálogo emprendedor La Plata",
@@ -164,22 +170,13 @@
       "kind": "catalog",
       "handles_found": 21,
       "html_chars": 54641
-    },
-    {
-      "directory": "EmprenZona · Directorio de ferias Argentina",
-      "kind": "emprenzona",
-      "handles_found": 889,
-      "html_chars": 2289276
-    },
-    {
-      "directory": "EmprenZona · Emprendedores de Córdoba",
-      "kind": "emprenzona_cordoba",
-      "handles_found": 10,
-      "html_chars": 82719
     }
   ],
-  "directories_ok": 8,
-  "errors": [],
+  "directories_ok": 6,
+  "errors": [
+    "EmprenZona · Directorio de ferias Argentina: TimeoutError: The read operation timed out",
+    "EmprenZona · Emprendedores de Córdoba: TimeoutError: The read operation timed out"
+  ],
   "profiles": [
     {
       "handle": "accesorios_.juli",
