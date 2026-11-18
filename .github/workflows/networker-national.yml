@@ -42,5 +42,17 @@ jobs:
             echo "Fuente sin cambios"
           else
             git commit -m "data(scout): snapshot national OSM source with real businesses [skip ci]"
-            git push
+            # El procesamiento puede llevar varios minutos. Integrar cambios
+            # publicados mientras tanto, sin sobrescribir ni hacer force push.
+            for intento in 1 2 3 4 5; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                echo "Catálogo nacional publicado correctamente"
+                exit 0
+              fi
+              sleep 3
+            done
+            echo "Error: publicación rechazada tras 5 intentos."
+            exit 1
           fi
