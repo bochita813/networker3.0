@@ -8,6 +8,8 @@ on:
       - 'scripts/scout_directory_sources.py'
       - 'scout/queries.json'
       - 'scout/configurar.html'
+      - 'scout/live.html'
+      - 'scripts/test_scout_live.mjs'
       - 'scripts/test_scout_config.mjs'
   schedule:
     # 09:17 de Argentina (UTC-3). GitHub puede demorar ejecuciones programadas.
@@ -38,6 +40,8 @@ jobs:
         run: python scripts/scout_discovery.py
       - name: Verificar filtros, HTML, resultados y seleccion en SCOUT
         run: node scripts/test_scout_config.mjs
+      - name: Verificar interfaz SCOUT LIVE
+        run: node scripts/test_scout_live.mjs
       - name: Publicar candidatos nuevos
         if: success()
         env:
