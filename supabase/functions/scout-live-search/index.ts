@@ -44,7 +44,7 @@ function getHandle(raw:string){
 const provinceOfCity:Record<string,string>={"cordoba capital":"Córdoba","cordoba":"Córdoba","cruz del eje":"Córdoba","lanus":"Buenos Aires","quilmes":"Buenos Aires","avellaneda":"Buenos Aires","lomas de zamora":"Buenos Aires","vicente lopez":"Buenos Aires","san isidro":"Buenos Aires","la plata":"Buenos Aires","viedma":"Río Negro","rosario":"Santa Fe"};
 function category(s:string){const n=norm(s);return /estetic|belleza|cosmetic|peluquer|maquill|spa/.test(n)?"Estética y belleza":/salud|nutric|bienestar|medic|kinesi|fitness|yoga/.test(n)?"Salud y bienestar":/emprend|negocio|comerc|venta|tienda/.test(n)?"Comercio y emprendimiento":/coach|lider|marca personal|marketing/.test(n)?"Marca personal":"Sin clasificar"}
 function profile(h:string,title:string,snippet:string,url:string,label:string,f:any,evidence:{city?:string,province?:string,country?:string}={}){
- const text=norm(title+" "+snippet);
+ const text=norm(h+" "+title+" "+snippet);
  const keywords=clean(f.keywords,300).split(",").map(x=>x.trim()).filter(Boolean);
  const matched=keywords.filter(k=>text.includes(norm(k)));
  const confirmed=Boolean(evidence.city||evidence.province||evidence.country);
