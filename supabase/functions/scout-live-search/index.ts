@@ -207,8 +207,15 @@ Deno.serve(async(req:Request)=>{
   }
   // No se infiere lugar o afinidad sólo porque la búsqueda lo pidió.
   // Conservamos resultados sin ubicación confirmada con la etiqueta de procedencia y el filtro solicitado.
-  const {data:stored,error:saveError}=await db.rpc("scout_merge_live_profiles",{payload:items});
-  if(saveError)return respond({error:"La consulta externa respondió pero falló el guardado: "+saveError.message,profiles:items,query,save_failed:true},500);
+  let stored=0;
+  // Lotes de hasta 250 para no superar los límites de escritura y preservar todos los hallazgos.
+  for(let offset=0;offset<items.length;offset+=250){
+   const portion=items.slice(offset,offset+250);
+   const {data:count,error:saveError}=await db.rpc("scout_merge_live_profiles",{payload:portion});
+   if(saveError)return respond({error:"Encontramos "+items.length+" cuentas externas, pero el guardado falló en el lote "+(Math.floor(offset/250)+1)+": "+saveError.message,
+      profiles:items,query,save_failed:true,already_stored:stored},500);
+   stored+=Number(count)||0;
+  }
   const {data:existing,error:exerr}=await db.from("scout_live_searches").select("id,found_count,search_batches,query_log").eq("id",searchId).maybeSingle();
   if(exerr)return respond({error:exerr.message,profiles:items,query},500);
   const run={id:searchId,created_by:user.id,filters:f,provider,found_count:(existing?.found_count||0)+items.length,
@@ -216,8 +223,9 @@ Deno.serve(async(req:Request)=>{
      query_log:[...(Array.isArray(existing?.query_log)?existing.query_log:[]),{batch,query,profiles:items.length,raw:rawCount,errors}].slice(-40)};
   const {error:logError}=await db.from("scout_live_searches").upsert(run,{onConflict:"id"});
   if(logError)return respond({error:"Se guardaron los perfiles, pero falló el historial: "+logError.message,profiles:items,query},500);
-  if(items.length){
-   const {error:matchErr}=await db.from("scout_live_search_matches").upsert(items.map(x=>({search_id:searchId,handle:x.handle,query_text:query})),{onConflict:"search_id,handle",ignoreDuplicates:true});
+  for(let offset=0;offset<items.length;offset+=250){
+   const batchMatches=items.slice(offset,offset+250).map(x=>({search_id:searchId,handle:x.handle,query_text:query}));
+   const {error:matchErr}=await db.from("scout_live_search_matches").upsert(batchMatches,{onConflict:"search_id,handle",ignoreDuplicates:true});
    if(matchErr)errors.push("Historial de coincidencias: "+matchErr.message);
   }
   return respond({profiles:items,fetched:rawCount,stored,query,batch,provider,details,errors,done:provider==="directories"?(batch+1)*3>=sources.filter(s=>!f.province||s[2]==="general"||s[2]===norm(f.province)).length:batch>=9,
