@@ -135,6 +135,45 @@ async function fetchResource(url:string,head:Record<string,string>={},timeout=15
  try{return await fetch(url,{headers:{"User-Agent":"NETWORKERScout/2.2 (+manual profile research; no Instagram access)","Accept":"text/html,application/json",...head},signal:ctrl.signal});}
  finally{clearTimeout(t)}
 }
+
+function cleanWebTitle(s:string){return clean(strip(s).replace(/\s*[•·]\s*Instagram.*$/i,"").replace(/\s*[-–]\s*Instagram.*$/i,""),250)}
+// Cada bloque es un resultado individual, no palabras tomadas del resto de la página.
+function fromBraveResults(html:string,f:any,sourceUrl:string){
+ const parts=html.split(/<div\s+class=["']snippet\s+/i).slice(1);
+ const rows:any[]=[];
+ const keys=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
+ const wantedCity=norm(f.city).replace(/ capital$/,"").trim(), wantedProvince=norm(f.province);
+ const cityNeedle=(s:string)=>s&&norm(s).replace(/ capital$/,"").trim();
+ for(const part of parts.slice(0,45)){
+  if(!/^.{0,190}data-type=["']web["']/is.test(part))continue;
+  const block=part.slice(0,9000);
+  const anchor=block.match(/<a\s+href=["'](https?:\/\/(?:www\.)?instagram\.com\/[a-z0-9._]{3,30}\/?(?:[?#][^"']*)?)["'][^>]*>([\s\S]*?)<\/a>/i);
+  if(!anchor)continue;
+  const h=getHandle(anchor[1]);if(!h)continue;
+  const titleMatch=anchor[2].match(/<div\s+class=["'][^"']*search-snippet-title[^"']*["'][^>]*>([\s\S]*?)<\/div>/i);
+  const attr=anchor[2].match(/<div\s+class=["'][^"']*search-snippet-title[^"']*["']\s+title=["']([^"']+)["']/i);
+  const title=cleanWebTitle(titleMatch?.[1]||attr?.[1]||h);
+  const snippetMatch=block.match(/<div\s+class=["'][^"']*line-clamp-dynamic[^"']*["'][^>]*>([\s\S]*?)<\/div>/i);
+  const snippet=clean(strip(snippetMatch?.[1]||""),850);
+  const relevant=norm(h+" "+title+" "+snippet);
+  if(!keys.some(k=>relevant.includes(k)))continue;
+  // Si se pide ciudad, exigimos que figure explícitamente en esta ficha.
+  // Si sólo se pide provincia, exigimos su mención explícita. La query no verifica domicilio.
+  if(wantedCity && !relevant.includes(wantedCity))continue;
+  if(!wantedCity && wantedProvince && !relevant.includes(wantedProvince))continue;
+  const row=profile(h,title,snippet,sourceUrl,"Brave Search · web pública",f);
+  row.match_evidence="La palabra aparece en el @usuario, título o fragmento indexado; ubicación mencionada, sin confirmar";
+  row.location_evidence="Mención textual en buscador; no es domicilio verificado";
+  rows.push(row);
+ }
+ return [...new Map(rows.map(r=>[r.handle,r])).values()];
+}
+function queryWeb(f:any,b:number){
+ const keys=clean(f.keywords,300).split(",").map(x=>x.trim()).filter(Boolean);
+ const word=keys[b%keys.length]||"";
+ const loc=[f.city,f.province,f.country].filter(Boolean).map(x=>'"'+clean(x,80)+'"').join(" ");
+ return 'site:instagram.com/ "'+clean(word,80)+'" '+loc;
+}
 Deno.serve(async(req:Request)=>{
  if(req.method==="OPTIONS")return new Response(null,{status:204,headers:H});
  if(req.method!=="POST")return respond({error:"Solo POST"},405);
@@ -149,13 +188,27 @@ Deno.serve(async(req:Request)=>{
   const {data:admin,error:adminError}=await db.from("crm_admins").select("user_id").eq("user_id",user.id).maybeSingle();
   if(adminError||!admin)return respond({error:"Acceso reservado a administradores"},403);
   const input=await req.json(),raw=input.filters||{};
-  const f={name:clean(raw.name,90),country:clean(raw.country||"Argentina",80),province:clean(raw.province,100),city:clean(raw.city,100),focus:clean(raw.focus||"Emprendedores",100),keywords:clean(raw.keywords,300),interests:Array.isArray(raw.interests)?raw.interests.slice(0,12).map((x:any)=>clean(x,80)):[]};
-  const batch=Number(input.batch),provider=input.provider==="serpapi"?"serpapi":"directories";
+  const f={name:clean(raw.name,90),country:clean(raw.country||"Argentina",80),province:clean(raw.province,100),city:clean(raw.city,100),focus:clean(raw.focus||"Todos los rubros",100),keywords:clean(raw.keywords,300),interests:Array.isArray(raw.interests)?raw.interests.slice(0,12).map((x:any)=>clean(x,80)):[]};
+  if(!f.keywords.trim())return respond({error:"Escribí una palabra o actividad para buscar perfiles."},400);
+  const batch=Number(input.batch),provider=input.provider==="serpapi"?"serpapi":input.provider==="web"?"web":"directories";
   if(!Number.isInteger(batch)||batch<0||batch>39)return respond({error:"Lote inválido"},400);
   const searchId=clean(input.searchId,50);
   if(!/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(searchId))return respond({error:"Identificador inválido"},400);
   let items:any[]=[],query="",details="",rawCount=0,errors:string[]=[];
-  if(provider==="serpapi"){
+  if(provider==="web"){
+   // Sólo se intenta una consulta en cada ejecución. Si el buscador aplica límites,
+   // se informa el error en lugar de inventar usuarios o recurrir a fichas irrelevantes.
+   query=queryWeb(f,batch);
+   const requestUrl="https://search.brave.com/search?"+new URLSearchParams({q:query,source:"web"}).toString();
+   const response=await fetchResource(requestUrl,{"Accept":"text/html"},16000);
+   if(response.status===429)return respond({error:"El buscador público limitó temporalmente las consultas. Reintentá más tarde o activá la alternativa con clave SerpApi.",code:"RATE_LIMITED"},429);
+   if(!response.ok)return respond({error:"El buscador externo no respondió: HTTP "+response.status,code:"SEARCH_UNAVAILABLE"},502);
+   const html=(await response.text()).slice(0,2000000);
+   if(!html.includes('data-type="web"'))return respond({error:"El buscador web no devolvió fichas interpretables en este momento. No se añadieron resultados de otros rubros.",code:"SEARCH_UNAVAILABLE"},503);
+   items=fromBraveResults(html,f,requestUrl);
+   rawCount=(html.match(/data-type="web"/g)||[]).length;
+   details="Resultados públicos indexados; la palabra debe aparecer en el usuario, nombre o extracto. La mención de una ciudad no confirma el domicilio ni que la cuenta siga activa.";
+  }else if(provider==="serpapi"){
    const apiKey=clean(input.apiKey,150)||Deno.env.get("SERPAPI_API_KEY")||"";
    if(!apiKey)return respond({error:"Agregá una clave SerpApi para búsquedas web en vivo.",code:"KEY_REQUIRED"},422);
    query=queryFor(f,batch);
@@ -174,6 +227,10 @@ Deno.serve(async(req:Request)=>{
     const combined=norm(h+" "+title+" "+snippet);
     const keys=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
     if(keys.length&&!keys.some(x=>combined.includes(x)))continue;
+    const place=norm(h+" "+title+" "+snippet);
+    const city=norm(f.city).replace(/ capital$/,"");
+    if(city&&!place.includes(city))continue;
+    if(!city&&f.province&&!place.includes(norm(f.province)))continue;
     const row=profile(h,title,snippet,String(r.link||r.url), "SerpApi · Google",f);
     row.match_evidence="Coincidencia en título o texto del índice web; no es una biografía verificada de Instagram";
     items.push(row);
@@ -228,7 +285,7 @@ Deno.serve(async(req:Request)=>{
    const {error:matchErr}=await db.from("scout_live_search_matches").upsert(batchMatches,{onConflict:"search_id,handle",ignoreDuplicates:true});
    if(matchErr)errors.push("Historial de coincidencias: "+matchErr.message);
   }
-  return respond({profiles:items,fetched:rawCount,stored,query,batch,provider,details,errors,done:provider==="directories"?(batch+1)*3>=sources.filter(s=>!f.province||s[2]==="general"||s[2]===norm(f.province)).length:batch>=9,
+  return respond({profiles:items,fetched:rawCount,stored,query,batch,provider,details,errors,done:provider==="web"?true:provider==="directories"?(batch+1)*3>=sources.filter(s=>!f.province||s[2]==="general"||s[2]===norm(f.province)).length:batch>=9,
      message:"Resultados obtenidos en esta consulta externa; no se inventaron usuarios ni se verificó su existencia en Instagram."});
  }catch(e){return respond({error:"Consulta fallida: "+String(e).slice(0,300)},500)}
 });
