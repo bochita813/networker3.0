@@ -45,3 +45,12 @@ Esto no consulta la API privada de Instagram ni asegura encontrar perfiles públ
 ## Datos reales y trazabilidad
 
 Los candidatos importados aparecen en `scout/candidates.json` con `source_query`, `source_page` y `discovery_method=directorio_publico`, que indican qué directorio publicó cada nombre de usuario. En el panel SCOUT se puede abrir tanto el perfil de Instagram como la fuente original para verificar la información. **No se debe interpretar que 60 cuentas listadas son 60 prospectos interesados**; el interés de emprender no se infiere de forma segura ni se verificó por contacto directo. Las entradas estáticas de los directorios pueden agotarse sin nuevas cuentas; el escaneo diario compara y no duplica resultados.
+
+
+## Ampliación de fuentes (18-11-2026)
+
+Se incorporó el directorio público [EmprenZona](https://www.emprenzona.com.ar/emprende), que publica marcas, rubros, descripciones y cuentas @instagram en fichas abiertas. En la primera ejecución detectó 889 nombres de usuario en dicha fuente, con deduplicación posterior. También se incorporaron y probaron catálogos públicos ADULP, Comunidad de Emprendedorxs y UNL, además de Famadex, Infloo y Climaps.
+
+La primera ejecución ampliada guardó 800 cuentas porque existía un límite de salida de 800; ese límite fue corregido a 2.400 cuentas y se configuró una ejecución adicional de verificación. **Nunca confundir la cantidad de perfiles publicados con personas que quieren asociarse, ni dar por activo o verificado el perfil dentro de Instagram.** Un catálogo puede tener cuentas antiguas. La búsqueda automática corre cada mañana y conservará candidatos previos aunque alguna fuente deje de responder.
+
+El panel ahora pagina en bloques de 100 resultados, permite buscar por nombre y descripción y muestra enlaces a la fuente pública de cada candidato. No modifica \`crm_leads\` ni envía DMs.
