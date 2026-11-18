@@ -177,11 +177,10 @@ def parse_directory(markup, url, label, kind):
             )
             # El directorio declara explícitamente rubro y ubicación por ficha.
             category = ""
-            for near, near_heading, _ in reversed(previous):
-                if near_heading != heading and near_heading != "":
-                    continue
-                if near in ("Gastronomía","Indumentaria","Accesorios","Artesanías","Decoración","Repostería","Cosmética","Librería","Velas Y Aromas","Arte Y Diseño","Impresión 3D","Bebidas","Juegos","Bijouterie","Emprendimiento"):
-                    category = near
+            categories = ("Gastronomía","Indumentaria","Accesorios","Artesanías","Decoración","Repostería","Cosmética","Librería","Velas Y Aromas","Arte Y Diseño","Impresión 3D","Bebidas","Juegos","Bijouterie","Emprendimiento")
+            for pos, (near, _, _) in enumerate(previous):
+                if near == title and pos > 0 and previous[pos-1][0] in categories:
+                    category = previous[pos-1][0]
                     break
             city = ""
             for line, following_heading, _ in parser.tokens[i+1:i+13]:
