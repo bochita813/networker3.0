@@ -63,7 +63,7 @@ footer{border-top:1px solid var(--line);color:#897f74;font-size:11px;margin-top:
 <div class="page">
   <div class="eyebrow">Prospección sin costo · Proyecto NETWORKER 3.0</div>
   <h1>El radar encuentra.<br><span>Vos elegís.</span></h1>
-  <p class="intro">SCOUT reúne perfiles públicos indexados relacionados con emprendimiento y negocios, para que revises si realmente son relevantes. No lee cuentas privadas, no extrae seguidores de Instagram y no envía mensajes por tu cuenta.</p>
+  <p class="intro">SCOUT reúne cuentas mencionadas en directorios públicos argentinos y buscadores, para que revises si realmente son relevantes. No lee cuentas privadas, no extrae seguidores de Instagram y no envía mensajes por tu cuenta.</p>
   <div class="stats">
     <div class="stat"><strong id="found">—</strong><small>Perfiles descubiertos en fuentes públicas</small></div>
     <div class="stat"><strong id="saved">—</strong><small>Guardados en tu radar privado</small></div>
@@ -78,7 +78,7 @@ footer{border-top:1px solid var(--line);color:#897f74;font-size:11px;margin-top:
   <div class="chips" role="tablist" aria-label="Vistas SCOUT"><button type="button" class="chip active" id="tabFound" aria-selected="true">Perfiles sugeridos</button><button type="button" class="chip" id="tabSaved" aria-selected="false">Mi radar privado</button></div>
   <section class="panel" id="foundPanel">
     <h2>Descubrimiento automático</h2>
-    <p class="note">Las coincidencias son sugerencias obtenidas por buscadores; que alguien aparezca acá no garantiza que su perfil sea público, ni que quiera emprender.</p>
+    <p class="note">Las coincidencias proceden de directorios públicos o buscadores. Que aparezca una cuenta acá no garantiza que siga activa, sea accesible o quiera colaborar.</p>
     <div class="controls"><input type="search" id="filter" placeholder="Filtrar por perfil, negocio, ubicación o tema…" aria-label="Filtrar perfiles"/><span class="status" id="filterCount"></span></div>
     <div class="cards" id="foundList"></div>
   </section>
@@ -102,7 +102,7 @@ footer{border-top:1px solid var(--line);color:#897f74;font-size:11px;margin-top:
 'use strict';
 const $=s=>document.querySelector(s);
 const C=window.NETWORKER_CRM_CONFIG||{};
-let db=null, saved=[], candidates=[], tab='found';
+let db=null, saved=[], candidates=[], tab='found', visibleCount=100;
 const safeHandle=s=>String(s||'').trim().replace(/^@/,'').toLowerCase();
 const isHandle=s=>/^[a-z0-9._]{1,30}$/.test(s)&&!s.includes('..')&&!s.startsWith('.')&&!s.endsWith('.');
 const profileUrl=handle=>'https://www.instagram.com/'+handle+'/';
@@ -140,13 +140,13 @@ function drawFound(){
  $('#filterCount').textContent=filtered.length+' coincidencias';
  if(!filtered.length){empty(list,candidates.length?'No hay resultados con ese filtro.':'Sin perfiles descubiertos todavía. Ejecutá la búsqueda en GitHub Actions o ampliá las palabras clave.');return}
  const selected=new Set(saved.map(p=>p.handle));
- for(const p of filtered.slice(0,120)){
+ for(const p of filtered.slice(0,visibleCount)){
   const handle=safeHandle(p.handle),v=cardBase(handle,p.headline,p.snippet,Number(p.score)||0);
   const save=document.createElement('button');save.className='btn';save.type='button';save.textContent=selected.has(handle)?'Ya guardado ✓':'Guardar en mi radar';save.disabled=selected.has(handle);
   save.addEventListener('click',()=>add(handle,p,save));v.buttons.appendChild(save);
-  const src=document.createElement('p');src.className='status';src.textContent='Fuente: '+String(p.source_query||'Buscador público').slice(0,125)+' · ';if(p.source_page){try{const u=new URL(p.source_page);if(u.protocol==='https:'&&['creatorreach.io','famadex.com','infloo.io','www.climaps.org','www.adulp.org.ar','comunidademprendedorxs.jimdofree.com','www.unl.edu.ar'].includes(u.hostname)){const sourceLink=document.createElement('a');sourceLink.href=u.href;sourceLink.target='_blank';sourceLink.rel='noopener noreferrer';sourceLink.textContent='Comprobar en directorio ↗';sourceLink.style.textDecoration='underline';src.appendChild(sourceLink)}}catch(e){}}v.item.appendChild(src);list.appendChild(v.item)
+  const src=document.createElement('p');src.className='status';src.textContent='Fuente: '+String(p.source_query||'Buscador público').slice(0,125)+' · ';if(p.source_page){try{const u=new URL(p.source_page);if(u.protocol==='https:'&&['creatorreach.io','famadex.com','infloo.io','www.climaps.org','www.adulp.org.ar','comunidademprendedorxs.jimdofree.com','www.unl.edu.ar','www.emprenzona.com.ar'].includes(u.hostname)){const sourceLink=document.createElement('a');sourceLink.href=u.href;sourceLink.target='_blank';sourceLink.rel='noopener noreferrer';sourceLink.textContent='Comprobar en directorio ↗';sourceLink.style.textDecoration='underline';src.appendChild(sourceLink)}}catch(e){}}v.item.appendChild(src);list.appendChild(v.item)
  }
- if(filtered.length>120){const s=document.createElement('p');s.className='status';s.textContent='Se muestran 120 resultados; filtrá para ver otros.';list.appendChild(s)}
+ if(filtered.length>visibleCount){const more=document.createElement('button');more.className='btn secondary';more.type='button';more.textContent='Mostrar otros '+Math.min(100,filtered.length-visibleCount)+' perfiles ('+filtered.length+' encontrados)';more.style.marginTop='12px';more.addEventListener('click',()=>{visibleCount+=100;drawFound()});list.appendChild(more)}
 }
 async function add(handle,p,button){
  if(!isHandle(handle))return;
@@ -181,7 +181,7 @@ $('#manualForm').addEventListener('submit',async e=>{e.preventDefault();const ha
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();$('#loginError').textContent='';$('#submitLogin').disabled=true;const {error}=await db.auth.signInWithPassword({email:$('#email').value.trim(),password:$('#password').value});$('#submitLogin').disabled=false;if(error){$('#loginError').textContent=error.message;return}await checkAuth()});
 $('#logout').addEventListener('click',async e=>{e.preventDefault();if(db)await db.auth.signOut();$('#authOverlay').hidden=false;saved=[];candidates=[]});
 $('#tabFound').addEventListener('click',()=>choose('found'));$('#tabSaved').addEventListener('click',()=>choose('saved'));
-$('#filter').addEventListener('input',drawFound);$('#refresh').addEventListener('click',()=>{getCandidates();getSaved()});
+$('#filter').addEventListener('input',()=>{visibleCount=100;drawFound()});$('#refresh').addEventListener('click',()=>{getCandidates();getSaved()});
 if(C.url&&C.publishableKey&&window.supabase){db=window.supabase.createClient(C.url,C.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});checkAuth().catch(e=>$('#loginError').textContent=e.message)}
 else{$('#loginError').textContent='No se pudo cargar la configuración de Supabase. Abrí nuevamente el CRM.'}
 })();
