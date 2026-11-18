@@ -18,7 +18,7 @@ Mantiene diseño y contenido de la landing original; no modifica tus ediciones d
 5. Abrir Project Settings > API Keys o Connect. Copiar Project URL y
    publishable key (sb_publishable_...). Nunca utilizar secret/service_role.
 6. Editar crm/config.js en GitHub, completar url y publishableKey, guardar.
-7. Netlify publica. Ingresar a https://networker30.netlify.app/crm/ con el usuario creado.
+7. Netlify publica. Ingresar a https://networker3.netlify.app/crm/ con el usuario creado.
 8. Abrir la landing, completar formulario con teléfono y consentimiento,
    enviar un registro DE PRUEBA y confirmar que aparece en Nuevo dentro del CRM.
 9. Eliminar los registros de prueba.
