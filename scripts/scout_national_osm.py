@@ -24,6 +24,7 @@ import osmium
 import requests
 from shapely.geometry import Point, shape
 from shapely.prepared import prep
+from shapely.strtree import STRtree
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEST = ROOT / "scout" / "national"
@@ -116,25 +117,33 @@ def download(url, dest, minimum=100, timeout=120):
 
 
 class Regions:
+    """Índice espacial de 23 límites provinciales para no recorrer todos por cada POI."""
     def __init__(self, features):
-        self.items = []
+        self.geometries = []
+        self.names = []
         for f in features:
             name = text((f.get("properties") or {}).get("shapeName"), 100)
             if not name:
                 continue
-            geom = shape(f["geometry"])
-            prepared = prep(geom)
-            self.items.append((name, geom.bounds, prepared))
+            if name == "La Roja":   # Error tipográfico en geoBoundaries ARG-ADM1 2006
+                name = "La Rioja"
+            geometry = shape(f["geometry"])
+            self.geometries.append(geometry)
+            self.names.append(name)
+        if not self.geometries:
+            raise RuntimeError("Faltan polígonos provinciales")
+        self.tree = STRtree(self.geometries)
+        self.prepared = [prep(g) for g in self.geometries]
 
     def province(self, latitude, longitude):
         if latitude is None or longitude is None:
             return ""
         point = Point(longitude, latitude)
-        for name, (minx, miny, maxx, maxy), geom in self.items:
-            if minx <= longitude <= maxx and miny <= latitude <= maxy and geom.covers(point):
-                return name
+        for index in self.tree.query(point):
+            ix = int(index)
+            if self.prepared[ix].covers(point):
+                return self.names[ix]
         return ""
-
 
 def get_regions():
     info = SESSION.get(BORDERS_API, timeout=(20, 40))
@@ -201,7 +210,7 @@ class Collector(osmium.SimpleHandler):
         if latitude > -21 or latitude < -56 or longitude < -75 or longitude > -52:
             return
         province = self.regions.province(latitude, longitude)
-        addr_prov = text(tags.get("addr:province"),100)
+        addr_prov = text(tags.get("addr:province") or tags.get("addr:state") or tags.get("is_in:state"),100)
         if not province and addr_prov:
             province = addr_prov
         city = text(tags.get("addr:city") or tags.get("is_in:city"), 120)
@@ -234,10 +243,16 @@ class Collector(osmium.SimpleHandler):
     def node(self, n):
         if not n.location.valid():
             return
+        if not any(t.k in ("name","brand") for t in n.tags):
+            return
+        if not any(t.k in ("shop","office","craft","healthcare","amenity","leisure","tourism") for t in n.tags):
+            return
         self.record(n,"node",n.location.lat,n.location.lon)
 
     def way(self, w):
         if not any(tag.k in ("name","brand") for tag in w.tags):
+            return
+        if not any(tag.k in ("shop","office","craft","healthcare","amenity","leisure","tourism") for tag in w.tags):
             return
         positions = []
         try:
@@ -283,7 +298,7 @@ def select_balanced(rows):
             result.append(row)
             used.add(row["source_id"])
     remaining=[row for group in lists.values() for row in group if row["source_id"] not in used]
-    remaining.sort(key=lambda r:(-priority(r),r["province"],r["source_id"]))
+    remaining.sort(key=lambda r:(-bool(r["province"]),-priority(r),r["province"],r["source_id"]))
     result.extend(remaining[:max(0,LIMIT-len(result))])
     return result[:LIMIT]
 
