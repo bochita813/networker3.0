@@ -7,6 +7,8 @@ on:
       - 'scripts/scout_discovery.py'
       - 'scripts/scout_directory_sources.py'
       - 'scout/queries.json'
+      - 'scout/configurar.html'
+      - 'scripts/test_scout_config.mjs'
   schedule:
     # 09:17 de Argentina (UTC-3). GitHub puede demorar ejecuciones programadas.
     - cron: "17 12 * * *"
@@ -22,7 +24,7 @@ concurrency:
 jobs:
   discovery:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 14
     steps:
       - name: Checkout del proyecto
         uses: actions/checkout@v4
@@ -34,6 +36,8 @@ jobs:
           python-version: "3.12"
       - name: Buscar cuentas publicas indexadas
         run: python scripts/scout_discovery.py
+      - name: Verificar filtros, HTML, resultados y seleccion en SCOUT
+        run: node scripts/test_scout_config.mjs
       - name: Publicar candidatos nuevos
         if: success()
         env:
