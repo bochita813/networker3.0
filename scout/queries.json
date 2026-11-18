@@ -1,0 +1,13 @@
+{
+  "description": "Búsquedas de perfiles públicos de Instagram indexados en RSS. Editar las frases para cambiar el nicho. No usar términos sensibles ni perfiles privados.",
+  "queries": [
+    "site:instagram.com/ emprendedora argentina negocios",
+    "site:instagram.com/ emprendedor argentina",
+    "site:instagram.com/ emprendimiento buenos aires",
+    "site:instagram.com/ marca personal emprender argentina",
+    "site:instagram.com/ networking emprendedores argentina",
+    "site:instagram.com/ profesionales emprendedores argentina",
+    "site:instagram.com/ emprendedoras cordoba argentina",
+    "site:instagram.com/ emprendedores rio negro neuquen"
+  ]
+}
