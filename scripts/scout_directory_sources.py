@@ -203,7 +203,9 @@ def parse_directory(markup, url, label, kind):
         # En particular, "Córdoba - Cruz del Eje" NO equivale a Córdoba Capital.
         for link, title, heading, country in parser.links:
             handle = instagram_handle(link)
-            if not handle:
+            # Solo cuentas de emprendedores publicadas como @usuario, no links
+            # genéricos del sitio ni sus propios perfiles corporativos.
+            if not handle or title.strip().lower().lstrip("@") != handle or handle == "emprenzona":
                 continue
             near = [t for t, h, _ in parser.tokens if h == heading]
             city = ""
