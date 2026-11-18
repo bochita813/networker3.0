@@ -11,7 +11,7 @@ import urllib.request
 import urllib.error
 
 DIRECTORIES = [
-    ("CreatorReach · Emprendedores Argentina", "https://creatorreach.io/find/instagram-entrepreneur-creators-argentina", "creatorreach"),
+    # CreatorReach no permite lectura automatizada (HTTP 403); se respeta su bloqueo.
     ("Famadex · Emprendedores Argentina", "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/", "famadex"),
     ("Infloo · Negocios Argentina", "https://infloo.io/es/influencers/ar/all/business", "infloo"),
     ("Climaps · Emprendimientos Argentina", "https://www.climaps.org/emprendimientos/", "climaps"),
