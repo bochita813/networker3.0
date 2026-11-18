@@ -24,6 +24,12 @@ assert.ok(html.includes('const needed=form.keywords.split'),"Los resultados debe
 assert.ok(html.includes('db.from("scout_live_profiles")'),"Falta tabla acumulativa");
 assert.ok(html.includes('db.from("crm_scout_profiles")'),"Falta vínculo con radar CRM");
 assert.ok(html.includes("source_provider"),"Falta traza de fuente");
+assert.ok(html.includes('id="showExisting"'),"Debe poder ver perfiles de Instagram ya detectados sin comprar consultas");
+assert.ok(html.includes('id="dbOrigin"'),"Debe poder filtrar índice web versus usuarios publicados en directorios");
+assert.ok(html.includes('function publicEvidence(p)'),"Se debe mostrar procedencia de perfil y no asumir privacidad pública");
+assert.ok(html.includes('$("#showExisting").onclick=async()=>'),"El botón de perfiles existentes debe consultar la base");
+assert.ok(html.includes('Instagram no permite confirmar'),"No debe llamarse cuenta pública verificada sin evidencia directa");
+
 assert.ok(html.includes("location_confirmed"),"Falta distinción de evidencia geográfica");
 assert.ok(html.includes("networker-base-segmentada.csv"),"Falta exportación");
 assert.ok(html.includes("@media(max-width:560px)"),"Faltan controles mobile");
@@ -43,6 +49,9 @@ assert.ok(backend.includes('if(!keys.some(k=>relevant.includes(k)))continue;'),"
 assert.ok(backend.includes('start:String((batch%3)*10)'),"No existe paginación real del buscador externo");
 assert.ok(backend.includes("entrepreneur-card"),"Falta extracción por ficha individual del directorio");
 assert.ok(backend.includes("p.handle,p.headline,p.snippet"),"La coincidencia de palabra debe buscar en @usuario y nombre");
+assert.ok(backend.includes('const text=norm(h+" "+title+" "+snippet);'),"El score debe reconocer la palabra en el nombre de usuario");
+assert.ok(backend.includes('if(!h||seen.has(h))continue;'),"No introducir URLs de reels/posts o cuentas duplicadas");
+
 assert.ok(backend.includes("biografía")||html.includes("biografías"),"Debe advertirse que las biografías no están verificadas");
 assert.ok(!html.includes("BRAVE_SEARCH_API_KEY"),"Proveedor no permitido por términos en este caso");
 console.log("SCOUT LIVE QA OK: script, "+ids.length+" controles, búsquedas, filtros y exportación.");
