@@ -87,10 +87,13 @@ def main():
         try:
             items = list(fetch_feed(query))
             feeds_ok += 1
-            report = {'query': query, 'rss_items': len(items), 'instagram_direct_links': 0, 'instagram_text_mentions': 0, 'handles_matched': 0}
+            report = {'query': query, 'rss_items': len(items), 'instagram_direct_links': 0, 'instagram_text_mentions': 0, 'handles_matched': 0, 'instagram_path_examples': []}
             for item in items:
                 if 'instagram.com/' in item['link'].lower():
                     report['instagram_direct_links'] += 1
+                    if len(report['instagram_path_examples']) < 5:
+                        url = urllib.parse.urlsplit(item['link'])
+                        report['instagram_path_examples'].append(url.path[:110])
                 if 'instagram.com/' in (item['title'] + ' ' + item['snippet']).lower():
                     report['instagram_text_mentions'] += 1
                 for handle in candidates_from(item):
