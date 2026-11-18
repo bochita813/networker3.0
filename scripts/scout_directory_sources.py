@@ -249,11 +249,12 @@ def parse_directory(markup, url, label, kind):
         display = display.split("·")[0].strip()[:130]
         for link, title, heading, country in parser.links:
             handle = instagram_handle(link)
-            if not handle:
+            # Excluir Instagram del propio directorio, que aparece en cada ficha.
+            if not handle or handle == "agora.red":
                 continue
             rec = record(handle, display, label + ". Cuenta de Instagram enlazada directamente desde una ficha pública.", label, url, 67)
             rec.update(country="Argentina", province="Córdoba", city="Córdoba Capital",
-                       category="Peluquería" if "Peluquería" in label else "Estética",
+                       category="Peluquería y belleza" if "Peluquería" in label else "Estética y belleza",
                        location_evidence="Ficha pública de negocio ubicado en Córdoba Capital")
             found[handle] = rec
     elif kind == "catalog":
