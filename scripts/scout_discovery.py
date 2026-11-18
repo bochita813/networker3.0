@@ -81,13 +81,20 @@ def main():
             print("Archivo anterior inválido; iniciamos limpio:", exc, file=sys.stderr)
     result = {p["handle"]: p for p in prior.get("profiles", []) if isinstance(p, dict) and "handle" in p}
     new_count, feeds_ok, errors = 0, 0, []
+    feed_inspection = []
     for query in queries:
         print("BUSCAR:", query)
         try:
             items = list(fetch_feed(query))
             feeds_ok += 1
+            report = {'query': query, 'rss_items': len(items), 'instagram_direct_links': 0, 'instagram_text_mentions': 0, 'handles_matched': 0}
             for item in items:
+                if 'instagram.com/' in item['link'].lower():
+                    report['instagram_direct_links'] += 1
+                if 'instagram.com/' in (item['title'] + ' ' + item['snippet']).lower():
+                    report['instagram_text_mentions'] += 1
                 for handle in candidates_from(item):
+                    report['handles_matched'] += 1
                     # Solo cuentas públicas indexadas; no verificamos si la cuenta permanece pública.
                     score_value = score(item, query)
                     if handle in result:
@@ -104,6 +111,7 @@ def main():
                             "first_seen": dt.datetime.now(dt.timezone.utc).date().isoformat(),
                         }
                         new_count += 1
+            feed_inspection.append(report)
         except (urllib.error.URLError, TimeoutError, ET.ParseError, ValueError, OSError) as exc:
             errors.append(f"{query}: {type(exc).__name__}: {exc}")
     # No inventar perfiles; no eliminar los anteriores ante fallos o feeds sin resultados.
@@ -115,6 +123,7 @@ def main():
         "feeds_ok": feeds_ok,
         "queries_attempted": len(queries),
         "new_profiles": new_count,
+        "feed_inspection": feed_inspection,
         "errors": errors[:8],
         "profiles": profiles,
     }
