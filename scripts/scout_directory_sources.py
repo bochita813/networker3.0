@@ -18,6 +18,7 @@ DIRECTORIES = [
     ("ADULP · Catálogo emprendedor La Plata", "https://www.adulp.org.ar/index.php?Itemid=118&id=45&option=com_content&view=article", "catalog"),
     ("Comunidad de Emprendedorxs · Argentina", "https://comunidademprendedorxs.jimdofree.com/emprendimientos/", "catalog"),
     ("UNL · Feria de emprendimientos Santa Fe", "https://www.unl.edu.ar/test/wp-unl/bienal/feria/", "catalog"),
+    ("EmprenZona · Directorio de ferias Argentina", "https://www.emprenzona.com.ar/emprende", "emprenzona"),
 ]
 HANDLE = re.compile(r"^[a-z0-9._]{3,30}$", flags=re.I)
 RESERVED = {"instagram", "explore", "accounts", "reel", "reels", "tv", "p", "stories", "direct", "web", "about", "developers", "api"}
@@ -145,6 +146,35 @@ def parse_directory(markup, url, label, kind):
             handle = instagram_handle(link)
             if handle and country.casefold() == "argentina":
                 found[handle] = record(handle, heading, "Emprendimiento listado en directorio de proyectos de Argentina.", label, url, 45)
+    elif kind == "emprenzona":
+        # El listado público muestra fichas de marcas con título h3 y @usuario visible.
+        # Se toma sólo la cadena @handle completa que figura expresamente en el HTML,
+        # nunca el nombre del negocio convertido en usuario hipotético.
+        for i, (token, heading, country) in enumerate(parser.tokens):
+            m = re.fullmatch(r"@([a-z0-9._]{3,30})", token, flags=re.I)
+            if not m or not valid(m.group(1)):
+                continue
+            handle = m.group(1).lower()
+            # El nombre de la marca precede al @usuario en la ficha HTML.
+            # Las líneas cercanas aportan descripción del emprendimiento.
+            previous = parser.tokens[max(0, i-6):i]
+            title = heading if heading and len(heading) <= 130 else "Emprendimiento @" + handle
+            if not previous or not any(t[0] == title for t in previous):
+                # Diferentes tarjetas pueden usar títulos duplicados, pero
+                # sin encabezado cercano no atribuimos el @usuario al negocio.
+                continue
+            next_words = []
+            for line, next_heading, _ in parser.tokens[i+1:i+5]:
+                if next_heading != heading or line.startswith("@"):
+                    break
+                if len(line) > 15 and not line.startswith(("Ver emprendimiento", "Ver perfil")):
+                    next_words.append(line)
+            summary = " ".join(next_words)[:580]
+            found[handle] = record(
+                handle, title,
+                summary or "Emprendimiento publicado en el directorio argentino de ferias.",
+                label, url, 47
+            )
     elif kind == "catalog":
         for link, title, heading, country in parser.links:
             handle = instagram_handle(link)
@@ -163,7 +193,7 @@ def fetch_directory(url):
         content_type = res.headers.get("content-type", "").lower()
         if "html" not in content_type and content_type:
             raise ValueError("Respuesta no HTML: " + content_type)
-        raw = res.read(2_400_000)
+        raw = res.read(8_000_000)
         charset = res.headers.get_content_charset() or "utf-8"
     return raw.decode(charset, errors="replace")
 
