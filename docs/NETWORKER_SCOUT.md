@@ -6,7 +6,9 @@
 - Creado: panel `https://networker3.netlify.app/scout/` que comparte autenticación con el CRM, muestra candidatos públicos y permite guardarlos, revisarlos o descartarlos.
 - Creado: programa `scripts/scout_discovery.py`, que consulta el RSS de un buscador público, deduplica coincidencias de URLs de Instagram y calcula una puntuación indicativa.
 - Programado: GitHub Actions `.github/workflows/networker-scout.yml` con ejecución diaria a las **12:17 UTC (09:17 Argentina)**, sujeta a demoras, disponibilidad, cuotas y permisos de GitHub.
-- **Aún no verificada** la primera ejecución real ni que el buscador devuelva perfiles. El archivo `scout/candidates.json` arranca vacío; no hay perfiles inventados.
+- **Pruebas reales ejecutadas el 18 de noviembre de 2026:** GitHub Actions sí ejecuta el script y actualiza el archivo. En la última ronda, 8 feeds respondieron y 0 perfiles válidos se encontraron. La inspección de RSS mostró enlaces a `instagram.com/` (página inicial), sin rutas `/usuario/`. **La fuente Bing RSS, con estas consultas, no sirve todavía para descubrir perfiles.** No inventar resultados ni confundir ejecución técnica con éxito comercial.
+- Se añadió disparador `push` en cambios de script, configuración o workflow para probar el motor sin botones de interfaz, además de las ejecuciones diarias y manuales.
+- Diagnósticos por consulta: `feed_inspection` dentro de `scout/candidates.json`.
 
 ## Usarlo en 3 pasos
 
