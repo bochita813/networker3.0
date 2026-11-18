@@ -421,13 +421,130 @@ async function loadRules(){
  if(error){status("No se pudieron leer tus búsquedas: "+error.message);return}
  rules=data||[];drawRules();
 }
+async function fetchLatestIndex(){
+ const response=await fetch("/scout/candidates.json?nocache="+Date.now(),{cache:"no-store"});
+ if(!response.ok)throw Error("No se pudo actualizar la base de perfiles (HTTP "+response.status+").");
+ const obj=await response.json();
+ if(!Array.isArray(obj.profiles))throw Error("El archivo de perfiles es inválido.");
+ candidates=obj.profiles.filter(p=>validHandle(handle(p.handle)));
+ lastScan=obj.last_scan||"";
+ $('#total').textContent=candidates.length.toLocaleString("es-AR");
+ return obj;
+}
+async function fetchVerifiedBios(){
+ const {data,error}=await db.from("crm_scout_profiles")
+  .select("handle,verified_bio,bio_source,bio_checked_at")
+  .not("verified_bio","eq","").limit(2000);
+ if(error)throw Error("Error leyendo biografías verificadas: "+error.message);
+ verifiedBios=new Map((data||[]).filter(p=>validHandle(handle(p.handle))&&p.verified_bio)
+  .map(p=>[handle(p.handle),p]));
+ const count=candidates.filter(p=>!!verifiedBio(p)).length;
+ $('#bioCoverage').textContent="Biografías de Instagram verificadas disponibles: "+count+" de "+candidates.length+
+ ". Los demás perfiles se buscan por usuario, nombre, rubro y descripción del directorio (no son biografías de Instagram).";
+ return count;
+}
+function searchProgress(state,title,detail){
+ const box=$('#searchProgress');box.dataset.state=state;
+ $('#searchProgressIcon').textContent=state==="loading"?"↻":state==="done"?"✓":state==="error"?"!":"⌕";
+ $('#searchProgressTitle').textContent=title;
+ $('#searchProgressDetail').textContent=detail;
+}
+async function runSearch(origin){
+ if(!user){status("Ingresá al CRM para iniciar la búsqueda.");return}
+ const reqId=++searchRun;
+ const f=filterForm();
+ const zone=[f.city,f.province,f.country].filter(Boolean).join(", ");
+ searchProgress("loading","Buscando perfiles…",
+  "Actualizando el índice y las biografías verificadas; luego se aplicarán tus filtros para "+zone+".");
+ const runButton=$('#runNow');runButton.disabled=true;
+ document.getElementById("resultPanel").scrollIntoView({behavior:"smooth",block:"start"});
+ // Deja al navegador pintar el indicador antes de realizar la descarga.
+ await new Promise(resolve=>requestAnimationFrame(resolve));
+ try{
+  const index=await fetchLatestIndex();
+  if(reqId!==searchRun)return;
+  searchProgress("loading","Analizando coincidencias…",
+   "Se encontraron "+candidates.length+" cuentas en la base. Evaluando ubicación, palabras clave, rubros y biografías verificadas.");
+  let bioError="";
+  try{await fetchVerifiedBios()}catch(e){bioError=e.message;$('#bioCoverage').textContent="No se pudieron consultar las biografías verificadas: "+bioError}
+  if(reqId!==searchRun)return;
+  preview();
+  const count=filtered.length;
+  searchProgress("done",count+" perfiles coincidentes",
+   "Búsqueda completada sobre "+candidates.length+" cuentas del índice; última actualización: "+
+    (lastScan?new Date(lastScan).toLocaleString("es-AR"):"sin fecha")+
+    ". "+(bioError?"Las biografías verificadas no pudieron actualizarse. ":"")+
+    "No se consultaron cuentas nuevas directamente en Instagram.");
+  status((origin==="saved"?"Búsqueda guardada ejecutada. ":"Búsqueda ejecutada. ")+
+   count+" perfiles coincidentes. El resultado ya está visible.");
+ }catch(e){
+  if(reqId!==searchRun)return;
+  // Si falla la descarga pero hay datos anteriores, mostrar resultados locales con advertencia.
+  preview();
+  searchProgress("error","No pudimos actualizar el índice",
+   e.message+(candidates.length?" Se muestran "+filtered.length+" coincidencias del último índice cargado.":" No hay resultados cargados."));
+  status("Error de actualización: "+e.message);
+ }finally{if(reqId===searchRun)runButton.disabled=false}
+}
+function openBioEditor(h){
+ if(!validHandle(h))return;
+ editingBioHandle=h;
+ $('#bioHandle').textContent="Perfil: @"+h+" · Registrá solo la biografía pública que pudiste verificar en Instagram.";
+ $('#bioText').value=verifiedBios.get(h)?.verified_bio||"";
+ const dialog=$('#bioDialog');
+ if(typeof dialog.showModal==="function")dialog.showModal();
+ else dialog.setAttribute("open","");
+}
+function closeBioEditor(){
+ const dialog=$('#bioDialog');
+ if(typeof dialog.close==="function"&&dialog.open)dialog.close();
+ else dialog.removeAttribute("open");
+}
+async function saveVerifiedBio(event){
+ event.preventDefault();
+ if(!user||!editingBioHandle)return;
+ const text=$('#bioText').value.trim();
+ const h=editingBioHandle;
+ $('#saveBio').disabled=true;
+ try{
+  const {data:existing,error:readError}=await db.from("crm_scout_profiles")
+   .select("id").eq("handle",h).maybeSingle();
+  if(readError)throw readError;
+  const newFields={verified_bio:text,bio_source:text?"Verificación manual del administrador":"",bio_checked_at:text?new Date().toISOString():null,updated_at:new Date().toISOString()};
+  let error;
+  if(existing?.id){
+   ({error}=await db.from("crm_scout_profiles").update(newFields).eq("id",existing.id));
+  }else{
+   const p=candidates.find(p=>handle(p.handle)===h);
+   const row={
+    handle:h,profile_url:"https://www.instagram.com/"+h+"/",
+    headline:String(p?.headline||"Cuenta por verificar").slice(0,250),
+    snippet:String(p?.snippet||"").slice(0,1000),
+    source:String(p?.source_query||"Revisión manual").slice(0,120),
+    score:Math.max(0,Math.min(100,Number(p?.score)||0)),
+    stage:"Por revisar",notes:"",...newFields
+   };
+   ({error}=await db.from("crm_scout_profiles").insert(row));
+  }
+  if(error)throw error;
+  if(text)verifiedBios.set(h,{handle:h,verified_bio:text,bio_source:newFields.bio_source,bio_checked_at:newFields.bio_checked_at});
+  else verifiedBios.delete(h);
+  closeBioEditor();preview();
+  const num=candidates.filter(p=>!!verifiedBio(p)).length;
+  $('#bioCoverage').textContent="Biografías verificadas disponibles: "+num+" de "+candidates.length+
+   ". Las demás fichas usan únicamente descripciones de directorios.";
+  status("Biografía pública de @"+h+" "+(text?"guardada.":"borrada.")+" Los filtros ya contemplan este cambio.");
+ }catch(e){status("No pudimos guardar la biografía: "+e.message)}
+ finally{$('#saveBio').disabled=false}
+}
+
 function drawRules(){
  const area=$('#savedRules');area.replaceChildren();
  if(!rules.length){area.appendChild(el("div","Todavía no guardaste búsquedas. Configurá los filtros y presioná Guardar.","empty"));return}
  rules.forEach(r=>{
   const row=el("div",null,"rule"),infoBox=el("div");infoBox.append(el("strong",r.name),el("small",[r.city,r.province,r.country].filter(Boolean).join(" · ")+" · "+r.focus),el("small",r.enabled?"● Activa · búsqueda diaria":"○ Pausada"));
   const ops=el("div",null,"rule-buttons");
-  const use=el("button","Usar","btn alt sm");use.type="button";use.onclick=()=>{editing=r.id;formSet(r);$('#saveRule').textContent="Actualizar esta búsqueda";status("Filtros cargados: "+r.name)};
+  const use=el("button","Usar","btn alt sm");use.type="button";use.onclick=()=>{editing=r.id;$('#textSearch').value="";formSet(r);$('#saveRule').textContent="Actualizar esta búsqueda";runSearch("saved")};
   const toggle=el("button",r.enabled?"Pausar":"Activar","btn alt sm");toggle.type="button";toggle.onclick=async()=>{if(!r.enabled&&rules.filter(x=>x.enabled).length>=8){status("Ya hay 8 búsquedas activas. Pausá una antes de activar otra.");return}const {error}=await db.from("scout_search_rules").update({enabled:!r.enabled,updated_at:new Date().toISOString()}).eq("id",r.id);if(error)status(error.message);else await loadRules()};
   const del=el("button","Eliminar","btn alt sm");del.type="button";del.onclick=async()=>{if(!confirm("¿Eliminar la búsqueda '"+r.name+"'?"))return;const {error}=await db.from("scout_search_rules").delete().eq("id",r.id);if(error)status(error.message);else{if(editing===r.id){editing=null;$('#saveRule').textContent="Guardar y activar búsqueda"}await loadRules()}};
   ops.append(use,toggle,del);row.append(infoBox,ops);area.appendChild(row)
@@ -439,17 +556,20 @@ async function auth(){
  const res=await db.from("crm_admins").select("user_id").eq("user_id",data.user.id).maybeSingle();
  if(res.error||!res.data){$('#loginError').textContent="Tu cuenta no está autorizada para el CRM.";$('#login').hidden=false;return}
  user=data.user;$('#login').hidden=true;
- const req=await fetch("/scout/candidates.json?nocache="+Date.now(),{cache:"no-store"});if(!req.ok)throw Error("No se pudo cargar el archivo de candidatos.");
- const obj=await req.json();
- candidates=(Array.isArray(obj.profiles)?obj.profiles:[]).filter(p=>validHandle(handle(p.handle)));
- lastScan=obj.last_scan||"";$('#total').textContent=candidates.length.toLocaleString("es-AR");
+ searchProgress("loading","Cargando el radar…","Descargando el índice de cuentas y las biografías verificadas.");
+ await fetchLatestIndex();
+ try{await fetchVerifiedBios()}catch(e){$('#bioCoverage').textContent="No se pudieron cargar las biografías verificadas: "+e.message}
  await loadRules();preview();
+ searchProgress("idle","Listo para buscar","Elegí los filtros y pulsá «Buscar perfiles ahora» o «Usar» en una búsqueda guardada.");
 }
 TOPICS.forEach(t=>{const label=document.createElement("label"),input=document.createElement("input");input.type="checkbox";input.value=t;input.addEventListener("change",preview);label.append(input,document.createTextNode(t));$('#interestChoices').appendChild(label)});
 ['country','province','city','focus','keywords','affinity','name'].forEach(id=>{
  $('#'+id).addEventListener("input",()=>{if(id==="affinity")$('#affinityValue').textContent=$('#affinity').value;if(id!=="name")preview()});
 });
 $('#textSearch').addEventListener("input",preview);
+$('#runNow').addEventListener("click",()=>runSearch("manual"));
+$('#bioForm').addEventListener("submit",saveVerifiedBio);
+$('#cancelBio').addEventListener("click",closeBioEditor);
 function preset(f){
  editing=null;$('#saveRule').textContent="Guardar y activar búsqueda";$('#textSearch').value="";
  formSet(f);
