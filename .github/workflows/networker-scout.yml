@@ -1,0 +1,44 @@
+name: NETWORKER SCOUT - Busqueda diaria gratuita
+
+on:
+  schedule:
+    # 09:17 de Argentina (UTC-3). GitHub puede demorar ejecuciones programadas.
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: networker-scout-scan
+  cancel-in-progress: false
+
+jobs:
+  discovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout del proyecto
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Buscar cuentas publicas indexadas
+        run: python scripts/scout_discovery.py
+      - name: Publicar candidatos nuevos
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "networker-scout[bot]"
+          git config user.email "networker-scout[bot]@users.noreply.github.com"
+          git add scout/candidates.json
+          if git diff --cached --quiet; then
+            echo "Sin cambios"
+          else
+            git commit -m "data(scout): update indexed public profiles [skip ci]"
+            git push
+          fi
