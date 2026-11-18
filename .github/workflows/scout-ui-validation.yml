@@ -1,0 +1,50 @@
+name: SCOUT - Validacion interfaz
+on:
+  push:
+    paths:
+      - 'scout/configurar.html'
+      - 'scout/index.html'
+      - '.github/workflows/scout-ui-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar JavaScript incrustado
+        run: |
+          python - <<'PY'
+          import re,json,subprocess,datetime
+          from pathlib import Path
+          status=[]
+          for path in ['scout/configurar.html','scout/index.html']:
+              content=Path(path).read_text(encoding='utf-8')
+              scripts=re.findall(r'<script[^>]*>([\s\S]*?)</script>',content,flags=re.I)
+              found=0
+              problems=[]
+              for inline in scripts:
+                  if not inline.strip():continue
+                  found+=1
+                  run=subprocess.run(['node','--check','-'],input=inline,text=True,capture_output=True)
+                  if run.returncode!=0:problems.append((run.stderr or run.stdout)[:900])
+              status.append({'file':path,'inline_scripts':found,'valid':not problems,'diagnostics':problems})
+          result={'checked_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'checks':status,'all_valid':all(x['valid'] for x in status)}
+          Path('scout/ui-check.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps(result,ensure_ascii=False,indent=2))
+          PY
+      - name: Guardar reporte de sintaxis
+        if: always()
+        run: |
+          if test ! -f scout/ui-check.json; then exit 1; fi
+          git config user.name "networker-scout[bot]"
+          git config user.email "networker-scout[bot]@users.noreply.github.com"
+          git add scout/ui-check.json
+          if ! git diff --cached --quiet; then
+            git commit -m "test(scout): update UI syntax report [skip ci]"
+            git push
+          fi
