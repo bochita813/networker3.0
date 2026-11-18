@@ -1,6 +1,11 @@
 name: NETWORKER SCOUT - Busqueda diaria gratuita
 
 on:
+  push:
+    paths:
+      - '.github/workflows/networker-scout.yml'
+      - 'scripts/scout_discovery.py'
+      - 'scout/queries.json'
   schedule:
     # 09:17 de Argentina (UTC-3). GitHub puede demorar ejecuciones programadas.
     - cron: "17 12 * * *"
