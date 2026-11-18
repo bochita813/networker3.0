@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1b1b1a">
+<title>NETWORKER SCOUT · Configurador estratégico</title>
+<script src="/crm/config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+<style>
+:root{--black:#1b1b1a;--orange:#f36136;--light:#faf8f3;--beige:#f0e9e0;--ink:#211e1a;--muted:#6a625b;--line:#e2d9cf}*{box-sizing:border-box}
+body{margin:0;font:14px/1.55 Inter,Montserrat,system-ui,-apple-system,sans-serif;background:var(--light);color:var(--ink)}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(30px,4vw,52px);letter-spacing:-.055em;line-height:1.1;margin-bottom:12px}h1 em{font-style:normal;color:var(--orange)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+a{color:inherit;text-decoration:none}a:hover{color:var(--orange)}
+.top{background:var(--black);color:#fff;padding:16px max(18px,calc((100vw - 1160px)/2));display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}
+.top strong{font-size:16px;letter-spacing:-.6px}.top strong span{color:var(--orange)}.top nav{display:flex;gap:17px;font-size:12px;font-weight:700;color:#e2dcd4}
+.wrap{max-width:1180px;margin:auto;padding:39px 19px 80px}
+.eyebrow{font-size:10px;text-transform:uppercase;font-weight:850;letter-spacing:.17em;color:#c25831}
+.lead{max-width:860px;color:var(--muted);font-size:15px}
+.layout{display:grid;grid-template-columns:minmax(300px,390px) minmax(0,1fr);align-items:start;gap:23px;margin-top:28px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:9px;padding:24px}
+.panel h2{font-size:21px;letter-spacing:-.6px;line-height:1.2;margin-bottom:13px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}.field label{font-weight:800;font-size:12px}
+.field input,.field select,.field textarea,.searchbox{width:100%;min-height:43px;border:1px solid #d6cdc3;border-radius:6px;background:#fefdfb;padding:11px;color:var(--ink);outline:none}
+.field textarea{min-height:74px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus,.searchbox:focus{border-color:var(--orange);box-shadow:0 0 0 3px #f3613622}
+.helper{font-size:11px;color:var(--muted);line-height:1.5;margin:-6px 0 13px}
+.rowfields{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px}.pills label{display:flex;align-items:center;gap:6px;background:#f6f2ec;border:1px solid #e4ddd3;border-radius:22px;padding:7px 11px;font-size:11px;font-weight:700;cursor:pointer}.pills input{accent-color:var(--orange)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;background:var(--orange);border:1px solid var(--orange);border-radius:6px;color:#fff;font-weight:800;font-size:12px;gap:7px;text-align:center}
+.btn:hover{filter:brightness(.94);color:#fff}.btn.alt{background:#fff;border-color:#d7cbc0;color:#26221e}.btn.dark{background:#26231f;border-color:#26231f;color:#fff}.btn.sm{padding:7px 11px;min-height:32px;font-size:11px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.note{font-size:11px;color:#756b61;line-height:1.7}
+.notice{margin:12px 0;padding:12px 14px;border-radius:5px;background:#f6eee5;font-size:12px;color:#5f4d3f}
+.notice.error{background:#fff0ec;color:#a5442b}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:17px}
+.stat{background:#f7f3ed;border-radius:7px;padding:13px}.stat strong{font-size:25px;display:block;line-height:1.1;font-weight:900}.stat small{color:#776c60;font-size:10px}
+.rule{display:flex;gap:10px;align-items:start;justify-content:space-between;border:1px solid #e7dfd5;border-radius:6px;padding:12px;margin-bottom:8px}
+.rule strong{font-size:12px}.rule small{display:block;font-size:10px;color:#7a7067;line-height:1.45}.rule-buttons{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.rules{max-height:275px;overflow:auto}
+.result-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.result-tools .searchbox{flex:1;min-width:180px}
+.list{display:grid;grid-template-columns:1fr;gap:9px}
+.profile{background:#fcfaf7;border:1px solid #e5dcd2;border-radius:7px;padding:14px;display:grid;grid-template-columns:25px 1fr;gap:8px}
+.profile .select{margin-top:3px;accent-color:var(--orange);width:17px;height:17px}
+.profile-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.handle{font-size:14px;font-weight:900;word-break:break-word}.score{color:#a44728;background:#ffece2;padding:3px 8px;border-radius:30px;font-size:10px;font-weight:800}
+.profile .title{font-size:12px;font-weight:800;margin:5px 0 3px}.profile p{font-size:11px;color:#72675d;margin:4px 0}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin:7px 0}.tag{font-size:10px;background:#eee8e0;border-radius:3px;padding:3px 6px}
+.profile .buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.profile .buttons a,.profile .buttons button{font-size:10px;padding:5px 8px;border:1px solid #d8cec2;border-radius:4px;background:#fff;color:#40352e}
+.empty{border:1px dashed #d6c9bc;padding:25px;text-align:center;color:#877b70;font-size:12px;border-radius:6px}
+#status{position:sticky;bottom:12px;background:#25221f;color:#fff;border-radius:7px;max-width:650px;padding:11px 16px;margin-top:10px;font-size:12px;z-index:2}
+#status:empty{display:none}
+#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#151411e8;z-index:20;padding:17px}
+#login[hidden]{display:none}
+.login-card{background:#fff;border-radius:8px;padding:28px;width:min(100%,420px)}.login-card h2{margin:4px 0 13px;font-size:24px}
+#loginError{color:#b34730;font-size:12px}
+footer{margin-top:20px;padding:20px 0;border-top:1px solid var(--line);color:#81766c;font-size:11px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.rowfields{grid-template-columns:1fr 1fr}.panel{padding:19px}}
+@media(max-width:520px){.statgrid{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:21px}.top{padding:16px}.top nav{gap:9px}.rowfields{grid-template-columns:1fr}.wrap{padding-top:24px}}
+</style></head>
+<body>
+<header class="top"><a href="/scout/"><strong>NETWORKER <span>SCOUT</span> 2.0</strong></a><nav><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
+<main class="wrap">
+<div class="eyebrow">CENTRO DE INTELIGENCIA COMERCIAL</div>
+<h1>Configurá a quién <em>querés encontrar.</em></h1>
+<p class="lead">Elegí país, provincia, ciudad, intereses y rubros. SCOUT filtra los perfiles públicos recopilados y guarda las configuraciones activas para usarlas también en la búsqueda diaria. Las señales de afinidad no son probabilidades ni demuestran intención de asociarse.</p>
+<div class="layout">
+<div>
+<section class="panel">
+<h2>1. Definí tu búsqueda</h2>
+<form id="configForm">
+<div class="field"><label for="name">Nombre de esta búsqueda</label><input id="name" maxlength="90" required placeholder="Ej.: Estéticas en Buenos Aires"></div>
+<div class="rowfields">
+<div class="field"><label for="country">País</label><select id="country"><option>Argentina</option><option>Uruguay</option><option>Chile</option><option>Paraguay</option><option>Bolivia</option><option>Perú</option><option>Colombia</option><option>México</option><option>España</option><option>Brasil</option></select></div>
+<div class="field"><label for="province">Provincia / estado</label><input id="province" maxlength="100" placeholder="Ej.: Buenos Aires"></div>
+</div>
+<div class="field"><label for="city">Ciudad / localidad</label><input id="city" maxlength="100" placeholder="Ej.: La Plata"></div>
+<div class="field"><label for="focus">Tipo de persona o proyecto</label><select id="focus"><option>Emprendedores</option><option>Estética y belleza</option><option>Salud y bienestar</option><option>Profesionales</option><option>Comercio y ventas</option><option>Marca personal y liderazgo</option><option>Todos los rubros</option></select></div>
+<div class="field"><label>Intereses y señales visibles (podés elegir varias)</label><div class="pills" id="interestChoices"></div></div>
+<div class="field"><label for="keywords">Palabras clave adicionales</label><input id="keywords" maxlength="300" placeholder="Ej.: cosmética, negocio, emprender"><div class="helper">Separadas por comas. Solo encontramos coincidencias cuando hay evidencia en la ficha.</div></div>
+<div class="field"><label for="affinity">Afinidad temática mínima: <strong id="affinityValue">0</strong> puntos</label><input id="affinity" type="range" min="0" max="90" step="10" value="0" style="padding:0"><div class="helper">Puntaje heurístico sobre información pública; NO es porcentaje de interés en un negocio.</div></div>
+<div class="actions"><button class="btn" type="submit" id="saveRule">Guardar y activar búsqueda</button><button class="btn alt" type="button" id="clear">Limpiar filtros</button></div>
+<div class="notice" id="configNotice">Al activar una búsqueda, sus términos no personales se publican para que los lea la automatización gratuita. No incluyas información privada.</div>
+</form>
+</section>
+<section class="panel" style="margin-top:17px"><h2>2. Búsquedas guardadas</h2><div class="rules" id="savedRules"></div><p class="note">Las activas alimentan las búsquedas RSS programadas. Los directorios existentes se siguen revisando completos; los filtros geográficos solo seleccionan perfiles con ubicación conocida. No se prometen resultados para cada región.</p></section>
+</div>
+<div>
+<section class="panel">
+<h2>3. Perfiles encontrados</h2>
+<div class="statgrid"><div class="stat"><strong id="total">—</strong><small>En la base</small></div><div class="stat"><strong id="matched">—</strong><small>Coinciden con filtros</small></div><div class="stat"><strong id="selected">0</strong><small>Seleccionados</small></div></div>
+<div class="result-tools"><input class="searchbox" id="textSearch" type="search" placeholder="Buscar en resultados…"><button id="selectAll" type="button" class="btn alt sm">Seleccionar coincidencias</button><button id="deselect" type="button" class="btn alt sm">Quitar selección</button></div>
+<div class="actions" style="margin-bottom:14px">
+<button class="btn dark" id="batchSave" type="button">Guardar seleccionados en radar</button>
+<button class="btn alt" id="exportCSV" type="button">Exportar selección</button>
+<button class="btn alt" id="greetings" type="button">Preparar saludos (CSV)</button>
+</div>
+<div class="notice">«Preparar saludos» genera borradores para que revises y envíes individualmente cuando corresponda. <strong>No se mandan DMs automáticamente ni a todos los desconocidos.</strong> La automatización oficial de Instagram requiere interacciones habilitantes.</div>
+<div class="list" id="profiles"></div>
+<div class="actions"><button id="more" type="button" class="btn alt" hidden>Mostrar más perfiles</button></div>
+</section>
+</div>
+</div>
+<div id="status" role="status" aria-live="polite"></div>
+<footer>Fuentes: directorios públicos y búsquedas indexadas. La ubicación se muestra solo si figura en la ficha o puede atribuirse al evento de origen. No se recopilan datos privados ni se infiere edad, situación económica o intención de adhesión. La cuenta de Instagram puede haber cambiado o dejado de existir.</footer>
+</main>
+<div id="login"><form class="login-card" id="loginForm"><div class="eyebrow">ACCESO RESTRINGIDO · CRM</div><h2>Iniciar sesión</h2><p class="note">Usá el mismo usuario administrador de NETWORKER 3.0.</p><div class="field"><label for="email">Correo</label><input required type="email" id="email"></div><div class="field"><label for="password">Contraseña</label><input required type="password" id="password"></div><button class="btn" type="submit">Ingresar</button><p id="loginError" role="alert"></p></form></div>
+<script>
+(()=>{"use strict";
+const $=x=>document.querySelector(x);
+const config=window.NETWORKER_CRM_CONFIG||{};
+let db=null,user=null,candidates=[],rules=[],filtered=[],selected=new Set(),editing=null,visible=35,lastScan="";
+const TOPICS=["Estética","Cosmética","Salud","Bienestar","Venta comercial","Emprendimiento","Profesionales","Marca personal","Liderazgo","Gastronomía","Arte y diseño","Tecnología"];
+const MATCH={
+"Estética":/est[eé]tic|belleza|peluquer|alisad|u[ñn]as|pesta[ñn]|spa|maquill/i,
+"Cosmética":/cosm[eé]tic|perfume|skincare|maquill|cuidado facial|belleza|natura|avon/i,
+"Salud":/salud|nutric|medic|farmac|kinesi|psicol|odontol|enfermer|bioquim/i,
+"Bienestar":/bienestar|yoga|masaje|fitness|pilates|entren|natural|terapia|alimentaci[oó]n/i,
+"Venta comercial":/vendo|venta|tienda|comerc|mayorista|minorista|revend|negocio|e-commerce|producto|feria/i,
+"Emprendimiento":/emprend|proyecto|negocio|marca local|independiente|empresa/i,
+"Profesionales":/profesional|contador|docente|abogad|coach|consultor|m[eé]dic|arquitect|ingenier|psic[oó]log|nutricionist/i,
+"Marca personal":/marca personal|contenido|influenc|creador|comunicac|marketing/i,
+"Liderazgo":/l[ií]der|liderazgo|oratoria|coach|mentoring|networking/i,
+"Gastronomía":/gastronom|pasteler|reposter|comida|torta|dulce|caf[eé]|catering|chocolat/i,
+"Arte y diseño":/arte|dise[ñn]|artesan|cer[aá]mic|impresi[oó]n 3d|bordad|tejid|decoraci[oó]n/i,
+"Tecnología":/tecnolog|software|digital|web|impresi[oó]n 3d|inteligencia artificial|automatiz/i
+};
+const FOCUS={
+"Estética y belleza":["Estética","Cosmética"],"Salud y bienestar":["Salud","Bienestar"],
+"Profesionales":["Profesionales"],"Comercio y ventas":["Venta comercial"],
+"Marca personal y liderazgo":["Marca personal","Liderazgo"],"Emprendedores":["Emprendimiento","Venta comercial"],"Todos los rubros":[]
+};
+const PROVINCES={
+"quilmes":"Buenos Aires","lanús":"Buenos Aires","lanus":"Buenos Aires","la plata":"Buenos Aires",
+"avellaneda":"Buenos Aires","mar del plata":"Buenos Aires","general pueyrredón":"Buenos Aires",
+"bahía blanca":"Buenos Aires","lomas de zamora":"Buenos Aires","morón":"Buenos Aires",
+"caba":"Ciudad Autónoma de Buenos Aires","ciudad de buenos aires":"Ciudad Autónoma de Buenos Aires",
+"buenos aires":"Buenos Aires","rosario":"Santa Fe","santa fe":"Santa Fe",
+"córdoba":"Córdoba","cordoba":"Córdoba","mendoza":"Mendoza","neuquén":"Neuquén",
+"neuquen":"Neuquén","viedma":"Río Negro","bariloche":"Río Negro","san carlos de bariloche":"Río Negro",
+"paraná":"Entre Ríos","parana":"Entre Ríos","salta":"Salta",
+"san miguel de tucumán":"Tucumán","tucumán":"Tucumán",
+"resistencia":"Chaco","posadas":"Misiones","formosa":"Formosa","rawson":"Chubut",
+"trelew":"Chubut","ushuaia":"Tierra del Fuego","río gallegos":"Santa Cruz",
+"la rioja":"La Rioja","san juan":"San Juan","san luis":"San Luis","santiago del estero":"Santiago del Estero"
+};
+function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim()}
+function handle(s){return String(s||"").toLowerCase().replace(/^@/,"").trim()}
+function validHandle(s){return /^[a-z0-9._]{1,30}$/.test(s)&&!s.includes("..")&&!s.startsWith(".")&&!s.endsWith(".")}
+function tags(p){const text=[p.headline,p.snippet,p.category,p.source_query].join(" ");return TOPICS.filter(t=>MATCH[t].test(text))}
+function info(p){
+ const city=String(p.city||"").trim();
+ let province=String(p.province||"").trim();
+ if(!province&&city)province=PROVINCES[norm(city)]||"";
+ if(!province&&p.source_query&&p.source_query.includes("ADULP"))province="Buenos Aires";
+ if(!province&&p.source_query&&p.source_query.includes("UNL"))province="Santa Fe";
+ let country=String(p.country||"").trim();
+ if(!country&&/(argentina|emprenzona|adulp|unl|climaps|infloo|famadex|emprendedorxs)/i.test(p.source_query||""))country="Argentina";
+ const t=tags(p);
+ const evidenceText=[p.headline,p.snippet,p.category].join(" ");
+ let score=20;
+ if(t.includes("Emprendimiento"))score+=12;
+ if(t.includes("Venta comercial"))score+=15;
+ if(t.includes("Estética")||t.includes("Cosmética"))score+=23;
+ if(t.includes("Salud")||t.includes("Bienestar"))score+=19;
+ if(t.includes("Profesionales"))score+=17;
+ if(t.includes("Marca personal")||t.includes("Liderazgo"))score+=13;
+ if(city)score+=3;
+ return {city,province,country,t,score:Math.min(95,score),evidence:evidenceText};
+}
+function filterForm(){
+ return {name:$('#name').value.trim(),country:$('#country').value,province:$('#province').value.trim(),city:$('#city').value.trim(),
+ focus:$('#focus').value,interests:[...document.querySelectorAll('#interestChoices input:checked')].map(e=>e.value),
+ keywords:$('#keywords').value.trim(),min_affinity:Number($('#affinity').value)};
+}
+function fits(p,f){
+ const m=info(p);const hay=norm([p.headline,p.snippet,p.category,p.handle].join(" "));
+ if(f.country&&norm(m.country)!==norm(f.country))return false;
+ if(f.province&&(!m.province||!norm(m.province).includes(norm(f.province))))return false;
+ if(f.city&&(!m.city||!norm(m.city).includes(norm(f.city))))return false;
+ if(f.focus!=="Todos los rubros"&&f.focus!=="Emprendedores"&&!FOCUS[f.focus].some(t=>m.t.includes(t)))return false;
+ if(f.interests.length&&!f.interests.some(t=>m.t.includes(t)))return false;
+ const keys=f.keywords.split(",").map(x=>norm(x)).filter(Boolean);
+ if(keys.length&&!keys.some(k=>hay.includes(k)))return false;
+ if(m.score<f.min_affinity)return false;
+ return true;
+}
+function formSet(f){$('#name').value=f.name||"";$('#country').value=f.country||"Argentina";$('#province').value=f.province||"";$('#city').value=f.city||"";
+ $('#focus').value=f.focus||"Emprendedores";$('#keywords').value=f.keywords||"";$('#affinity').value=f.min_affinity||0;$('#affinityValue').textContent=$('#affinity').value;
+ document.querySelectorAll('#interestChoices input').forEach(c=>c.checked=(f.interests||[]).includes(c.value));preview();
+}
+function preview(){
+ if(!candidates.length)return;
+ const f=filterForm(),q=norm($('#textSearch').value);
+ filtered=candidates.filter(p=>fits(p,f)&&(!q||norm([p.handle,p.headline,p.snippet,p.category,p.city].join(" ")).includes(q)));
+ $('#matched').textContent=filtered.length.toLocaleString("es-AR");$('#selected').textContent=selected.size.toLocaleString("es-AR");visible=35;draw();
+}
+function el(tag,text,cls){const e=document.createElement(tag);if(text!==null)e.textContent=String(text);if(cls)e.className=cls;return e}
+function draw(){
+ const list=$('#profiles');list.replaceChildren();
+ if(!filtered.length){list.appendChild(el("div","No hay coincidencias con evidencia suficiente. Probá un área más amplia o quitá algún filtro; no asignaremos ciudades desconocidas.","empty"));$('#more').hidden=true;return}
+ for(const p of filtered.slice(0,visible)){
+  const h=handle(p.handle);if(!validHandle(h))continue;
+  const m=info(p),box=el("article",null,"profile"),cb=document.createElement("input");cb.type="checkbox";cb.className="select";cb.checked=selected.has(h);cb.setAttribute("aria-label","Seleccionar @"+h);
+  cb.addEventListener("change",()=>{if(cb.checked)selected.add(h);else selected.delete(h);$('#selected').textContent=selected.size.toLocaleString("es-AR")});
+  const content=el("div"),head=el("div",null,"profile-head");head.append(el("strong","@"+h,"handle"),el("span",m.score+" pts de afinidad temática","score"));content.appendChild(head);
+  content.appendChild(el("div",p.headline||"Cuenta por revisar","title"));
+  content.appendChild(el("p",String(p.snippet||"Sin descripción pública").slice(0,280)));
+  const geo=[m.city,m.province,m.country].filter(Boolean).join(" · ");
+  content.appendChild(el("p","📍 "+(geo||"Ubicación sin determinar")+(m.city?" · ficha pública":""),"note"));
+  const labels=el("div",null,"tags");m.t.slice(0,5).forEach(t=>labels.appendChild(el("span",t,"tag")));if(!m.t.length)labels.appendChild(el("span","Sin señales suficientes","tag"));content.appendChild(labels);
+  const buttons=el("div",null,"buttons"),profile=document.createElement("a");profile.href="https://www.instagram.com/"+h+"/";profile.textContent="Abrir Instagram ↗";buttons.appendChild(profile);
+  const copy=document.createElement("button");copy.type="button";copy.textContent="Copiar usuario";copy.onclick=async()=>{try{await navigator.clipboard.writeText(h);status("@"+h+" copiado. Pegalo en el buscador de Instagram.")}catch(e){status("Usuario: @"+h+" (copialo manualmente)")}};buttons.appendChild(copy);
+  if(p.source_page){const src=document.createElement("a");src.textContent="Fuente ↗";src.href=p.source_page;src.target="_blank";src.rel="noopener noreferrer";buttons.appendChild(src)}
+  content.appendChild(buttons);box.append(cb,content);list.appendChild(box);
+ }
+ $('#more').hidden=filtered.length<=visible;$('#more').textContent="Mostrar otros "+Math.min(35,filtered.length-visible)+" perfiles";
+}
+function status(text){$('#status').textContent=text;clearTimeout(status.timer);status.timer=setTimeout(()=>$('#status').textContent="",8000)}
+function csv(rows,filename){const cells=rows.map(r=>r.map(v=>{let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}).join(","));const blob=new Blob(["\ufeff"+cells.join("\r\n")],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+function chosen(){return candidates.filter(p=>selected.has(handle(p.handle)))}
+function exportRows(greeting){
+ const profiles=chosen();
+ if(!profiles.length){status("Primero seleccioná uno o varios perfiles.");return}
+ const rows=[greeting?["usuario","url","proyecto","saludo_para_revisar","enviado"]:["usuario","url","proyecto","ciudad","provincia","país","rubros","afinidad_temática_no_probabilidad","fuente"]];
+ for(const p of profiles){const m=info(p),name=String(p.headline||"tu emprendimiento").replace(/\s+/g," ").slice(0,70);
+ if(greeting)rows.push([p.handle,"https://www.instagram.com/"+p.handle+"/",name,"Hola, ¿cómo estás? Soy Hernán. Encontré "+name+" en un directorio de emprendimientos y me interesó conocer lo que hacen. Si te parece, me gustaría saludarte y saber más de tu proyecto.","NO"]);
+ else rows.push([p.handle,"https://www.instagram.com/"+p.handle+"/",p.headline||"",m.city,m.province,m.country,m.t.join("; "),m.score,p.source_query||""])}
+ csv(rows,greeting?"networker-saludos-para-revisar.csv":"networker-scout-seleccion.csv");
+ status(greeting?"Descargaste "+profiles.length+" borradores. NINGÚN mensaje fue enviado. Revisá la pertinencia antes de contactar.":"Exportados "+profiles.length+" perfiles seleccionados.");
+}
+async function saveBatch(){
+ const profiles=chosen();if(!profiles.length){status("Primero seleccioná perfiles.");return}
+ if(!confirm("¿Guardar "+profiles.length+" candidatos en tu radar privado? Esto NO envía mensajes."))return;
+ $('#batchSave').disabled=true;
+ try{
+  let done=0;
+  for(let i=0;i<profiles.length;i+=70){
+   const batch=profiles.slice(i,i+70).map(p=>({handle:handle(p.handle),profile_url:"https://www.instagram.com/"+handle(p.handle)+"/",headline:String(p.headline||"").slice(0,250),snippet:String(p.snippet||"").slice(0,1000),source:String(p.source_query||"Directorio público").slice(0,120),score:Math.max(0,Math.min(100,info(p).score)),stage:"Por revisar",notes:""}));
+   const {error}=await db.from("crm_scout_profiles").upsert(batch,{onConflict:"handle",ignoreDuplicates:true});
+   if(error)throw error;done+=batch.length;
+  }
+  status("Guardados o ya existentes: "+done+" candidatos en tu radar privado. No se enviaron DMs.");
+ }catch(e){status("Error al guardar candidatos: "+e.message)}finally{$('#batchSave').disabled=false}
+}
+async function loadRules(){
+ const {data,error}=await db.from("scout_search_rules").select("*").order("created_at",{ascending:false}).limit(70);
+ if(error){status("No se pudieron leer tus búsquedas: "+error.message);return}
+ rules=data||[];drawRules();
+}
+function drawRules(){
+ const area=$('#savedRules');area.replaceChildren();
+ if(!rules.length){area.appendChild(el("div","Todavía no guardaste búsquedas. Configurá los filtros y presioná Guardar.","empty"));return}
+ rules.forEach(r=>{
+  const row=el("div",null,"rule"),infoBox=el("div");infoBox.append(el("strong",r.name),el("small",[r.city,r.province,r.country].filter(Boolean).join(" · ")+" · "+r.focus),el("small",r.enabled?"● Activa · búsqueda diaria":"○ Pausada"));
+  const ops=el("div",null,"rule-buttons");
+  const use=el("button","Usar","btn alt sm");use.type="button";use.onclick=()=>{editing=r.id;formSet(r);$('#saveRule').textContent="Actualizar esta búsqueda";status("Filtros cargados: "+r.name)};
+  const toggle=el("button",r.enabled?"Pausar":"Activar","btn alt sm");toggle.type="button";toggle.onclick=async()=>{const {error}=await db.from("scout_search_rules").update({enabled:!r.enabled,updated_at:new Date().toISOString()}).eq("id",r.id);if(error)status(error.message);else await loadRules()};
+  const del=el("button","Eliminar","btn alt sm");del.type="button";del.onclick=async()=>{if(!confirm("¿Eliminar la búsqueda '"+r.name+"'?"))return;const {error}=await db.from("scout_search_rules").delete().eq("id",r.id);if(error)status(error.message);else{if(editing===r.id){editing=null;$('#saveRule').textContent="Guardar y activar búsqueda"}await loadRules()}};
+  ops.append(use,toggle,del);row.append(infoBox,ops);area.appendChild(row)
+ });
+}
+async function auth(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data?.user){$('#login').hidden=false;return}
+ const res=await db.from("crm_admins").select("user_id").eq("user_id",data.user.id).maybeSingle();
+ if(res.error||!res.data){$('#loginError').textContent="Tu cuenta no está autorizada para el CRM.";$('#login').hidden=false;return}
+ user=data.user;$('#login').hidden=true;
+ const req=await fetch("/scout/candidates.json?nocache="+Date.now(),{cache:"no-store"});if(!req.ok)throw Error("No se pudo cargar el archivo de candidatos.");
+ const obj=await req.json();
+ candidates=(Array.isArray(obj.profiles)?obj.profiles:[]).filter(p=>validHandle(handle(p.handle)));
+ lastScan=obj.last_scan||"";$('#total').textContent=candidates.length.toLocaleString("es-AR");
+ await loadRules();preview();
+}
+TOPICS.forEach(t=>{const label=document.createElement("label"),input=document.createElement("input");input.type="checkbox";input.value=t;input.addEventListener("change",preview);label.append(input,document.createTextNode(t));$('#interestChoices').appendChild(label)});
+['country','province','city','focus','keywords','affinity','name'].forEach(id=>{
+ $('#'+id).addEventListener("input",()=>{if(id==="affinity")$('#affinityValue').textContent=$('#affinity').value;if(id!=="name")preview()});
+});
+$('#textSearch').addEventListener("input",preview);
+$('#clear').addEventListener("click",()=>{editing=null;$('#saveRule').textContent="Guardar y activar búsqueda";formSet({country:"Argentina",focus:"Emprendedores",interests:[],min_affinity:0})});
+$('#configForm').addEventListener("submit",async event=>{
+ event.preventDefault();if(!user){status("Ingresá primero al CRM.");return}
+ const form=filterForm();if(form.name.length<3){status("Escribí un nombre de búsqueda.");return}
+ const row={...form,enabled:true,updated_at:new Date().toISOString()};
+ $('#saveRule').disabled=true;
+ let result;
+ if(editing)result=await db.from("scout_search_rules").update(row).eq("id",editing);
+ else result=await db.from("scout_search_rules").insert({...row,created_by:user.id});
+ $('#saveRule').disabled=false;
+ if(result.error){status("Error guardando búsqueda: "+result.error.message);return}
+ editing=null;$('#saveRule').textContent="Guardar y activar búsqueda";
+ await loadRules();status("Búsqueda guardada y activada. El motor diario leerá estos términos en su próxima ejecución; los filtros actuales ya están aplicados.");
+});
+$('#more').addEventListener("click",()=>{visible+=35;draw()});
+$('#selectAll').addEventListener("click",()=>{filtered.forEach(p=>selected.add(handle(p.handle)));$('#selected').textContent=selected.size.toLocaleString("es-AR");draw();status("Seleccionadas "+filtered.length+" coincidencias. Selección no equivale a envío de mensajes.")});
+$('#deselect').addEventListener("click",()=>{selected.clear();$('#selected').textContent="0";draw()});
+$('#exportCSV').addEventListener("click",()=>exportRows(false));
+$('#greetings').addEventListener("click",()=>exportRows(true));
+$('#batchSave').addEventListener("click",saveBatch);
+$('#loginForm').addEventListener("submit",async e=>{e.preventDefault();$('#loginError').textContent="";const {error}=await db.auth.signInWithPassword({email:$('#email').value.trim(),password:$('#password').value});if(error){$('#loginError').textContent=error.message;return}auth().catch(e=>$('#loginError').textContent=e.message)});
+if(!config.url||!config.publishableKey||!window.supabase){$('#loginError').textContent="No se pudo cargar la conexión con Supabase."}
+else{db=window.supabase.createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});auth().catch(e=>{$('#loginError').textContent=e.message;status(e.message)})}
+})();
+</script></body></html>
