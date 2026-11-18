@@ -190,12 +190,54 @@ Deno.serve(async(req:Request)=>{
   const input=await req.json(),raw=input.filters||{};
   const f={name:clean(raw.name,90),country:clean(raw.country||"Argentina",80),province:clean(raw.province,100),city:clean(raw.city,100),focus:clean(raw.focus||"Todos los rubros",100),keywords:clean(raw.keywords,300),interests:Array.isArray(raw.interests)?raw.interests.slice(0,12).map((x:any)=>clean(x,80)):[]};
   if(!f.keywords.trim())return respond({error:"Escribí una palabra o actividad para buscar perfiles."},400);
-  const batch=Number(input.batch),provider=input.provider==="serpapi"?"serpapi":input.provider==="web"?"web":"directories";
+  const batch=Number(input.batch),provider=["serpapi","serper","tavily","web","directories"].includes(String(input.provider))?String(input.provider):"web";
   if(!Number.isInteger(batch)||batch<0||batch>39)return respond({error:"Lote inválido"},400);
   const searchId=clean(input.searchId,50);
   if(!/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(searchId))return respond({error:"Identificador inválido"},400);
   let items:any[]=[],query="",details="",rawCount=0,errors:string[]=[];
-  if(provider==="web"){
+  if(provider==="serper"||provider==="tavily"){
+   const keyName=provider==="serper"?"SERPER_API_KEY":"TAVILY_API_KEY";
+   const key=clean(input.apiKey,240)||Deno.env.get(keyName)||"";
+   if(!key)return respond({error:"Para una búsqueda automática estable, conectá tu clave gratuita de "+(provider==="serper"?"Serper":"Tavily")+".",code:"KEY_REQUIRED"},422);
+   query=provider==="serper"?queryFor(f,batch):queryWeb(f,batch);
+   const gl:Record<string,string>={Argentina:"ar",Uruguay:"uy",Chile:"cl",Paraguay:"py",Bolivia:"bo",Perú:"pe",Colombia:"co",México:"mx",España:"es",Brasil:"br"};
+   const payload=provider==="serper"?
+     {q:query,gl:gl[f.country]||"ar",hl:"es",num:10,page:Math.min(10,batch+1)}:
+     {query,search_depth:"basic",max_results:20,include_domains:["instagram.com"],include_answer:false};
+   const endpoint=provider==="serper"?"https://google.serper.dev/search":"https://api.tavily.com/search";
+   const headers=provider==="serper"?{"X-API-KEY":key,"Content-Type":"application/json"}:{"Authorization":"Bearer "+key,"Content-Type":"application/json"};
+   const ctrl=new AbortController(),timeout=setTimeout(()=>ctrl.abort(),22000);
+   let external:Response;
+   try{external=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(payload),signal:ctrl.signal});}
+   finally{clearTimeout(timeout)}
+   if(!external.ok){
+    const status=external.status;
+    const code=status===429?"RATE_LIMITED":status===401||status===403?"KEY_INVALID":"SEARCH_UNAVAILABLE";
+    return respond({error:status===429?"El proveedor agotó las consultas gratuitas o limitó temporalmente las búsquedas.":status===401||status===403?"La clave de "+(provider==="serper"?"Serper":"Tavily")+" no fue aceptada.":"El proveedor de búsqueda respondió HTTP "+status,code},status===429?429:502);
+   }
+   const result=await external.json();
+   if(result.error||result.message&&(!Array.isArray(result.organic)&&!Array.isArray(result.results)))return respond({error:clean(result.error||result.message,300),code:"SEARCH_UNAVAILABLE"},502);
+   const hits=(provider==="serper"?result.organic:result.results)||[];
+   rawCount=hits.length;
+   const seen=new Set<string>();
+   const needles=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
+   const city=norm(f.city).replace(/ capital$/,""),province=norm(f.province);
+   for(const hit of hits){
+    const url=String(hit.link||hit.url||"");
+    const h=getHandle(url);
+    if(!h||seen.has(h))continue;
+    const name=clean(hit.title,250),excerpt=clean(hit.snippet||hit.content,850);
+    const searchable=norm(h+" "+name+" "+excerpt);
+    if(!needles.some(k=>searchable.includes(k)))continue;
+    if(city&&!searchable.includes(city))continue;
+    if(!city&&province&&!searchable.includes(province))continue;
+    seen.add(h);
+    const row=profile(h,name,excerpt,url,provider==="serper"?"Serper · Google":"Tavily · búsqueda web",f);
+    row.match_evidence="Coincidencia en título o descripción indexada; la ubicación de la cuenta no está verificada";
+    items.push(row);
+   }
+   details="Búsqueda nueva en un índice web profesional. No implica acceso directo a Instagram ni verificación de domicilio.";
+  }else if(provider==="web"){
    // Sólo se intenta una consulta en cada ejecución. Si el buscador aplica límites,
    // se informa el error en lugar de inventar usuarios o recurrir a fichas irrelevantes.
    query=queryWeb(f,batch);
@@ -285,7 +327,7 @@ Deno.serve(async(req:Request)=>{
    const {error:matchErr}=await db.from("scout_live_search_matches").upsert(batchMatches,{onConflict:"search_id,handle",ignoreDuplicates:true});
    if(matchErr)errors.push("Historial de coincidencias: "+matchErr.message);
   }
-  return respond({profiles:items,fetched:rawCount,stored,query,batch,provider,details,errors,done:provider==="web"?true:provider==="directories"?(batch+1)*3>=sources.filter(s=>!f.province||s[2]==="general"||s[2]===norm(f.province)).length:batch>=9,
+  return respond({profiles:items,fetched:rawCount,stored,query,batch,provider,details,errors,done:provider==="web"||provider==="tavily"?true:provider==="directories"?(batch+1)*3>=sources.filter(s=>!f.province||s[2]==="general"||s[2]===norm(f.province)).length:batch>=9,
      message:"Resultados obtenidos en esta consulta externa; no se inventaron usuarios ni se verificó su existencia en Instagram."});
  }catch(e){return respond({error:"Consulta fallida: "+String(e).slice(0,300)},500)}
 });
