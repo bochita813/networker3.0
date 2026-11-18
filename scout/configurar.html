@@ -221,27 +221,68 @@ function filterForm(){
  focus:$('#focus').value,interests:[...document.querySelectorAll('#interestChoices input:checked')].map(e=>e.value),
  keywords:$('#keywords').value.trim(),min_affinity:Number($('#affinity').value)};
 }
-function fits(p,f){
- const m=info(p);const hay=norm([p.headline,p.snippet,p.category,p.handle].join(" "));
+function geoFits(p,f){
+ const m=info(p);
  if(f.country&&norm(m.country)!==norm(f.country))return false;
  if(f.province&&(!m.province||!norm(m.province).includes(norm(f.province))))return false;
  if(f.city&&(!m.city||!norm(m.city).includes(norm(f.city))))return false;
- if(f.focus!=="Todos los rubros"&&f.focus!=="Emprendedores"&&!FOCUS[f.focus].some(t=>m.t.includes(t)))return false;
- if(f.interests.length&&!f.interests.some(t=>m.t.includes(t)))return false;
- const keys=f.keywords.split(",").map(x=>norm(x)).filter(Boolean);
- if(keys.length&&!keys.some(k=>hay.includes(k)))return false;
- if(m.score<f.min_affinity)return false;
  return true;
+}
+function interestFits(p,f){
+ const m=info(p);
+ if(f.focus!=="Todos los rubros"&&f.focus!=="Emprendedores"&&!(FOCUS[f.focus]||[]).some(t=>m.t.includes(t)))return false;
+ if(f.interests.length&&!f.interests.some(t=>m.t.includes(t)))return false;
+ return true;
+}
+function termsFit(p,f){
+ const hay=norm([p.headline,p.snippet,p.category,p.handle].join(" "));
+ const keys=f.keywords.split(",").map(x=>norm(x)).filter(Boolean);
+ return !keys.length||keys.some(k=>hay.includes(k));
+}
+function fits(p,f){return geoFits(p,f)&&interestFits(p,f)&&termsFit(p,f)&&info(p).score>=f.min_affinity}
+function diagnosis(f){
+ const geo=candidates.filter(p=>geoFits(p,f));
+ const interest=geo.filter(p=>interestFits(p,f));
+ const keywords=interest.filter(p=>termsFit(p,f));
+ const scores=keywords.filter(p=>info(p).score>=f.min_affinity);
+ const withLocation=candidates.filter(p=>info(p).province||info(p).city).length;
+ const provincial=candidates.filter(p=>norm(info(p).province)===norm(f.province)).length;
+ $('#coverage').replaceChildren();
+ const strong=el("strong",withLocation.toLocaleString("es-AR")+" de "+candidates.length.toLocaleString("es-AR")+" cuentas tienen ciudad o provincia identificada.");
+ const rest=el("span"," Las otras no se asignan a ningún lugar por suposición.","small");
+ const summary=el("span","Ubicación: "+geo.length+" · Rubros/intereses: "+interest.length+" · Palabras clave: "+keywords.length+" · Afinidad: "+scores.length+".","small");
+ $('#coverage').append(strong,rest,summary);
+ $('#scanMeta').textContent="Datos actualizados: "+(lastScan?new Date(lastScan).toLocaleString("es-AR"):"sin escaneo registrado")+". Búsqueda sobre perfiles existentes, no consulta instantánea a Instagram.";
+ const block=$('#filterDiagnosis');block.hidden=scores.length>0;
+ if(scores.length){return}
+ let title="",body="";
+ if(!geo.length){
+  title="No encontramos ubicaciones que coincidan.";
+  if(f.province&&f.city)body="La base actual no contiene cuentas con ubicación comprobada en "+f.city+", "+f.province+". La provincia puede tener perfiles en otras ciudades. Quitá la ciudad para ver la provincia completa.";
+  else if(f.province)body="Hay "+provincial+" cuentas con provincia '"+f.province+"' en los datos disponibles. Si son cero, la fuente todavía no cubre esta zona; guardá la búsqueda para el próximo escaneo.";
+  else body="No hay cuentas identificadas en la ubicación solicitada. Las fuentes actuales se concentran en Argentina y ciertas localidades.";
+ }else if(!interest.length){title="La ubicación existe, pero los rubros no coinciden.";
+ body="Hay "+geo.length+" cuentas para esa ubicación, pero ninguna tiene evidencia pública suficiente de los rubros e intereses que seleccionaste. Probá quitar intereses antes de concluir que no hay prospectos."}
+ else if(!keywords.length){title="Las palabras clave dejaron la búsqueda en cero.";body="Encontramos "+interest.length+" cuentas relacionadas con la zona y los temas. Ninguna menciona las palabras extra. Probá reducirlas."}
+ else{title="El mínimo de afinidad excluyó todos los resultados.";body="Hay "+keywords.length+" cuentas que cumplen la ubicación y los temas, pero ninguna llega al puntaje elegido. Reducí el mínimo para revisar perfiles."}
+ $('#diagnosisTitle').textContent=title;$('#diagnosisText').textContent=body;
+ $('#removeCity').hidden=!f.city;
+ $('#removeTopics').hidden=!f.interests.length&&f.focus==="Todos los rubros"&&!f.keywords&&f.min_affinity===0;
 }
 function formSet(f){$('#name').value=f.name||"";$('#country').value=f.country||"Argentina";$('#province').value=f.province||"";$('#city').value=f.city||"";
  $('#focus').value=f.focus||"Emprendedores";$('#keywords').value=f.keywords||"";$('#affinity').value=f.min_affinity||0;$('#affinityValue').textContent=$('#affinity').value;
  document.querySelectorAll('#interestChoices input').forEach(c=>c.checked=(f.interests||[]).includes(c.value));preview();
 }
 function preview(){
- if(!candidates.length)return;
+ if(!candidates.length){$('#matched').textContent="0";return}
  const f=filterForm(),q=norm($('#textSearch').value);
- filtered=candidates.filter(p=>fits(p,f)&&(!q||norm([p.handle,p.headline,p.snippet,p.category,p.city].join(" ")).includes(q)));
- $('#matched').textContent=filtered.length.toLocaleString("es-AR");$('#selected').textContent=selected.size.toLocaleString("es-AR");visible=35;draw();
+ const matched=candidates.filter(p=>fits(p,f));
+ filtered=matched.filter(p=>!q||norm([p.handle,p.headline,p.snippet,p.category,p.city,p.province,p.source_query].join(" ")).includes(q));
+ $('#matched').textContent=filtered.length.toLocaleString("es-AR");$('#selected').textContent=selected.size.toLocaleString("es-AR");visible=35;
+ diagnosis(f);draw();
+ if(matched.length&&q&&!filtered.length){$('#diagnosisTitle').textContent="No hay coincidencias con el texto de búsqueda.";
+  $('#diagnosisText').textContent="Los filtros principales encuentran "+matched.length+" cuentas, pero el texto adicional no coincide. Borrá el texto de «Buscar en resultados».";
+  $('#filterDiagnosis').hidden=false;}
 }
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==null)e.textContent=String(text);if(cls)e.className=cls;return e}
 function draw(){
@@ -325,6 +366,12 @@ TOPICS.forEach(t=>{const label=document.createElement("label"),input=document.cr
  $('#'+id).addEventListener("input",()=>{if(id==="affinity")$('#affinityValue').textContent=$('#affinity').value;if(id!=="name")preview()});
 });
 $('#textSearch').addEventListener("input",preview);
+$('#removeCity').addEventListener("click",()=>{$('#city').value="";preview()});
+$('#removeTopics').addEventListener("click",()=>{
+ $('#focus').value="Todos los rubros";$('#keywords').value="";$('#affinity').value="0";$('#affinityValue').textContent="0";
+ document.querySelectorAll('#interestChoices input').forEach(c=>c.checked=false);
+ preview();
+});
 $('#clear').addEventListener("click",()=>{editing=null;$('#saveRule').textContent="Guardar y activar búsqueda";formSet({country:"Argentina",focus:"Emprendedores",interests:[],min_affinity:0})});
 $('#configForm').addEventListener("submit",async event=>{
  event.preventDefault();if(!user){status("Ingresá primero al CRM.");return}
