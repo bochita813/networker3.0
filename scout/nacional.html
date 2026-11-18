@@ -58,7 +58,7 @@ footer{padding:22px 0;border-top:1px solid var(--line);font-size:11px;color:#746
 <div class="bar"><strong id="heading">Contactos y establecimientos</strong><button id="export" class="btn secondary" type="button">Exportar CSV filtrado</button></div>
 <div id="progress" role="status" aria-live="polite">Cargando base…</div><div id="error" class="error" role="alert"></div><div id="results" class="results"><div class="empty">Los perfiles aparecen cuando inicia tu sesión.</div></div>
 <div class="buttons" style="margin-top:17px"><button class="btn secondary" type="button" id="previous">Anterior</button><button class="btn secondary" type="button" id="next">Siguiente</button></div>
-<p class="help">Cada ficha lleva un enlace a su fuente. Los registros de OpenStreetMap son establecimientos o lugares profesionales; no implican propietarios identificados ni permiso para enviarles mensajes masivos.</p>
+<p class="help">Cada ficha lleva un enlace a su fuente. Los registros de OpenStreetMap son establecimientos o lugares profesionales, no propietarios identificados. El contacto es comercial y público cuando figura, y su uso debe respetar las normas aplicables y las preferencias de las personas.</p>
 </section></div>
 <footer>Fuentes cartográficas: © OpenStreetMap contributors, licencia ODbL 1.0. Límites provinciales: geoBoundaries (atribución de la fuente original). Datos comerciales únicamente si fueron publicados. La información puede estar desactualizada y debe verificarse antes de contactar.</footer>
 </main>
@@ -112,6 +112,7 @@ function card(p){
  if(p.region_hint&&!p.province)root.append(el("p","Región de búsqueda: "+p.region_hint+" (sin verificar)","help"));
  if(p.location_basis==="osm_poi_coordinate_in_province")root.append(el("p","Ubicación del establecimiento según datos cartográficos abiertos","help"));
  if(p.lead_kind==="instagram_profile"&&p.activity)root.append(el("p",p.activity.slice(0,230)));
+ if(p.lead_kind==="instagram_profile"&&p.account_public_verified!==true)root.append(el("p","Cuenta enlazada desde fuente pública; privacidad actual de Instagram no comprobada.","help"));
  const links=el("div","","links");
  link(links,"Instagram ↗",p.instagram);
  link(links,"Sitio web ↗",p.website);
@@ -157,7 +158,7 @@ async function exportAll(){
  const lines=[header.map(csvCell).join(",")];
  let start=0,failed=false;
  try{
-  while(start<100000){
+  while(start<200000){
    note("Preparando CSV filtrado: "+fmt(start)+" registros…");
    const {data,error}=await request().order("first_seen_at",{ascending:false}).order("source_id",{ascending:true}).range(start,start+999);
    if(error)throw error;
