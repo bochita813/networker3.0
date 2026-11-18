@@ -123,7 +123,8 @@ async function getCandidates(){
   $('#found').textContent=candidates.length;
   $('#scanned').textContent=data.last_scan?new Date(data.last_scan).toLocaleDateString('es-AR'):'Pendiente';
   const errorCount=Array.isArray(data.errors)?data.errors.length:0;
-  msg(data.last_scan?('Última búsqueda: '+new Date(data.last_scan).toLocaleString('es-AR')+'. '+(data.feeds_ok||0)+' fuentes respondieron; '+(data.new_profiles||0)+' perfiles nuevos en el último análisis.'+(errorCount?' Hubo '+errorCount+' consultas con error.':'')):'Todavía no hay una búsqueda automática registrada. Podés iniciarla desde GitHub Actions.',false);
+  const noProfiles = !!data.last_scan && candidates.length===0;
+  msg(data.last_scan?('Última búsqueda: '+new Date(data.last_scan).toLocaleString('es-AR')+'. '+(data.feeds_ok||0)+' consultas RSS respondieron; '+(data.new_profiles||0)+' perfiles nuevos.'+(noProfiles?' IMPORTANTE: el buscador no está encontrando URLs de perfiles de Instagram; esto NO es una prospección validada.':'')+(errorCount?' Hubo '+errorCount+' consultas con error.':'')):'Todavía no hay una búsqueda automática registrada. Podés iniciarla desde GitHub Actions.',noProfiles);
   drawFound();
  }catch(e){msg('No se pudo leer el archivo de descubrimiento: '+e.message,true);$('#found').textContent='—'}
 }
