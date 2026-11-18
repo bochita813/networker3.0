@@ -1,9 +1,9 @@
 {
-  "checked_utc": "2026-11-18T19:43:35.835780+00:00",
+  "checked_utc": "2026-11-18T22:24:41.365254+00:00",
   "checks": [
     {
       "file": "scout/configurar.html",
-      "inline_scripts": 1,
+      "inline_scripts": 2,
       "valid": true,
       "diagnostics": []
     },
