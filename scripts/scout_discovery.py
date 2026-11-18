@@ -132,7 +132,7 @@ def main():
     errors.extend(directory_errors)
 
     # No inventar perfiles; no eliminar los anteriores ante fallos o feeds sin resultados.
-    profiles = sorted(result.values(), key=lambda x: (-int(x.get("score", 0)), x["handle"]))[:800]
+    profiles = sorted(result.values(), key=lambda x: (-int(x.get("score", 0)), x["handle"]))[:2400]
     output = {
         "schema": 1,
         "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
