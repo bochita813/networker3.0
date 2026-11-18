@@ -206,7 +206,7 @@ body{min-width:320px}
 (()=>{"use strict";
 const $=x=>document.querySelector(x);
 const config=window.NETWORKER_CRM_CONFIG||{};
-let db=null,user=null,candidates=[],rules=[],filtered=[],selected=new Set(),editing=null,visible=35,lastScan="";
+let db=null,user=null,candidates=[],rules=[],filtered=[],selected=new Set(),editing=null,visible=35,lastScan="",verifiedBios=new Map(),searchRun=0,editingBioHandle="";
 const TOPICS=["Estética","Cosmética","Salud","Bienestar","Venta comercial","Emprendimiento","Profesionales","Marca personal","Liderazgo","Gastronomía","Arte y diseño","Tecnología"];
 const MATCH={
 "Estética":/est[eé]tic|belleza|peluquer|alisad|u[ñn]as|pesta[ñn]|spa|maquill/i,
@@ -244,7 +244,29 @@ const PROVINCES={
 function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim()}
 function handle(s){return String(s||"").toLowerCase().replace(/^@/,"").trim()}
 function validHandle(s){return /^[a-z0-9._]{1,30}$/.test(s)&&!s.includes("..")&&!s.startsWith(".")&&!s.endsWith(".")}
-function tags(p){const text=[p.headline,p.snippet,p.category,p.source_query].join(" ");return TOPICS.filter(t=>MATCH[t].test(text))}
+function verifiedBio(p){
+ const local=verifiedBios.get(handle(p.handle));
+ if(local&&local.verified_bio)return local.verified_bio;
+ return p.biography&&p.biography_source?String(p.biography):"";
+}
+function keywordFields(p){
+ return {
+  "usuario":p.handle||"",
+  "nombre":p.headline||"",
+  "biografía de Instagram verificada":verifiedBio(p),
+  "descripción del directorio":p.snippet||"",
+  "rubro":p.category||"",
+  "ubicación":[p.city,p.province,p.country].filter(Boolean).join(" "),
+  "fuente":p.source_query||""
+ }
+}
+function searchText(p){return Object.values(keywordFields(p)).join(" ")}
+function keywordMatches(p,raw){
+ const keys=String(raw||"").split(",").map(x=>norm(x)).filter(Boolean);
+ if(!keys.length)return [];
+ return Object.entries(keywordFields(p)).filter(([,value])=>keys.some(k=>norm(value).includes(k))).map(([source])=>source);
+}
+function tags(p){const text=[p.headline,p.snippet,p.category,p.source_query,verifiedBio(p)].join(" ");return TOPICS.filter(t=>MATCH[t].test(text))}
 function info(p){
  const city=String(p.city||"").trim();
  let province=String(p.province||"").trim();
@@ -284,9 +306,8 @@ function interestFits(p,f){
  return true;
 }
 function termsFit(p,f){
- const hay=norm([p.headline,p.snippet,p.category,p.handle].join(" "));
- const keys=f.keywords.split(",").map(x=>norm(x)).filter(Boolean);
- return !keys.length||keys.some(k=>hay.includes(k));
+ const keys=String(f.keywords||"").split(",").map(x=>norm(x)).filter(Boolean);
+ return !keys.length||keys.some(k=>norm(searchText(p)).includes(k));
 }
 function fits(p,f){return geoFits(p,f)&&interestFits(p,f)&&termsFit(p,f)&&info(p).score>=f.min_affinity}
 function diagnosis(f){
@@ -326,7 +347,7 @@ function preview(){
  if(!candidates.length){$('#matched').textContent="0";return}
  const f=filterForm(),q=norm($('#textSearch').value);
  const matched=candidates.filter(p=>fits(p,f));
- filtered=matched.filter(p=>!q||norm([p.handle,p.headline,p.snippet,p.category,p.city,p.province,p.source_query].join(" ")).includes(q));
+ filtered=matched.filter(p=>!q||norm(searchText(p)).includes(q));
  $('#matched').textContent=filtered.length.toLocaleString("es-AR");$('#selected').textContent=selected.size.toLocaleString("es-AR");visible=35;
  diagnosis(f);draw();
  if(matched.length&&q&&!filtered.length){$('#diagnosisTitle').textContent="No hay coincidencias con el texto de búsqueda.";
@@ -343,13 +364,27 @@ function draw(){
   cb.addEventListener("change",()=>{if(cb.checked)selected.add(h);else selected.delete(h);$('#selected').textContent=selected.size.toLocaleString("es-AR")});
   const content=el("div"),head=el("div",null,"profile-head");head.append(el("strong","@"+h,"handle"),el("span",m.score+" pts de afinidad temática","score"));content.appendChild(head);
   content.appendChild(el("div",p.headline||"Cuenta por revisar","title"));
-  content.appendChild(el("p",String(p.snippet||"Sin descripción pública").slice(0,280)));
+  const bio=verifiedBio(p);
+  if(bio){
+   content.appendChild(el("div","Biografía pública de Instagram · "+(verifiedBios.has(h)?"registrada y verificada manualmente":"fuente declarada"),"bio-label"));
+   content.appendChild(el("p",String(bio).slice(0,450)));
+  }else{
+   content.appendChild(el("div","Biografía de Instagram no disponible / no verificada","bio-source"));
+  }
+  if(p.snippet){
+   content.appendChild(el("div","Descripción de directorio (no es la bio de Instagram)","bio-source"));
+   content.appendChild(el("p",String(p.snippet).slice(0,280)));
+  }
+  const hits=keywordMatches(p,filterForm().keywords);
+  if(hits.length)content.appendChild(el("div","Coincide en: "+hits.join(", "),"bio-label"));
   const geo=[m.city,m.province,m.country].filter(Boolean).join(" · ");
   content.appendChild(el("p","📍 "+(geo||"Ubicación sin determinar")+(m.city?" · ficha pública":""),"note"));
   const labels=el("div",null,"tags");m.t.slice(0,5).forEach(t=>labels.appendChild(el("span",t,"tag")));if(!m.t.length)labels.appendChild(el("span","Sin señales suficientes","tag"));content.appendChild(labels);
   const buttons=el("div",null,"buttons"),profile=document.createElement("a");profile.href="https://www.instagram.com/"+h+"/";profile.textContent="Abrir Instagram ↗";buttons.appendChild(profile);
   const copy=document.createElement("button");copy.type="button";copy.textContent="Copiar usuario";copy.onclick=async()=>{try{await navigator.clipboard.writeText(h);status("@"+h+" copiado. Pegalo en el buscador de Instagram.")}catch(e){status("Usuario: @"+h+" (copialo manualmente)")}};buttons.appendChild(copy);
   if(p.source_page){const src=document.createElement("a");src.textContent="Fuente ↗";src.href=p.source_page;src.target="_blank";src.rel="noopener noreferrer";buttons.appendChild(src)}
+  const updateBio=document.createElement("button");updateBio.type="button";updateBio.textContent=bio?"Actualizar bio":"Registrar bio verificada";
+  updateBio.addEventListener("click",()=>openBioEditor(h));buttons.appendChild(updateBio);
   content.appendChild(buttons);box.append(cb,content);list.appendChild(box);
  }
  $('#more').hidden=filtered.length<=visible;$('#more').textContent="Mostrar otros "+Math.min(35,filtered.length-visible)+" perfiles";
