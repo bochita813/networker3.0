@@ -147,7 +147,8 @@ function queryFor(f:any,b:number){
 function matchesDirectory(p:any,f:any){
  const a=(x:any)=>norm(x).replace(/ capital$/,"").replace(/^ciudad de /,"");
  if(f.country && a(f.country)!=="argentina")return false;
- if(f.province && (!p.location_confirmed || a(p.province)!==a(f.province)))return false;
+ const sourceRegion=p.source_provider?.startsWith("Modash · Fitness Córdoba")&&a(f.province)==="cordoba";
+ if(f.province && (!p.location_confirmed || a(p.province)!==a(f.province))&&!sourceRegion)return false;
  if(f.city && (!p.location_confirmed || !p.city || !(a(p.city)===a(f.city)||a(p.city).includes(a(f.city)))))return false;
  const hay=a([p.handle,p.headline,p.snippet,p.category].filter(Boolean).join(" "));
  const keys=clean(f.keywords,300).split(",").map(x=>a(x)).filter(Boolean);
