@@ -6,6 +6,7 @@ const clean=(x:any,n=150)=>String(x??"").replace(/[\u0000-\u001f<>]/g," ").trim(
 const norm=(x:any)=>clean(x,500).toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 const blocked=new Set(["instagram","stories","explore","accounts","reel","reels","p","tv","direct","about","developers","privacy","terms","web","api","help","tags","download","challenge","audio","login","signup","profilecard"]);
 const sources=[
+ ["Modash · Fitness Córdoba","https://www.modash.io/find-influencers/argentina/c%C3%B3rdoba/fitness","cordoba"],
  ["Famadex · Emprendedores Argentina","https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/","general"],
  ["Infloo · Negocios Argentina","https://infloo.io/es/influencers/ar/all/business","general"],
  ["Climaps · Emprendimientos Argentina","https://www.climaps.org/emprendimientos/","general"],
@@ -56,7 +57,39 @@ function profile(h:string,title:string,snippet:string,url:string,label:string,f:
   match_keywords:matched,searches:[label,...(f.name?[clean(f.name,90)]:[])],score:Math.min(90,25+15*matched.length+(confirmed?25:0))};
 }
 const strip=(s:string)=>s.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi," ").replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&nbsp;|&#160;/g," ").replace(/&amp;/g,"&").replace(/\s+/g," ").trim();
+// Perfiles con ficha propia publicada en el catálogo: nunca asociar la biografía de una tarjeta a otra.
+function fromModash(html:string,label:string,url:string,f:any){
+ const seen=new Map<string,any>();
+ const anchors=/<a\b[^>]*href=["'](https:\/\/www\.instagram\.com\/([a-z0-9._]{3,30}))["'][^>]*>\s*@\2\s*<\/a>/gi;
+ const keys=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
+ const desiredCity=norm(f.city).replace(/ capital$/,"").trim();
+ for(const m of html.matchAll(anchors)){
+  const h=getHandle(m[1]);if(!h||seen.has(h))continue;
+  const before=html.slice(Math.max(0,m.index-3600),m.index);
+  const headlines=[...before.matchAll(/<h[234]\b[^>]*>([\s\S]*?)<\/h[234]>/gi)];
+  const bios=[...before.matchAll(/<p\b[^>]*class=["'][^"']*line-clamp-3[^"']*["'][^>]*>([\s\S]*?)<\/p>/gi)];
+  const heading=strip(headlines.at(-1)?.[1]||"").replace(/^\d+\.\s*/,"").slice(0,190);
+  const bio=strip(bios.at(-1)?.[1]||"").slice(0,850);
+  if(!bio||!heading)continue;
+  const text=norm(h+" "+heading+" "+bio);
+  if(keys.length&&!keys.some(k=>text.includes(k)))continue;
+  if(desiredCity&&!text.includes(desiredCity))continue;
+  // La página agrupa audiencia por Córdoba; no implica que la persona resida allí.
+  // Sólo acreditar provincia si la propia ficha lo indica explícitamente.
+  const hasCordoba=text.includes("cordoba");
+  const region=hasCordoba?{country:"Argentina",province:"Córdoba"}:{};
+  const row=profile(h,heading,bio,url,label,f,region);
+  row.category="Fitness y entrenamiento";
+  row.match_evidence=hasCordoba?
+    "La biografía menciona Córdoba; perfil publicado en el catálogo; privacidad de Instagram no verificada":
+    "Cuenta con nombre y biografía publicados en catálogo regional; domicilio y privacidad sin verificar";
+  if(region.province)row.location_evidence="Córdoba mencionada en biografía reproducida por catálogo público";
+  seen.set(h,row);
+ }
+ return [...seen.values()];
+}
 function fromDirectory(html:string,label:string,url:string,f:any){
+ if(label.startsWith("Modash"))return fromModash(html,label,url,f);
  const found=new Map<string,any>();
  const anchors=/<a\b([^>]*href\s*=\s*["']([^"']+)["'][^>]*)>([\s\S]*?)<\/a>/gi;
  for(const m of html.matchAll(anchors)){
@@ -285,6 +318,7 @@ Deno.serve(async(req:Request)=>{
       (f.province&&s[2]===norm(f.province)?30:0)+
       (f.city&&norm(s[0]).includes(norm(f.city))?18:0)+
       (norm(f.focus).includes("estetica")&&s[0].includes("Ágora")?16:0)+
+      (s[0].startsWith("Modash")&&/educacion fisica|ed fisica|fitness|entren|preparador fisico|profesor|personal trainer|deporte|gimnasio|musculacion/i.test(norm(f.keywords))?65:0)+
       (s[0].startsWith("EmprenZona")?12:0)+
       (s[0].startsWith("Infloo")?4:0);
     return priority(b)-priority(a);
