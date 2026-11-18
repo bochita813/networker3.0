@@ -52,6 +52,10 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:20px;font-si
 <input id="dbProvince" placeholder="Provincia investigada">
 <input id="dbCity" placeholder="Ciudad investigada">
 <select id="dbFocus"><option value="">Todos los intereses</option><option>Emprendedores</option><option>Estética y belleza</option><option>Salud y bienestar</option><option>Profesionales</option><option>Comercio y ventas</option><option>Marca personal y liderazgo</option><option>Todos los rubros</option></select>
+<select id="dbCategory"><option value="">Todos los rubros identificados</option></select>
+<input id="dbCountry" placeholder="País de la búsqueda / fuente">
+<input id="dbFrom" type="date" title="Descubiertos desde esta fecha">
+<select id="dbProvider"><option value="">Todas las fuentes</option></select>
 <select id="dbStage"><option value="">Todas las etapas</option><option>Por revisar</option><option>Interesante</option><option>Revisado</option><option>Contactado</option><option>Descartado</option></select>
 <select id="dbVerification"><option value="">Todas las ubicaciones</option><option value="true">Ubicación indicada en fuente</option><option value="false">Ubicación sin comprobar</option></select></div>
 <div class="toolbar"><button id="refreshDb" class="btn black small" type="button">Actualizar base</button><button id="exportDb" class="btn secondary small" type="button">Exportar base filtrada CSV</button><span class="micro" id="dbMeta">Sin cargar</span></div>
@@ -63,7 +67,7 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:20px;font-si
 <script>
 (()=>{"use strict";
 const $=s=>document.querySelector(s), config=window.NETWORKER_CRM_CONFIG||{};
-let db=null,user=null,searchRows=[],dbRows=[],runId="",nextBatch=0,provider="directories",busy=false,abort=false,activeTab="live",dbVisible=40,allRules=[];
+let db=null,user=null,searchRows=[],dbRows=[],runId="",nextBatch=0,provider="directories",busy=false,abort=false,activeTab="live",dbVisible=40,allRules=[],searchFingerprint="";
 const topics=["Estética","Cosmética","Salud","Bienestar","Venta comercial","Emprendimiento","Profesionales","Marca personal","Liderazgo","Gastronomía","Arte y diseño","Tecnología"];
 const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
 const txt=(tag,str,cls)=>{const x=document.createElement(tag);x.textContent=String(str??"");if(cls)x.className=cls;return x};
@@ -89,17 +93,37 @@ function card(p,storage){
  box.append(actions);return box;
 }
 function renderLive(){const q=norm($("#liveText").value),rows=searchRows.filter(p=>!q||norm([p.handle,p.headline,p.snippet,p.category,p.city,p.province,p.source_provider].join(" ")).includes(q));$("#liveCount").textContent=searchRows.length.toLocaleString("es-AR");$("#batchCount").textContent=String(nextBatch);$("#liveMeta").textContent=rows.length+" perfiles visibles · "+searchRows.length+" perfiles únicos en esta búsqueda · fuente externa";const list=$("#liveCards");list.replaceChildren();if(!rows.length){list.append(txt("div",searchRows.length?"Tus filtros de texto no coinciden con los resultados.":"Aún no hay perfiles encontrados en esta búsqueda.","empty"));return}rows.slice(0,240).forEach(p=>list.appendChild(card(p,false)));if(rows.length>240)list.append(txt("p","Mostrando 240 de "+rows.length+" fichas. Exportá el CSV para verlas todas.","micro"))}
-function filteredDb(){const q=norm($("#dbText").value),province=norm($("#dbProvince").value),city=norm($("#dbCity").value),focus=$("#dbFocus").value,stage=$("#dbStage").value,verified=$("#dbVerification").value;return dbRows.filter(p=>(!q||norm([p.handle,p.headline,p.snippet,p.category,p.source_provider,(p.match_keywords||[]).join(" ")].join(" ")).includes(q))&&(!province||norm(p.search_province).includes(province)||norm(p.province).includes(province))&&(!city||norm(p.search_city).includes(city)||norm(p.city).includes(city))&&(!focus||p.search_focus===focus)&&(!stage||p.stage===stage)&&(!verified||String(!!p.location_confirmed)===verified))}
+function filteredDb(){
+ const q=norm($("#dbText").value),province=norm($("#dbProvince").value),city=norm($("#dbCity").value),
+ focus=$("#dbFocus").value,stage=$("#dbStage").value,verified=$("#dbVerification").value,
+ category=$("#dbCategory").value,country=norm($("#dbCountry").value),from=$("#dbFrom").value,provider=$("#dbProvider").value;
+ const matchesFocus=p=>{
+  if(!focus)return true;
+  if(p.search_focus===focus)return true;
+  const cat=norm(p.category);
+  if(focus==="Emprendedores")return /emprend|indumentaria|artesan|accesorios|gastronom|decoraci|velas|librer|reposteri|cosmetica/.test(cat);
+  if(focus==="Estética y belleza")return /estetic|cosmet|belleza|peluquer/.test(cat);
+  if(focus==="Salud y bienestar")return /salud|bienestar|nutric/.test(cat);
+  if(focus==="Comercio y ventas")return /comerc|venta|indumentaria|accesorios|gastronom|reposteri|decoraci|librer/.test(cat);
+  if(focus==="Marca personal y liderazgo")return /marca personal|lider/.test(cat);
+  if(focus==="Profesionales")return /profesional/.test(cat);
+  return focus==="Todos los rubros";
+ };
+ return dbRows.filter(p=>(!q||norm([p.handle,p.headline,p.snippet,p.category,p.source_provider,(p.match_keywords||[]).join(" ")].join(" ")).includes(q))&&(!province||norm(p.search_province).includes(province)||norm(p.province).includes(province))&&(!city||norm(p.search_city).includes(city)||norm(p.city).includes(city))&&matchesFocus(p)&&(!category||p.category===category)&&(!country||norm(p.search_country).includes(country)||norm(p.country).includes(country))&&(!from||String(p.first_seen_at||"").slice(0,10)>=from)&&(!provider||p.source_provider===provider)&&(!stage||p.stage===stage)&&(!verified||String(!!p.location_confirmed)===verified))}
 function renderDb(){const rows=filteredDb();$("#dbMeta").textContent=rows.length.toLocaleString("es-AR")+" de "+dbRows.length.toLocaleString("es-AR")+" fichas cargadas";const list=$("#dbCards");list.replaceChildren();if(!rows.length){list.append(txt("div","Sin perfiles para estos filtros; probá ampliar la búsqueda.","empty"));$("#nextDb").hidden=true;return}rows.slice(0,dbVisible).forEach(p=>list.appendChild(card(p,true)));$("#nextDb").hidden=rows.length<=dbVisible;$("#nextDb").textContent="Mostrar más ("+(rows.length-dbVisible)+")"}
 async function refreshTotal(){const {count,error:e}=await db.from("scout_live_profiles").select("handle",{count:"exact",head:true});if(!e)$("#storedCount").textContent=Number(count||0).toLocaleString("es-AR")}
-async function refreshDb(){error("");showProgress("Leyendo base segmentada","Cargando fichas de tu repositorio privado…",true);dbRows=[];let page=0;while(page<20){const {data,error:e}=await db.from("scout_live_profiles").select("*").order("last_seen_at",{ascending:false}).range(page*500,page*500+499);if(e){error("No se pudo cargar la base: "+e.message);break}dbRows.push(...data);if(data.length<500)break;page++}dbVisible=40;renderDb();await refreshTotal();showProgress("Base acumulada cargada",dbRows.length+" fichas del CRM. Podés filtrarlas y exportarlas.",false);if(page>=20)error("La vista está limitada a 10.000 fichas; faltan páginas posteriores.")}
+async function refreshDb(){error("");showProgress("Leyendo base segmentada","Cargando fichas de tu repositorio privado…",true);dbRows=[];let page=0;while(page<20){const {data,error:e}=await db.from("scout_live_profiles").select("*").order("last_seen_at",{ascending:false}).range(page*500,page*500+499);if(e){error("No se pudo cargar la base: "+e.message);break}dbRows.push(...data);if(data.length<500)break;page++}const setOptions=(id,values,defaultLabel)=>{const sel=$(id),keep=sel.value;sel.replaceChildren();const none=document.createElement("option");none.value="";none.textContent=defaultLabel;sel.append(none);values.filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")).forEach(v=>{const opt=document.createElement("option");opt.value=v;opt.textContent=v;sel.append(opt)});sel.value=values.includes(keep)?keep:""};
+ setOptions("#dbCategory",[...new Set(dbRows.map(x=>x.category))],"Todos los rubros identificados");
+ setOptions("#dbProvider",[...new Set(dbRows.map(x=>x.source_provider))],"Todas las fuentes");
+ dbVisible=40;renderDb();await refreshTotal();showProgress("Base acumulada cargada",dbRows.length+" fichas del CRM. Podés filtrarlas y exportarlas.",false);if(page>=20)error("La vista está limitada a 10.000 fichas; faltan páginas posteriores.")}
 function switchTab(t){activeTab=t;$("#tabLive").classList.toggle("active",t==="live");$("#tabDb").classList.toggle("active",t==="db");$("#livePanel").hidden=t!=="live";$("#dbPanel").hidden=t!=="db";if(t==="db"&&!dbRows.length)refreshDb()}
 function settingsProvider(){const v=$("#provider").value;$("#keyArea").hidden=v!=="serpapi";$("#providerTitle").textContent=v==="serpapi"?"Consulta web en tiempo real":"Directorios públicos · consulta en vivo";$("#providerInfo").textContent=v==="serpapi"?"Busca perfiles indexados en la web por parámetros. Requiere API externa; la ubicación debe verificarse.":"Reconsulta directorios públicos ahora. Gratuidad y cobertura parcial: principalmente Argentina. No accede al buscador de Instagram."}
 function setBusy(b){busy=b;$("#go").disabled=b;$("#stop").disabled=!b;$("#loadMore").disabled=b||!runId;$("#provider").disabled=b;$("#batches").disabled=b}
 async function batchSearch(id,b,form,p){const {data,error:e}=await db.functions.invoke("scout-live-search",{body:{searchId:id,batch:b,provider:p,filters:form,apiKey:p==="serpapi"?$("#apiKey").value.trim():""}});if(e){let message=e.message;try{const x=await e.context?.json();if(x?.error)message=x.error}catch{}throw Error(message)}if(data?.error)throw Error(data.error);return data}
 async function start(restart=true,onlyOne=false){
  if(busy||!user)return;error("");
- if(restart){runId=crypto.randomUUID();nextBatch=0;searchRows=[];renderLive()}
+ if(restart){runId=crypto.randomUUID();nextBatch=0;searchRows=[];searchFingerprint=JSON.stringify({filters:filters(),provider:$("#provider").value});renderLive()}
+ else if(searchFingerprint!==JSON.stringify({filters:filters(),provider:$("#provider").value})){error("Cambiaste los parámetros: pulsá «Buscar en vivo» para iniciar una búsqueda nueva.");return}
  if(!runId)runId=crypto.randomUUID();
  provider=$("#provider").value;
  const form=filters();if(provider==="serpapi"&&!$("#apiKey").value.trim()){error("Conectá tu clave SerpApi para consultar la web. También podés elegir «Directorios públicos» sin clave.");return}
@@ -136,7 +160,7 @@ $("#tabLive").onclick=()=>switchTab("live");$("#tabDb").onclick=()=>switchTab("d
 $("#liveText").oninput=renderLive;
 $("#refreshDb").onclick=refreshDb;
 $("#nextDb").onclick=()=>{dbVisible+=40;renderDb()};
-["dbText","dbProvince","dbCity","dbFocus","dbStage","dbVerification"].forEach(id=>$("#"+id).addEventListener("input",()=>{dbVisible=40;renderDb()}));
+["dbText","dbProvince","dbCity","dbFocus","dbCategory","dbCountry","dbFrom","dbProvider","dbStage","dbVerification"].forEach(id=>$("#"+id).addEventListener("input",()=>{dbVisible=40;renderDb()}));
 $("#exportLive").onclick=()=>{if(!searchRows.length){error("Primero buscá perfiles para exportar.");return}csv(asRows(searchRows),"networker-busqueda-en-vivo.csv")};
 $("#exportDb").onclick=()=>{const rows=filteredDb();if(!rows.length){error("No hay perfiles con estos filtros para exportar.");return}csv(asRows(rows),"networker-base-segmentada.csv")};
 $("#loginForm").onsubmit=async e=>{e.preventDefault();$("#loginError").textContent="";const {error:x}=await db.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});if(x){$("#loginError").textContent=x.message;return}await auth()};
