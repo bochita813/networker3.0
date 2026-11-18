@@ -1,61 +1,57 @@
 {
   "schema": 1,
   "description": "Perfiles públicos potencialmente relevantes, de búsquedas RSS indexadas. Verificar antes de contactar; sin garantías de afinidad.",
-  "last_scan": "2026-11-18T15:37:15+00:00",
+  "last_scan": "2026-11-18T15:41:30+00:00",
   "feeds_ok": 8,
   "queries_attempted": 8,
-  "new_profiles": 0,
+  "new_profiles": 60,
   "feed_inspection": [
     {
       "query": "\"instagram.com\" \"emprendedor\" \"Argentina\"",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
       "query": "\"instagram.com\" \"emprendedora\" \"Buenos Aires\"",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
       "query": "instagram emprendimiento Argentina cuentas",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
       "query": "instagram negocios emprendedores Argentina perfil",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
@@ -69,19 +65,18 @@
     {
       "query": "Instagram emprendedoras Neuquén",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     },
     {
       "query": "site:instagram.com emprendedores",
-      "rss_items": 10,
+      "rss_items": 0,
       "instagram_direct_links": 0,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
@@ -90,17 +85,700 @@
     {
       "query": "instagram.com emprendedoras Córdoba Argentina",
       "rss_items": 10,
-      "instagram_direct_links": 4,
+      "instagram_direct_links": 3,
       "instagram_text_mentions": 0,
       "handles_matched": 0,
       "instagram_path_examples": [
         "/",
         "/",
-        "/",
-        "/p/signin/"
+        "/"
       ]
     }
   ],
-  "errors": [],
-  "profiles": []
+  "directory_inspection": [
+    {
+      "directory": "Famadex · Emprendedores Argentina",
+      "kind": "famadex",
+      "handles_found": 20,
+      "html_chars": 115935
+    },
+    {
+      "directory": "Infloo · Negocios Argentina",
+      "kind": "infloo",
+      "handles_found": 9,
+      "html_chars": 166571
+    },
+    {
+      "directory": "Climaps · Emprendimientos Argentina",
+      "kind": "climaps",
+      "handles_found": 31,
+      "html_chars": 605833
+    }
+  ],
+  "directories_ok": 3,
+  "errors": [
+    "CreatorReach · Emprendedores Argentina: HTTPError: HTTP Error 403: Forbidden"
+  ],
+  "profiles": [
+    {
+      "handle": "arte_delcabo",
+      "url": "https://www.instagram.com/arte_delcabo/",
+      "headline": "Arte del Cabo",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "casas_para_pajaros",
+      "url": "https://www.instagram.com/casas_para_pajaros/",
+      "headline": "Casas para Pájaros \"pajaritos en la cabeza\"",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "chacal.estudio",
+      "url": "https://www.instagram.com/chacal.estudio/",
+      "headline": "Chacal Estudio",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "climategy",
+      "url": "https://www.instagram.com/climategy/",
+      "headline": "Climategy",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "conciencia.nutritiva",
+      "url": "https://www.instagram.com/conciencia.nutritiva/",
+      "headline": "Conciencia Nutritiva",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "creacionesrominablack",
+      "url": "https://www.instagram.com/creacionesrominablack/",
+      "headline": "Romina Black",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "d.r.y.coats",
+      "url": "https://www.instagram.com/d.r.y.coats/",
+      "headline": "D.R.Y (Design. Recycled. You)",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "deepagroco",
+      "url": "https://www.instagram.com/deepagroco/",
+      "headline": "DeepAgro",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "elatelierdemeggi",
+      "url": "https://www.instagram.com/elatelierdemeggi/",
+      "headline": "El Atelier de Meggi",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "giovaecolavado",
+      "url": "https://www.instagram.com/giovaecolavado/",
+      "headline": "Giova Eco-Lavado",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "goodenergy_argentina",
+      "url": "https://www.instagram.com/goodenergy_argentina/",
+      "headline": "Goodenergy",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "jenny.vivirmejor",
+      "url": "https://www.instagram.com/jenny.vivirmejor/",
+      "headline": "VIVIR MEJOR",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "laquemisterie",
+      "url": "https://www.instagram.com/laquemisterie/",
+      "headline": "La Quemisterie",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "meli.newen",
+      "url": "https://www.instagram.com/meli.newen/",
+      "headline": "Meli newen",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "misuelitolindo",
+      "url": "https://www.instagram.com/misuelitolindo/",
+      "headline": "Mi Suelito Lindo",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "nativasregalos",
+      "url": "https://www.instagram.com/nativasregalos/",
+      "headline": "Nativas Regalos Sustentables",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "naturalis.consultora.ambiental",
+      "url": "https://www.instagram.com/naturalis.consultora.ambiental/",
+      "headline": "Naturalis Consultora Ambiental",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "neambiente",
+      "url": "https://www.instagram.com/neambiente/",
+      "headline": "Neambiente Consultora Ambiental",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "newentrunkay",
+      "url": "https://www.instagram.com/newentrunkay/",
+      "headline": "Newen Trunkay",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "playalimpiaok",
+      "url": "https://www.instagram.com/playalimpiaok/",
+      "headline": "Playa Limpia",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "qmaxsrl",
+      "url": "https://www.instagram.com/qmaxsrl/",
+      "headline": "QMAX Energía Inteligente",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "reforest_latam",
+      "url": "https://www.instagram.com/reforest_latam/",
+      "headline": "ReForest Latam",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "resilium.consultoria",
+      "url": "https://www.instagram.com/resilium.consultoria/",
+      "headline": "Resilium - consultoría ambiental y diseño sostenible",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "rezet.global",
+      "url": "https://www.instagram.com/rezet.global/",
+      "headline": "REZET",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "satellitesonfire",
+      "url": "https://www.instagram.com/satellitesonfire/",
+      "headline": "Satellites on Fire",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "semilla.que.brota",
+      "url": "https://www.instagram.com/semilla.que.brota/",
+      "headline": "Semilla.que.brota",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "semillas_ludicas",
+      "url": "https://www.instagram.com/semillas_ludicas/",
+      "headline": "Semillas Lúdicas - Recreación y Naturaleza",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "sharyco.arg",
+      "url": "https://www.instagram.com/sharyco.arg/",
+      "headline": "Sharyco",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "solarlinkers",
+      "url": "https://www.instagram.com/solarlinkers/",
+      "headline": "Solar Linkers",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "ucrop.it",
+      "url": "https://www.instagram.com/ucrop.it/",
+      "headline": "ucrop.it",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "yocompost",
+      "url": "https://www.instagram.com/yocompost/",
+      "headline": "YoCompost",
+      "snippet": "Emprendimiento listado en directorio de proyectos de Argentina.",
+      "score": 45,
+      "source_query": "Climaps · Emprendimientos Argentina",
+      "source_page": "https://www.climaps.org/emprendimientos/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "catalina.lavayen",
+      "url": "https://www.instagram.com/catalina.lavayen/",
+      "headline": "@catalina.lavayen",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "educaremprendedor",
+      "url": "https://www.instagram.com/educaremprendedor/",
+      "headline": "@educaremprendedor",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "marcas_argentinas",
+      "url": "https://www.instagram.com/marcas_argentinas/",
+      "headline": "@marcas_argentinas",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "mujer_millonariaa",
+      "url": "https://www.instagram.com/mujer_millonariaa/",
+      "headline": "@mujer_millonariaa",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "pilarcbaa",
+      "url": "https://www.instagram.com/pilarcbaa/",
+      "headline": "@pilarcbaa",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "teodemendonca",
+      "url": "https://www.instagram.com/teodemendonca/",
+      "headline": "@teodemendonca",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "unicajabanco",
+      "url": "https://www.instagram.com/unicajabanco/",
+      "headline": "@unicajabanco",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "visma_latam_hr",
+      "url": "https://www.instagram.com/visma_latam_hr/",
+      "headline": "@visma_latam_hr",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "winexplorersok",
+      "url": "https://www.instagram.com/winexplorersok/",
+      "headline": "@winexplorersok",
+      "snippet": "Perfil listado en ranking de negocios y emprendimiento de Argentina.",
+      "score": 34,
+      "source_query": "Infloo · Negocios Argentina",
+      "source_page": "https://infloo.io/es/influencers/ar/all/business",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "b.c",
+      "url": "https://www.instagram.com/b.c/",
+      "headline": "Brian Condenanza",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "connieansaldi",
+      "url": "https://www.instagram.com/connieansaldi/",
+      "headline": "C Connie Ansaldi",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "danipresman",
+      "url": "https://www.instagram.com/danipresman/",
+      "headline": "D Daniel Presman",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "edgar_natolo",
+      "url": "https://www.instagram.com/edgar_natolo/",
+      "headline": "𝔼 𝔼𝕕𝕘𝕒𝕣 ℕ𝕒𝕥𝕠𝕝𝕠",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "evelinacabrera23",
+      "url": "https://www.instagram.com/evelinacabrera23/",
+      "headline": "Evelina Cabrera",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "facundoguerra",
+      "url": "https://www.instagram.com/facundoguerra/",
+      "headline": "Facundo Guerra",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "javiermirandaled",
+      "url": "https://www.instagram.com/javiermirandaled/",
+      "headline": "J Javier Miranda",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "juanmondino_",
+      "url": "https://www.instagram.com/juanmondino_/",
+      "headline": "J juanmondino",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "kevinleyes",
+      "url": "https://www.instagram.com/kevinleyes/",
+      "headline": "Leyes",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "mamaemprendearg",
+      "url": "https://www.instagram.com/mamaemprendearg/",
+      "headline": "A Ale Leguizamón - Mujer Diamante",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "martinvars",
+      "url": "https://www.instagram.com/martinvars/",
+      "headline": "Martín Varsavsky",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "mateons",
+      "url": "https://www.instagram.com/mateons/",
+      "headline": "M Mateo Nicolás Salvatto 🇦🇷",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "nanotietjen",
+      "url": "https://www.instagram.com/nanotietjen/",
+      "headline": "Ezequiel Tietjen",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "pamelaspolidori",
+      "url": "https://www.instagram.com/pamelaspolidori/",
+      "headline": "P Pamela Spolidori",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "ramiromarra",
+      "url": "https://www.instagram.com/ramiromarra/",
+      "headline": "Ramiro Marra",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "ronasuk",
+      "url": "https://www.instagram.com/ronasuk/",
+      "headline": "R Rona Suk",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "sebasosaemprende",
+      "url": "https://www.instagram.com/sebasosaemprende/",
+      "headline": "S Seba Sosa | Empresario y emprendedor",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "soysofiacontreras",
+      "url": "https://www.instagram.com/soysofiacontreras/",
+      "headline": "S Sofia Contreras",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "woker.oficial",
+      "url": "https://www.instagram.com/woker.oficial/",
+      "headline": "J Joaquín Méndez",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "handle": "yamilsantoro",
+      "url": "https://www.instagram.com/yamilsantoro/",
+      "headline": "Yamil Santoro",
+      "snippet": "Ranking público de emprendedores argentinos. Puede incluir perfiles muy grandes; validar adecuación.",
+      "score": 28,
+      "source_query": "Famadex · Emprendedores Argentina",
+      "source_page": "https://famadex.com/en/ranking/instagram/people/argentina/entrepreneurship/",
+      "discovery_method": "directorio_publico",
+      "first_seen": "2026-11-18"
+    }
+  ]
 }
