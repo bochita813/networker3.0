@@ -34,8 +34,15 @@ const start=script.indexOf("const TOPICS=");
 const end=script.indexOf("function formSet(f)");
 assert.ok(start>=0&&end>start,"No se encontró la lógica de filtros");
 const context=vm.createContext({});
-vm.runInContext(script.slice(start,end)+";this.logic={fits,info,geoFits,interestFits,termsFit};",context);
-const {fits,info}=context.logic;
+vm.runInContext("const verifiedBios=new Map();const handle=s=>String(s||'').toLowerCase();",context);
+vm.runInContext(script.slice(start,end)+";this.logic={fits,info,geoFits,interestFits,termsFit,keywordMatches};this.verifiedBios=verifiedBios;",context);
+const {fits,info,keywordMatches}=context.logic;
+assert.ok(ids.has("runNow"),"Falta el botón de búsqueda inmediata");
+assert.ok(ids.has("searchProgress"),"Falta el estado de ejecución");
+assert.ok(ids.has("bioDialog"),"Falta el editor de biografías verificadas");
+assert.ok(script.includes('use.onclick=()=>{editing=r.id;')&&script.includes('runSearch("saved")'),
+  "Usar no inicia la búsqueda inmediata");
+assert.ok(script.includes('await fetchLatestIndex()'),"El botón no refresca el índice");
 const query=(province,city,focus="Todos los rubros",interests=[])=>({
  country:"Argentina",province,city,focus,interests,keywords:"",min_affinity:0
 });
@@ -62,6 +69,16 @@ assert.equal(fits(cordobaInterior,query("Córdoba","Cordoba","Todos los rubros")
 assert.equal(fits(cordobaBeauty,query("Córdoba","Jesús María","Todos los rubros")),false,
   "El filtro de ciudad no respeta localidades diferentes");
 assert.equal(info(cordobaBeauty).province,"Córdoba","No se conserva provincia explícita");
+
+const bioProfile={handle:"test.bio",headline:"Un perfil neutro",snippet:"Sin detalle",category:"",source_query:"Prueba"};
+assert.equal(context.logic.termsFit(bioProfile,{keywords:"nutrición"}),false,
+ "Una bio no disponible no debe inventarse");
+context.verifiedBios.set("test.bio",{verified_bio:"Especialista en nutrición deportiva",bio_source:"Verificación manual"});
+assert.equal(context.logic.termsFit(bioProfile,{keywords:"nutrición"}),true,
+ "El texto de una biografía verificada debería ser consultable");
+assert.ok(keywordMatches(bioProfile,"nutrición").includes("biografía de Instagram verificada"),
+ "El resultado debe revelar que la coincidencia está en la bio verificada");
+context.verifiedBios.clear();
 
 const handles=new Set();
 for(const p of data.profiles||[]){
