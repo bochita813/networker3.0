@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/networker-scout.yml'
       - 'scripts/scout_discovery.py'
+      - 'scripts/scout_directory_sources.py'
       - 'scout/queries.json'
   schedule:
     # 09:17 de Argentina (UTC-3). GitHub puede demorar ejecuciones programadas.
