@@ -17,5 +17,14 @@ assert.ok(html.includes("source_provider"),"Falta traza de fuente");
 assert.ok(html.includes("location_confirmed"),"Falta distinción de evidencia geográfica");
 assert.ok(html.includes("networker-base-segmentada.csv"),"Falta exportación");
 assert.ok(html.includes("@media(max-width:560px)"),"Faltan controles mobile");
+for(const name of ["searchName","saveRule","ruleMessage","apiKey"]){assert.ok(seen.has(name),"Falta campo de búsqueda o persistencia: "+name)}
+assert.ok(html.includes("name:$(\"#searchName\").value.trim()"),"La búsqueda no transmite el nombre editado por el administrador");
+assert.ok(html.includes('db.from("scout_search_rules").insert'),"No se pueden guardar configuraciones escritas a mano");
+const backend=fs.readFileSync("supabase/functions/scout-live-search/index.ts","utf8");
+assert.ok(backend.includes('engine:"google"'),"El proveedor debe consultar Google, no un RSS irrelevante");
+assert.ok(backend.includes('start:String((batch%3)*10)'),"No existe paginación real del buscador externo");
+assert.ok(backend.includes("entrepreneur-card"),"Falta extracción por ficha individual del directorio");
+assert.ok(backend.includes("p.handle,p.headline,p.snippet"),"La coincidencia de palabra debe buscar en @usuario y nombre");
+assert.ok(backend.includes("biografía")||html.includes("biografías"),"Debe advertirse que las biografías no están verificadas");
 assert.ok(!html.includes("BRAVE_SEARCH_API_KEY"),"Proveedor no permitido por términos en este caso");
 console.log("SCOUT LIVE QA OK: script, "+ids.length+" controles, búsquedas, filtros y exportación.");
