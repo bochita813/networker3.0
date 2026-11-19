@@ -251,7 +251,7 @@ $("#provider").onchange=()=>{
  const p=$("#provider").value,mode=$("#matchMode").value;
  if(p==="directories")$("#matchMode").value="catalogs";
  else if(mode==="bio"&&p!=="serpapi"||mode==="linked"&&p!=="serper"||mode==="catalogs"&&p!=="directories")$("#matchMode").value="google";
- settingsProvider();
+ settingsMode();
 };
 $("#matchMode").onchange=settingsMode;
 ["keywords","country","province","city"].forEach(id=>$("#"+id).addEventListener("input",updateSearchLink));
