@@ -419,7 +419,9 @@ Deno.serve(async(req:Request)=>{
       const city=norm(f.city).replace(/ capital$/,""),province=norm(f.province);
       // Una mención territorial en la biografía no equivale a domicilio verificado.
       const geoEvidence=[city,province].filter(Boolean).every(x=>location.includes(x));
-      item.headline=name;item.snippet=bio;item.bio_verified=true;item.public_account_verified=true;
+      item.headline=name;item.snippet=bio;item.category=category(name+" "+bio);
+      item.match_keywords=clean(f.keywords,300).split(",").map(x=>x.trim()).filter(x=>x&&norm([item.handle,name,bio].join(" ")).includes(norm(x)));
+      item.bio_verified=true;item.public_account_verified=true;
       item.profile_checked_at=new Date().toISOString();
       item.match_evidence="Cuenta pública verificada por proveedor. Coincidencia en "+field+
        (geoEvidence?". Lugar mencionado en perfil, residencia no confirmada.":". Ubicación sin comprobar.");
