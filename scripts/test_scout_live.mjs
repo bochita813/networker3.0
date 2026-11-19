@@ -43,13 +43,14 @@ const isJson=x=>!!x&&typeof x==="object"&&!Array.isArray(x);
 const extract=new vm.Script(code+"; extractPublicMatches",{}).runInNewContext({clean,norm,validHandle,isJson,Date,JSON,Set});
 const fixture=[
  {username:"sofi.administrativo",fullName:"Sofia | Córdoba",biography:"Soy administrativo - Córdoba Argentina",private:false,scrapedAt:"2026-11-19T00:00:00Z"},
+ {username:"cba.admin.publico",fullName:"Administrativo | Cba",biography:"Administrativo · Cba",private:false},
  {username:"lucia.admin",fullName:"Lucia Cordoba",biography:"Administrativo en Córdoba",private:true},
  {username:"cba.admins",fullName:"Administrativo Cordoba",biography:"Servicios administrativos"},
  {username:"admin.salta",fullName:"Administrativo",biography:"Salta Argentina",private:false},
  {username:"tucu.nutri",fullName:"Nutricionista Córdoba",biography:"Nutri",private:false}
 ];
 const tested=extract(fixture,"administrativo","Córdoba");
-assert.equal(tested.profiles.length,1,"Debe existir una sola cuenta pública que coincida");
+assert.equal(tested.profiles.length,2,"Debe aceptar Córdoba y Cba cuando se mencionan en la ficha");
 assert.equal(tested.profiles[0].handle,"sofi.administrativo");
 assert.equal(tested.profiles[0].public_account_verified,true);
 assert.equal(tested.profiles[0].bio_verified,true);
