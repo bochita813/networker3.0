@@ -84,10 +84,28 @@ Deno.serve(async(req:Request)=>{
 
   const input=await req.json().catch(()=>({}));
   const action=String(input?.action||"status");
-  const token=Deno.env.get("APIFY_API_TOKEN")||"";
+  // Configuración única: Supabase Vault cifra el token. La web nunca puede leerlo.
+  let token=Deno.env.get("APIFY_API_TOKEN")||"";
+  if(!token){
+   const serviceKey=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")||"";
+   if(serviceKey){
+    const backend=createClient(supabaseUrl,serviceKey,{auth:{persistSession:false,autoRefreshToken:false}});
+    const {data:stored,error:secretError}=await backend.rpc("scout_backend_apify_token");
+    if(!secretError&&typeof stored==="string")token=stored;
+   }
+  }
+  if(action==="configure"){
+   const supplied=clean(input?.token,500);
+   if(supplied.length<22)return reply({error:"Pegá el token de API de Apify completo."},400);
+   const test=await apify("https://api.apify.com/v2/users/me",supplied);
+   if(test.error)return reply({error:"Apify no aceptó la conexión: "+test.error,code:"API_KEY_INVALID"},422);
+   const {error:saveError}=await db.rpc("scout_admin_store_apify_token",{new_token:supplied});
+   if(saveError)return reply({error:"No se pudo guardar la clave cifrada: "+saveError.message},500);
+   return reply({connected:true,message:"Apify conectado. Las siguientes búsquedas funcionarán sin volver a ingresar el token."});
+  }
   if(action==="status")return reply({connected:token.length>15,provider:"Apify · Instagram Search",
    actor:"apify/instagram-search-scraper",maxCostUsdPerSearch:0.35});
-  if(!token||token.length<16)return reply({error:"El motor de Instagram todavía no está conectado. Hace falta configurar APIFY_API_TOKEN una sola vez en Supabase.",code:"SETUP_REQUIRED"},424);
+  if(!token||token.length<16)return reply({error:"Conectá Apify una sola vez desde SCOUT para activar la búsqueda real de Instagram.",code:"SETUP_REQUIRED"},424);
 
   if(action==="start"){
    const word=clean(input.word,100),place=clean(input.place,100);
