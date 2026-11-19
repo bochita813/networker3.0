@@ -220,6 +220,71 @@ function fromBraveResults(html:string,f:any,sourceUrl:string){
  }
  return [...new Map(rows.map(r=>[r.handle,r])).values()];
 }
+
+/** Búsqueda de una persona o actividad en páginas de enlaces públicos, no en cuentas privadas. */
+function queryLinked(f:any,b:number){
+ const hosts=["linktr.ee","beacons.ai","bio.site","carrd.co","solo.to","taplink.cc","about.me","lnk.bio"];
+ const word=clean(f.keywords,140).split(",").map(x=>x.trim()).filter(Boolean)[b%Math.max(1,clean(f.keywords,140).split(",").filter(Boolean).length)]||"";
+ const place=[f.city,f.province,f.country].filter(Boolean).map(x=>'"'+clean(x,75)+'"').join(" ");
+ return ['site:'+hosts[b%hosts.length],'"'+clean(word,100)+'"',place,'instagram'].join(" ").trim();
+}
+const linkedHosts=new Set(["linktr.ee","beacons.ai","bio.site","carrd.co","solo.to","taplink.cc","about.me","lnk.bio"]);
+async function fromLinkedGooglePages(results:any[],f:any,providerLabel:string){
+ const rows:any[]=[];const problems:string[]=[];
+ const keys=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
+ const city=norm(f.city).replace(/ capital$/,""),province=norm(f.province);
+ // Sólo páginas de enlaces personales identificadas y un único usuario de Instagram asociado.
+ for(const hit of results.slice(0,8)){
+  if(rows.length>=5)break;
+  let page:URL;
+  try{page=new URL(String(hit.link||hit.url||""))}catch{continue}
+  const domain=page.hostname.toLowerCase().replace(/^www\./,"");
+  if(page.protocol!=="https:"||!linkedHosts.has(domain)||page.username||page.password||!page.pathname||page.pathname==="/")continue;
+  let html="";
+  try{
+   const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),8500);
+   try{
+    // Sin redirecciones para evitar saltos a direcciones no autorizadas.
+    const response=await fetch(page.href,{redirect:"error",headers:{Accept:"text/html"},signal:ctl.signal});
+    if(!response.ok)continue;
+    html=(await response.text()).slice(0,450000);
+   }finally{clearTimeout(timer)}
+  }catch(e){problems.push(domain+": no fue posible leer la página");continue}
+  const normalized=html.replace(/\\u002[fF]/g,"/").replace(/\\\//g,"/").replaceAll("&amp;","&");
+  const handles=new Set<string>();
+  for(const m of normalized.matchAll(/https?:\/\/(?:www\.)?instagram\.com\/([a-z0-9._]{3,30})(?=$|[/?#"'<\s\\])/gi)){
+   const handle=getHandle("https://www.instagram.com/"+m[1]+"/");
+   if(handle)handles.add(handle);
+  }
+  if(handles.size!==1)continue;
+  const handle=[...handles][0];
+  const pageTitle=clean(strip((html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)||[])[1]||""),200);
+  const snippet=clean(hit.snippet||"",450);
+  const hay=norm(handle+" "+pageTitle+" "+snippet);
+  if(!keys.some(k=>hay.includes(k)))continue;
+  // La ubicación se usa en la búsqueda, no como domicilio acreditado.
+  const geoMention=[city,province].filter(Boolean).some(k=>hay.includes(k));
+  const row=profile(handle,pageTitle||clean(hit.title,200),snippet,page.href,providerLabel,f);
+  row.match_evidence="Instagram enlazado desde página personal pública; actividad en título o extracto. "+
+   (geoMention?"El lugar figura en el texto de la fuente.":"La ubicación personal no está comprobada.");
+  row.bio_verified=false;row.public_account_verified=false;
+  rows.push(row);
+ }
+ return {rows,problems};
+}
+/** Comprobación opcional con el proveedor de datos públicos de perfiles (consume créditos). */
+async function checkActualInstagramProfile(handle:string,key:string){
+ const params=new URLSearchParams({engine:"instagram_profile",profile_id:handle,api_key:key});
+ const res=await fetchResource("https://serpapi.com/search.json?"+params.toString(),{"Accept":"application/json"},15000);
+ if(!res.ok)return {error:"Consulta de perfil "+handle+": HTTP "+res.status};
+ const body=await res.json();
+ if(body.error)return {error:"Perfil "+handle+": "+clean(body.error,140)};
+ const actual=body.profile_results;
+ if(!actual||actual.is_private!==false||typeof actual.biography!=="string")
+  return {error:"Perfil "+handle+": privacidad o biografía no verificable",private:actual?.is_private===true};
+ return {bio:clean(actual.biography,1000),name:clean(actual.full_name||handle,250),is_public:true};
+}
+
 function queryWeb(f:any,b:number){
  const keys=clean(f.keywords,300).split(",").map(x=>x.trim()).filter(Boolean);
  const word=keys[b%keys.length]||"";
@@ -240,8 +305,12 @@ Deno.serve(async(req:Request)=>{
   const {data:admin,error:adminError}=await db.from("crm_admins").select("user_id").eq("user_id",user.id).maybeSingle();
   if(adminError||!admin)return respond({error:"Acceso reservado a administradores"},403);
   const input=await req.json(),raw=input.filters||{};
-  const f={name:clean(raw.name,90),country:clean(raw.country||"Argentina",80),province:clean(raw.province,100),city:clean(raw.city,100),focus:clean(raw.focus||"Todos los rubros",100),keywords:clean(raw.keywords,300),interests:Array.isArray(raw.interests)?raw.interests.slice(0,12).map((x:any)=>clean(x,80)):[]};
+  const f={mode:["catalogs","google","linked","bio"].includes(raw.mode)?raw.mode:"catalogs",name:clean(raw.name,90),country:clean(raw.country||"Argentina",80),province:clean(raw.province,100),city:clean(raw.city,100),focus:clean(raw.focus||"Todos los rubros",100),keywords:clean(raw.keywords,300),interests:Array.isArray(raw.interests)?raw.interests.slice(0,12).map((x:any)=>clean(x,80)):[]};
   if(!f.keywords.trim())return respond({error:"Escribí una palabra o actividad para buscar perfiles."},400);
+  if(f.mode==="bio"&&String(input.provider)!=="serpapi")
+   return respond({error:"Para verificar la biografía y privacidad real elegí SerpApi y conectá su clave.",code:"KEY_REQUIRED"},422);
+  if(f.mode==="linked"&&String(input.provider)!=="serper")
+   return respond({error:"Para descubrir Instagram desde páginas personales elegí Serper (Google).",code:"KEY_REQUIRED"},422);
   const batch=Number(input.batch),provider=["serpapi","serper","tavily","web","directories"].includes(String(input.provider))?String(input.provider):"web";
   if(!Number.isInteger(batch)||batch<0||batch>39)return respond({error:"Lote inválido"},400);
   const searchId=clean(input.searchId,50);
@@ -251,7 +320,7 @@ Deno.serve(async(req:Request)=>{
    const keyName=provider==="serper"?"SERPER_API_KEY":"TAVILY_API_KEY";
    const key=clean(input.apiKey,240)||Deno.env.get(keyName)||"";
    if(!key)return respond({error:"Para una búsqueda automática estable, conectá tu clave gratuita de "+(provider==="serper"?"Serper":"Tavily")+".",code:"KEY_REQUIRED"},422);
-   query=provider==="serper"?queryFor(f,batch):queryWeb(f,batch);
+   query=f.mode==="linked"?queryLinked(f,batch):provider==="serper"?queryFor(f,batch):queryWeb(f,batch);
    const gl:Record<string,string>={Argentina:"ar",Uruguay:"uy",Chile:"cl",Paraguay:"py",Bolivia:"bo",Perú:"pe",Colombia:"co",México:"mx",España:"es",Brasil:"br"};
    const payload=provider==="serper"?
      {q:query,gl:gl[f.country]||"ar",hl:"es",num:10,page:Math.min(10,batch+1)}:
@@ -271,6 +340,10 @@ Deno.serve(async(req:Request)=>{
    if(result.error||result.message&&(!Array.isArray(result.organic)&&!Array.isArray(result.results)))return respond({error:clean(result.error||result.message,300),code:"SEARCH_UNAVAILABLE"},502);
    const hits=(provider==="serper"?result.organic:result.results)||[];
    rawCount=hits.length;
+   if(f.mode==="linked"){
+    const found=await fromLinkedGooglePages(hits,f,"Serper · Web personal → Instagram");
+    items=found.rows;errors.push(...found.problems);details="Cuentas encontradas como enlace de Instagram en páginas personales públicas; privacidad no confirmada.";
+   }else{
    const seen=new Set<string>();
    const needles=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
    const city=norm(f.city).replace(/ capital$/,""),province=norm(f.province);
@@ -285,10 +358,11 @@ Deno.serve(async(req:Request)=>{
     if(!city&&province&&!searchable.includes(province))continue;
     seen.add(h);
     const row=profile(h,name,excerpt,url,provider==="serper"?"Serper · Google":"Tavily · búsqueda web",f);
-    row.match_evidence="Coincidencia en título o descripción indexada; la ubicación de la cuenta no está verificada";
+    row.match_evidence="Coincidencia en Google: "+(needles.some(k=>norm(h).includes(k))?"@usuario":needles.some(k=>norm(name).includes(k))?"nombre":"texto indexado")+". Biografía y privacidad por verificar.";
     items.push(row);
    }
-   details="Búsqueda nueva en un índice web profesional. No implica acceso directo a Instagram ni verificación de domicilio.";
+   details="Búsqueda nueva en un índice web profesional. Coincidencias en nombre, usuario o texto indexado; biografía y privacidad pendientes.";
+   }
   }else if(provider==="web"){
    // Sólo se intenta una consulta en cada ejecución. Si el buscador aplica límites,
    // se informa el error en lugar de inventar usuarios o recurrir a fichas irrelevantes.
@@ -320,16 +394,44 @@ Deno.serve(async(req:Request)=>{
     const title=clean(r.title,250),snippet=clean(r.snippet,850);
     const combined=norm(h+" "+title+" "+snippet);
     const keys=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
-    if(keys.length&&!keys.some(x=>combined.includes(x)))continue;
+    if(f.mode!=="bio"&&keys.length&&!keys.some(x=>combined.includes(x)))continue;
     const place=norm(h+" "+title+" "+snippet);
     const city=norm(f.city).replace(/ capital$/,"");
-    if(city&&!place.includes(city))continue;
-    if(!city&&f.province&&!place.includes(norm(f.province)))continue;
+    if(f.mode!=="bio"&&city&&!place.includes(city))continue;
+    if(f.mode!=="bio"&&!city&&f.province&&!place.includes(norm(f.province)))continue;
     const row=profile(h,title,snippet,String(r.link||r.url), "SerpApi · Google",f);
-    row.match_evidence="Coincidencia en título o texto del índice web; no es una biografía verificada de Instagram";
+    row.match_evidence="Coincidencia en Google: "+(keys.some(x=>norm(h).includes(x))?"@usuario":keys.some(x=>norm(title).includes(x))?"nombre":"texto indexado")+". Biografía y privacidad no comprobadas.";
     items.push(row);
    }
-   details="Resultados web públicos indexados. La coincidencia puede estar en el nombre o fragmento indexado; ni la biografía ni la ubicación están verificadas.";
+   if(f.mode==="bio"){
+    const publicVerified:any[]=[];
+    const limited=items.slice(0,5);
+    for(const item of limited){
+     try{
+      const check=await checkActualInstagramProfile(item.handle,apiKey);
+      if("error" in check){errors.push(check.error||"No se pudo verificar un perfil");continue}
+      const name=check.name||item.handle,bio=check.bio||"";
+      const hayHandle=norm(item.handle),hayName=norm(name),hayBio=norm(bio);
+      const k=clean(f.keywords,300).split(",").map(x=>norm(x.trim())).filter(Boolean);
+      const field=k.some(x=>hayBio.includes(x))?"biografía":k.some(x=>hayName.includes(x))?"nombre":k.some(x=>hayHandle.includes(x))?"usuario":"";
+      if(!field)continue;
+      const location=norm([name,bio].join(" "));
+      const city=norm(f.city).replace(/ capital$/,""),province=norm(f.province);
+      // Una mención territorial en la biografía no equivale a domicilio verificado.
+      const geoEvidence=[city,province].filter(Boolean).every(x=>location.includes(x));
+      item.headline=name;item.snippet=bio;item.bio_verified=true;item.public_account_verified=true;
+      item.profile_checked_at=new Date().toISOString();
+      item.match_evidence="Cuenta pública verificada por proveedor. Coincidencia en "+field+
+       (geoEvidence?". Lugar mencionado en perfil, residencia no confirmada.":". Ubicación sin comprobar.");
+      item.source_provider="SerpApi · Instagram verificado";item.score=Math.min(100,(item.score||50)+22);
+      publicVerified.push(item);
+     }catch(e){errors.push("No se pudo verificar un perfil: "+String(e).slice(0,130))}
+    }
+    items=publicVerified;
+    details="Se consultaron hasta 5 perfiles de Instagram; sólo se incluyen cuentas con privacidad pública explícita y palabra en biografía, nombre o usuario. Cada perfil consume una consulta adicional.";
+   }else{
+    details="Resultados web públicos indexados. La coincidencia puede estar en el nombre o fragmento indexado; ni la biografía ni la privacidad están verificadas.";
+   }
   }else{
    if(f.country&&norm(f.country)!=="argentina")return respond({profiles:[],fetched:0,query:"Fuentes abiertas argentinas",batch,done:true,message:"Los directorios gratuitos actuales cubren Argentina. Para otro país conectá un buscador externo.",total_saved:0});
    const selected=sources.filter(s=>!f.province||s[2]==="general"||s[2]===norm(f.province)).sort((a,b)=>{
