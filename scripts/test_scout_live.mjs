@@ -30,7 +30,11 @@ assert.ok(html.includes('id="showExisting"'),"Debe poder ver perfiles de Instagr
 assert.ok(html.includes('id="dbOrigin"'),"Debe poder filtrar índice web versus usuarios publicados en directorios");
 assert.ok(html.includes('const publicEvidence=p=>'),"Se debe mostrar procedencia de perfil y no asumir privacidad pública");
 assert.ok(html.includes('$("#showExisting").onclick=async()=>'),"El botón de perfiles existentes debe consultar la base");
-assert.ok(html.includes('Instagram no permite confirmar'),"No debe llamarse cuenta pública verificada sin evidencia directa");
+assert.ok(html.includes('Google y los catálogos no pueden comprobar'),"Advertir la diferencia entre indexación web y privacidad real");
+assert.ok(html.includes('id="matchMode"'),"Se requieren tres vías explícitas de descubrimiento");
+assert.ok(html.includes('id="dbPublic"'),"Poder filtrar sólo cuentas públicas verificadas");
+assert.ok(html.includes('matchMode').valueOf()&&html.includes('mode:$("#matchMode").value'),"El modo de búsqueda debe transmitirse al backend");
+assert.ok(html.includes('p.public_account_verified===true'),"No inferir la privacidad de cuentas indexadas");
 
 assert.ok(html.includes("location_confirmed"),"Falta distinción de evidencia geográfica");
 assert.ok(html.includes("networker-base-segmentada.csv"),"Falta exportación");
@@ -45,13 +49,18 @@ assert.ok(backend.includes('provider==="serper"||provider==="tavily"'),"Deben ex
 assert.ok(backend.includes("https://google.serper.dev/search"),"Falta Serper");
 assert.ok(backend.includes("https://api.tavily.com/search"),"Falta Tavily");
 assert.ok(backend.includes('if(!needles.some(k=>searchable.includes(k)))continue;'),"No se deben mezclar actividades");
+assert.ok(backend.includes('function queryLinked(f:any,b:number)'),"Se necesita búsqueda Google de páginas personales");
+assert.ok(backend.includes('function checkActualInstagramProfile(handle:string,key:string)'),"Debe consultarse Instagram para comprobar privacidad y biografía");
+assert.ok(backend.includes('actual.is_private!==false'),"No permitir perfiles que no sean explícitamente públicos");
+assert.ok(backend.includes('item.bio_verified=true;item.public_account_verified=true'),"Persistir evidencia de perfiles públicos");
+assert.ok(backend.includes('handles.size!==1'),"Un directorio con muchas cuentas no prueba vinculación de persona");
 
 assert.ok(backend.includes('provider==="web"'),"La búsqueda web gratuita debe estar conectada a la función remota");
 assert.ok(backend.includes('if(!keys.some(k=>relevant.includes(k)))continue;'),"No debe guardar cuentas de rubros que no coincidan");
 assert.ok(backend.includes('start:String((batch%3)*10)'),"No existe paginación real del buscador externo");
 assert.ok(backend.includes("entrepreneur-card"),"Falta extracción por ficha individual del directorio");
 assert.ok(backend.includes("function fromModash"),"Falta nuevo detector de perfiles Instagram de fuente pública");
-assert.ok(backend.includes('const sourceRegion=p.source_provider?.startsWith("Modash · Fitness Córdoba")'),"No se deben perder los perfiles de alcance regional cuando la ubicación no es verificable");
+assert.ok(backend.includes('const sourceRegion=Boolean(p.source_provider?.startsWith("Modash ·")'),"No perder perfiles de alcance regional sin asumir domicilio");
 assert.ok(backend.includes("Modash · Fitness Córdoba"),"Falta fuente indexada de cuentas de educación física en Córdoba");
 assert.ok(backend.includes('return fromModash(html,label,url,f)'),"El motor debe separar las biografías por perfil");
 assert.ok(backend.includes('normalize("NFKD")'),"El detector debe reconocer letras especiales en la biografía");
