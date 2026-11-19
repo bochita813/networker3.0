@@ -237,7 +237,7 @@ async function fromNetwork(word,place){
    try{await callProvider("abort",{jobId:activeJobId})}catch(e){$("#error").textContent="No pude confirmar que Apify haya detenido el cobro: "+e.message}
    return {sourcesScanned:1,networkErrors:0,canceled:true};
   }
-  state("Buscando perfiles directamente…","Consultando Instagram con proveedor · "+word+" · "+place+" · consulta "+(i+1),true);
+  state("Buscando cuentas de Instagram…","Consultando el índice del proveedor y comprobando los perfiles · "+word+" · "+place+" · revisión "+(i+1),true);
   if(i)await new Promise(resolve=>setTimeout(resolve,2500));
   const res=await callProvider("poll",{jobId:activeJobId});
   if(res.state==="SUCCEEDED"){
