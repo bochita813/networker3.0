@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>NETWORKER 3.0 · Prospectos en redes</title>
+<script src="/crm/config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+<style>
+:root{--ink:#151515;--orange:#ff5a1f;--line:#e5e1db;--muted:#6a6763}
+*{box-sizing:border-box}body{margin:0;background:#f8f7f5;color:var(--ink);font:14px/1.5 Inter,Montserrat,system-ui,Arial,sans-serif}
+header{background:var(--ink);padding:16px max(16px,calc((100vw - 1200px)/2));display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#fff}
+a{color:inherit}a:hover{color:var(--orange)}header a{text-decoration:none;font-weight:800}header nav{display:flex;gap:15px;font-size:12px;color:#ded7d1}.accent{color:var(--orange)}
+main{max-width:1200px;margin:auto;padding:35px 18px 65px}h1{font-size:clamp(27px,5vw,49px);letter-spacing:-.06em;line-height:1.08;margin:4px 0 14px}h2{font-size:16px;margin:0 0 17px}
+.lead{color:var(--muted);max-width:920px}.layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;margin-top:23px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.field{margin-bottom:13px}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:5px}
+input,select{font:inherit;border:1px solid #d5cec6;border-radius:7px;background:#fff;padding:9px 11px;min-height:41px;width:100%}
+button{font:inherit;cursor:pointer}.btn{border-radius:7px;border:1px solid #151515;background:#151515;color:#fff;padding:10px 13px;font-size:12px;font-weight:850;min-height:41px}
+.btn.orange{background:var(--orange);border-color:var(--orange)}.btn.outline{background:white;border-color:#cfc8c1;color:#272320}.btn:disabled{opacity:.45;cursor:wait}
+.buttons{display:flex;gap:8px;flex-wrap:wrap}.buttons>*{flex:1}.small{color:#716961;font-size:11px;line-height:1.5}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:15px}.metric{padding:12px;background:#f4f1ec;border-radius:8px}
+.metric strong{display:block;font-size:23px;font-weight:900;letter-spacing:-.045em}.metric span{font-size:11px;color:#6d645c}
+.notice{border:1px solid #efd7c7;background:#fff3eb;color:#784331;padding:12px;border-radius:8px;font-size:12px;margin:15px 0}
+.topline{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0 13px}
+.results{display:grid;gap:11px}.result{border:1px solid #e8e4e0;border-radius:9px;padding:15px;background:#fff}
+.result-title{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}.result h3{margin:0;font-size:15px}
+.pill{font-size:11px;background:#f3ede6;padding:3px 9px;border-radius:30px;font-weight:750}
+.desc{font-size:12px;color:#655f58;white-space:pre-wrap;margin:7px 0 0;word-break:break-word}
+.links{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px;font-weight:800;color:#d94f1e}
+.empty{padding:30px;border:1px dashed #d4cdc6;text-align:center;color:#79736d;border-radius:10px}
+.error{font-size:12px;color:#aa2921;margin:10px 0}.error:empty{display:none}
+#login{position:fixed;inset:0;background:#111d;display:grid;place-items:center;padding:18px;z-index:4}#login[hidden]{display:none}
+.login-panel{background:#fff;padding:24px;max-width:390px;width:100%;border-radius:12px}
+#progress{font-size:12px;color:#6e6861;margin:13px 0;min-height:20px}
+@media(max-width:830px){.layout{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<header><a href="/scout/personas.html">NETWORKER <span class="accent">3.0</span> · PERSONAS Y REDES</a><nav>
+<a href="/scout/nacional.html">Base de establecimientos</a><a href="/scout/live.html">Buscar Instagram</a><a href="/crm/">CRM</a></nav></header>
+<main><div class="small" style="color:var(--orange);font-weight:900;letter-spacing:.13em">CUENTAS PÚBLICAMENTE REFERENCIADAS · SIN DATOS INVENTADOS</div>
+<h1>Personas y <span class="accent">redes sociales.</span></h1>
+<p class="lead">Solo perfiles encontrados en páginas públicas de creadores. Instagram, TikTok y Facebook se muestran por separado. <strong>Una cuenta encontrada no significa edad comprobada, intención de emprender, residencia verificada ni permiso para enviar mensajes.</strong></p>
+<div class="layout">
+<aside class="panel"><h2>Segmentar perfiles</h2><form id="filters">
+<div class="field"><label for="q">Actividad, profesión, nombre o @usuario</label><input id="q" placeholder="Ej.: fitness, creador UGC, emprendedor" maxlength="85"></div>
+<div class="field"><label for="platform">Red social</label><select id="platform"><option value="">Todas las redes</option><option value="instagram">Instagram</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option></select></div>
+<div class="field"><label for="sector">Actividad de la fuente</label><input id="sector" placeholder="Ej.: negocios, estética" maxlength="80"></div>
+<div class="field"><label for="region">Provincia documentada</label><input id="region" placeholder="Ej.: Córdoba" maxlength="90"></div>
+<div class="field"><label for="person">Tipo de ficha</label><select id="person"><option value="">Todas (pendientes incluidas)</option><option value="individual_evidenced">Persona individual con evidencia</option><option value="needs_review">Identidad por revisar</option><option value="business_or_group">Marca o grupo</option><option value="not_a_person">No es persona</option></select></div>
+<div class="field"><label for="age">Edad</label><select id="age"><option value="">Incluir edad no comprobada</option><option value="true">Solo mayores de 25 comprobados</option></select></div>
+<div class="field"><label for="opportunity">Interés en nuevas actividades</label><select id="opportunity"><option value="">Interés por comprobar</option><option value="true">Solo quienes lo declararon públicamente</option></select></div>
+<div class="buttons"><button class="btn orange" type="submit">Filtrar</button><button id="reset" class="btn outline" type="button">Limpiar</button></div></form>
+<div class="notice"><strong>Calidad antes que cantidad.</strong> No se incluyeron los 100.000 comercios del otro catálogo como si fueran personas. La mayoría de cuentas todavía necesita revisión humana para validar perfil, edad y rubro.</div>
+</aside><section class="panel"><div class="metrics">
+<div class="metric"><strong id="total">—</strong><span>Cuentas sociales</span></div>
+<div class="metric"><strong id="hits">—</strong><span>Coinciden con filtros</span></div>
+<div class="metric"><strong id="aged">—</strong><span>Edad +25 verificada</span></div>
+<div class="metric"><strong id="seek">—</strong><span>Interés declarado</span></div>
+</div>
+<div class="topline"><strong id="heading">Cuentas localizadas</strong><button id="export" class="btn outline" type="button">Exportar CSV de los filtros</button></div>
+<div id="progress" role="status">Leyendo base social…</div><div id="error" class="error" role="alert"></div>
+<div id="results" class="results"><div class="empty">Iniciá sesión con la cuenta del CRM para ver perfiles.</div></div>
+<div class="buttons" style="margin-top:17px"><button id="prev" class="btn outline" type="button">Anterior</button><button id="next" class="btn outline" type="button">Siguiente</button></div>
+<p class="small">En cada ficha figuran enlace directo, fuente, actividad publicada, ubicación documentada o procedencia regional. Algunos creadores pueden tener varias redes: <strong>el total cuenta cuentas, no personas únicas</strong>. Contactá de manera individual y respetá las reglas de cada red.</p>
+</section></div></main>
+<div id="login" hidden><form id="loginForm" class="login-panel"><h2>Ingresá a NETWORKER</h2><div class="field"><label for="email">Correo del CRM</label><input id="email" type="email" required></div><div class="field"><label for="password">Contraseña</label><input id="password" type="password" required></div><button class="btn orange" type="submit">Ingresar</button><p class="error" id="loginError"></p></form></div>
+<script>
+(()=>{
+"use strict";
+const $=s=>document.querySelector(s),cfg=window.NETWORKER_CRM_CONFIG||{};
+let db=null,ok=false,offset=0,count=0,rows=[],busy=false,exporting=false;
+const limit=100;
+const fmt=n=>Number(n||0).toLocaleString("es-AR");
+const el=(name,txt,cls)=>{const x=document.createElement(name);x.textContent=String(txt??"");if(cls)x.className=cls;return x};
+const text=x=>String(x??"").trim().slice(0,80).replace(/[,%"()]/g," ");
+const url=x=>{try{const u=new URL(String(x||""));return ["https:","http:"].includes(u.protocol)?u.href:""}catch{return""}};
+const filters=()=>({q:text($("#q").value),platform:$("#platform").value,sector:text($("#sector").value),
+ region:text($("#region").value),person:$("#person").value,age:$("#age").value,opportunity:$("#opportunity").value});
+function buildQuery(){
+ const f=filters();let q=db.from("scout_social_people").select("*",{count:"exact"});
+ if(f.q)q=q.or("handle.ilike.%"+f.q+"%,display_name.ilike.%"+f.q+"%,profile_bio.ilike.%"+f.q+"%,sector.ilike.%"+f.q+"%");
+ if(f.platform)q=q.eq("platform",f.platform);
+ if(f.sector)q=q.ilike("sector","%"+f.sector+"%");
+ if(f.region)q=q.ilike("province","%"+f.region+"%");
+ if(f.person)q=q.eq("person_assessment",f.person);
+ if(f.age)q=q.eq("age_25_plus_verified",true);
+ if(f.opportunity)q=q.eq("seeking_other_activity_verified",true);
+ return q;
+}
+function card(p){
+ const root=el("article","","result"),title=el("div","","result-title");
+ title.append(el("h3",p.display_name||"@"+p.handle),el("span",p.platform.toUpperCase(),"pill"));root.append(title);
+ root.append(el("p","@"+p.handle+(p.sector?" · "+p.sector:""),"desc"));
+ if(p.profile_bio)root.append(el("p",p.profile_bio.slice(0,480),"desc"));
+ const place=p.province?[p.city,p.province].filter(Boolean).join(", "):
+ p.region_hint? p.region_hint+" (región del catálogo, no domicilio confirmado)":"Ubicación no verificada";
+ root.append(el("p",place,"small"));
+ const status=p.person_assessment==="individual_evidenced"?"Identidad individual documentada":p.person_assessment==="business_or_group"?"Marca o grupo":p.person_assessment==="not_a_person"?"No es persona":"Persona por revisar";
+ root.append(el("p",status+" · +25: "+(p.age_25_plus_verified?"con evidencia":"sin comprobar")+" · busca otra actividad: "+(p.seeking_other_activity_verified?"declarado":"sin comprobar"),"small"));
+ const links=el("div","","links");
+ for(const [label,source] of [["Abrir "+p.platform,p.profile_url],["Ver la fuente",p.discovery_url]]){
+  const href=url(source);if(!href)continue;const a=el("a",label+" ↗");a.href=href;a.target="_blank";a.rel="noopener noreferrer";links.append(a)
+ }
+ root.append(links);
+ return root;
+}
+function draw(){
+ $("#hits").textContent=fmt(count);$("#heading").textContent=fmt(count)+" cuentas que coinciden";
+ const list=$("#results");list.replaceChildren();
+ for(const p of rows)list.append(card(p));
+ if(!rows.length)list.append(el("div","No existen cuentas documentadas con todos estos requisitos. Que haya cero resultados verificados NO significa que no existan personas interesadas.","empty"));
+ $("#prev").disabled=offset===0;$("#next").disabled=offset+limit>=count;
+}
+async function totals(){
+ const q=db.from("scout_social_people");
+ const [a,b,c]=await Promise.all([
+  q.select("id",{head:true,count:"exact"}),
+  db.from("scout_social_people").select("id",{head:true,count:"exact"}).eq("age_25_plus_verified",true),
+  db.from("scout_social_people").select("id",{head:true,count:"exact"}).eq("seeking_other_activity_verified",true)
+ ]);
+ if(a.error)throw a.error;
+ $("#total").textContent=fmt(a.count);$("#aged").textContent=fmt(b.count);$("#seek").textContent=fmt(c.count)
+}
+async function load(reset=true){
+ if(!ok||busy)return;
+ if(reset)offset=0;busy=true;$("#error").textContent="";
+ $("#progress").textContent="Buscando perfiles reales en la base…";
+ try{
+ const {data,count:total,error}=await buildQuery().order("first_seen_at",{ascending:false}).order("id",{ascending:true}).range(offset,offset+limit-1);
+ if(error)throw error;rows=data||[];count=total||0;draw();$("#progress").textContent="Resultados cargados; cuentas deduplicadas por plataforma y @usuario.";
+ await totals()
+ }catch(e){$("#error").textContent="Error leyendo perfiles: "+(e.message||String(e))}
+ finally{busy=false}
+}
+function cell(v){let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
+async function exportCsv(){
+ if(!ok||exporting)return;exporting=true;$("#export").disabled=true;$("#error").textContent="";
+ const fields=["platform","handle","profile_url","display_name","profile_bio","sector","province","city","country","region_hint","person_assessment","age_25_plus_verified","seeking_other_activity_verified","discovery_source","discovery_url","relevance_reason","first_seen_at"];
+ const output=[fields.map(cell).join(",")];let from=0;
+ try{
+  while(from<150000){
+   $("#progress").textContent="Exportando perfiles con los filtros activos: "+fmt(from)+"…";
+   const {data,error}=await buildQuery().order("first_seen_at",{ascending:false}).order("id",{ascending:true}).range(from,from+999);
+   if(error)throw error;
+   if(!data?.length)break;
+   for(const p of data)output.push(fields.map(x=>cell(p[x])).join(","));
+   from+=data.length;
+   if(data.length<1000)break;
+  }
+  const blob=new Blob(["\ufeff"+output.join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="networker-personas-redes-filtradas.csv";document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),3000);
+  $("#progress").textContent="Exportado: "+fmt(output.length-1)+" perfiles con enlaces públicos y fuente.";
+ }catch(e){$("#error").textContent="Exportación incompleta: "+(e.message||String(e))}
+ finally{exporting=false;$("#export").disabled=false}
+}
+async function auth(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data?.user){$("#login").hidden=false;return}
+ const {data:admin,error:e}=await db.from("crm_admins").select("user_id").eq("user_id",data.user.id).maybeSingle();
+ if(e||!admin){$("#login").hidden=false;$("#loginError").textContent="Usuario sin permisos de administrador.";return}
+ ok=true;$("#login").hidden=true;await load()
+}
+$("#filters").onsubmit=e=>{e.preventDefault();load()};
+$("#reset").onclick=()=>{$("#filters").reset();load()};
+$("#prev").onclick=()=>{if(offset>0){offset-=limit;load(false)}};
+$("#next").onclick=()=>{if(offset+limit<count){offset+=limit;load(false)}};
+$("#export").onclick=exportCsv;
+$("#loginForm").onsubmit=async e=>{e.preventDefault();$("#loginError").textContent="";
+ const {error}=await db.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});
+ if(error){$("#loginError").textContent=error.message;return}await auth()
+};
+if(cfg.url&&cfg.publishableKey&&window.supabase){db=window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});auth().catch(e=>$("#error").textContent=String(e))}
+else{$("#error").textContent="Falta la configuración del CRM."}
+})();
+</script></body></html>
