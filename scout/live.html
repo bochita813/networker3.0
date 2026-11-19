@@ -67,7 +67,7 @@ h1 span{color:var(--orange)}.subtitle{max-width:760px;margin:0 0 27px;color:var(
 <p class="summary" id="summary">Ingresá una palabra y una ubicación para comenzar.</p>
 <p id="error" class="warning" role="alert"></p>
 <div class="results" id="results"><div class="empty">Acá van a aparecer las cuentas que coincidan con tu búsqueda, sin anuncios ni resultados inventados.</div></div>
-<p class="note">**Importante:** Instagram no ofrece un listado completo de todos los perfiles públicos filtrado por profesión y ciudad para prospección comercial. Las cuentas encontradas en páginas públicas pueden haber cambiado a privadas. SCOUT distingue una cuenta verificada de una mención indexada, y la ubicación no se considera confirmada solo porque la pediste.</p>
+<p class="note"><strong>Importante:</strong> Instagram no ofrece un listado completo de todos los perfiles públicos filtrado por profesión y ciudad para prospección comercial. Las cuentas encontradas en páginas públicas pueden haber cambiado a privadas. SCOUT distingue una cuenta verificada de una mención indexada, y la ubicación no se considera confirmada solo porque la pediste.</p>
 </main>
 <div id="login" hidden><form class="loginCard" id="loginForm"><h2>Acceso a NETWORKER</h2><p class="summary">Ingresá con tu cuenta del CRM. No hace falta iniciar sesión en Instagram.</p>
 <div class="field"><label for="email">Correo</label><input id="email" type="email" required autocomplete="username"></div>
@@ -102,7 +102,7 @@ function geo(p,place){
  if(p.location_confirmed===true&&local.includes(t))return {found:true,level:"documented",label:"Ubicación indicada en fuente: "+[p.city,p.province].filter(Boolean).join(", ")};
  const text=norm([p.headline,p.snippet].filter(Boolean).join(" "));
  if(text.includes(t))return {found:true,level:"mentioned",label:"La ubicación aparece en la descripción pública; residencia por comprobar"};
- const url=norm(decodeURIComponent(String(p.source_page||"")).replaceAll("-"," "));
+ const raw=String(p.source_page||"");let decoded=raw;try{decoded=decodeURIComponent(raw)}catch{}const url=norm(decoded.replaceAll("-"," "));
  if(url.includes(t))return {found:true,level:"catalog",label:"Listado regional "+place+" · residencia por comprobar"};
  return {found:false,level:"none",label:""};
 }
