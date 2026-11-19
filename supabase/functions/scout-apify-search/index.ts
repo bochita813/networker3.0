@@ -139,6 +139,18 @@ Deno.serve(async(req:Request)=>{
    return reply({jobId:job.id,state:"RUNNING",reused:false});
   }
 
+  if(action==="abort"){
+   const jobId=String(input.jobId||"");
+   if(!/^[a-f0-9-]{36}$/i.test(jobId))return reply({error:"Identificador inválido"},400);
+   const {data:job}=await db.from("scout_instagram_live_jobs").select("*").eq("id",jobId).eq("created_by",user.id).maybeSingle();
+   if(!job)return reply({error:"Búsqueda no encontrada"},404);
+   if(["SUCCEEDED","FAILED","ABORTED","TIMED-OUT"].includes(job.provider_state))
+    return reply({state:job.provider_state,stopped:false});
+   const canceled=await apify("https://api.apify.com/v2/actor-runs/"+encodeURIComponent(job.provider_run_id)+"/abort",token,"POST");
+   if(canceled.error)return reply({error:"El proveedor no pudo detener la búsqueda: "+canceled.error},502);
+   await db.from("scout_instagram_live_jobs").update({provider_state:"ABORTED",finished_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq("id",job.id);
+   return reply({state:"ABORTED",stopped:true});
+  }
   if(action==="poll"){
    const jobId=String(input.jobId||"");
    if(!/^[a-f0-9-]{36}$/i.test(jobId))return reply({error:"Identificador inválido"},400);
