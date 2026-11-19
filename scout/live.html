@@ -56,6 +56,19 @@ h1 span{color:var(--orange)}.subtitle{max-width:760px;margin:0 0 27px;color:var(
 <button class="btn orange" id="search" type="submit">⌕ Buscar</button></div></form>
 <div class="examples">Probá: <button type="button" id="example1">Administrativo · Córdoba</button> o <button type="button" id="example2">Nutricionista · Córdoba</button></div>
 </section>
+<section id="connectBox" class="searchbox" style="margin-top:15px;border-color:#fac7a9" hidden>
+ <strong style="display:block;margin:0 0 6px">Conectá el buscador de Instagram una sola vez</strong>
+ <p class="summary">SCOUT necesita una fuente de búsqueda externa para consultar perfiles públicos reales. Creá una cuenta en
+ <a href="https://console.apify.com/settings/integrations" target="_blank" rel="noopener noreferrer">Apify · API &amp; Integrations</a>
+ y pegá su token aquí. Después solo vas a usar palabra, ubicación y Buscar. El token se guarda cifrado en Supabase Vault, nunca en tu navegador.</p>
+ <form id="connectForm" class="formgrid" style="grid-template-columns:minmax(0,1fr) auto">
+  <div class="field"><label for="apifyToken">Token de API de Apify</label>
+  <input id="apifyToken" type="password" autocomplete="off" placeholder="apify_api_..." required></div>
+  <button id="connectButton" type="submit" class="btn orange">Conectar</button>
+ </form>
+ <p id="connectError" class="warning" role="alert"></p>
+ <p class="note">Apify tiene créditos gratuitos iniciales, pero cada búsqueda puede consumir saldo. SCOUT limita el costo a un máximo de USD 0,35 por ejecución y 15 consultas al día. El proveedor puede devolver menos cuentas que las solicitadas.</p>
+</section>
 <div class="state" id="status" role="status" aria-live="polite" hidden><div class="icon" id="statusIcon">⌕</div><div>
 <strong id="statusTitle">Iniciando búsqueda…</strong><small id="statusDetail">Consultando fuentes de perfiles públicos</small>
 <div style="margin-top:7px"><button type="button" id="stop" class="btn secondary" style="min-height:30px;padding:5px 10px;font-size:11px" hidden>Detener</button></div>
@@ -78,7 +91,7 @@ h1 span{color:var(--orange)}.subtitle{max-width:760px;margin:0 0 27px;color:var(
 "use strict";
 const $=q=>document.querySelector(q);
 const config=window.NETWORKER_CRM_CONFIG||{};
-let db=null,logged=false,running=false,cancel=false,resultRows=[],existing=new Set(),confirmedInSearch=0,lastSources="",runId="";
+let db=null,logged=false,running=false,cancel=false,resultRows=[],existing=new Set(),confirmedInSearch=0,lastSources="",runId="",activeJobId="",providerConnected=false;
 const norm=v=>String(v||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").trim();
 const txt=(tag,text,cls)=>{const e=document.createElement(tag);e.textContent=String(text??"");if(cls)e.className=cls;return e};
 const valid=h=>/^[a-z0-9._]{3,30}$/.test(String(h||""))&&!String(h).includes("..");
@@ -107,7 +120,7 @@ function geo(p,place){
  return {found:false,level:"none",label:""};
 }
 function matched(p,word,place){
- if(!p||!valid(p.handle))return null;
+ if(!p||!valid(p.handle)||p.public_account_verified!==true)return null;
  const w=norm(word),hay=norm([p.handle,p.headline,p.snippet].join(" "));
  if(!w||!hay.includes(w))return null;
  const location=geo(p,place);if(!location.found)return null;
@@ -141,7 +154,7 @@ function draw(){
  const div=$("#results");div.replaceChildren();$("#count").textContent=resultRows.length.toLocaleString("es-AR");$("#export").disabled=!resultRows.length;
  $("#summary").textContent=resultRows.length
  ?resultRows.length+" cuentas vinculadas a tu búsqueda · "+confirmedInSearch+" no estaban en la base antes de consultar las fuentes. Se indican por separado las ubicaciones comprobadas y las menciones de terceros."
- :"Sin coincidencias cargadas todavía. Se muestran únicamente perfiles con palabra y ubicación mencionadas en una fuente.";
+ :"Sin coincidencias comprobadas todavía. Se mostrarán solamente perfiles que el proveedor marque como públicos y que mencionen la palabra y ubicación solicitadas.";
  if(!resultRows.length){div.append(txt("div","Todavía no aparecieron perfiles que cumplan ambos filtros en las fuentes consultadas.","empty"));return}
  for(const p of resultRows.slice(0,250)){
   const card=txt("article","","profile"),head=txt("div","","profiletop"),meta=txt("div","","tags");
@@ -173,7 +186,7 @@ async function fromDatabase(word,place){
  const term=word.replace(/[,()%*]/g," ").slice(0,95);
  for(let page=0;page<4;page++){
   const {data,error}=await db.from("scout_live_profiles").select("*")
-   .or("handle.ilike.%"+term+"%,headline.ilike.%"+term+"%,snippet.ilike.%"+term+"%")
+   .or("handle.ilike.%"+term+"%,headline.ilike.%"+term+"%,snippet.ilike.%"+term+"%").eq("public_account_verified",true)
    .order("last_seen_at",{ascending:false}).range(page*500,page*500+499);
   if(error)throw error;
   all.push(...(data||[]));if(!data||data.length<500)break;
@@ -181,34 +194,64 @@ async function fromDatabase(word,place){
  add(all,word,place,false);
  return all.length;
 }
-async function fromNetwork(word,place){
- const filters={keywords:word,country:"Argentina",province:place,city:"",focus:"Todos los rubros",interests:[],name:"Búsqueda simple"};
- const maxBatches=7;let sourcesScanned=0,networkErrors=0;
- for(let batch=0;batch<maxBatches&&!cancel;batch++){
-  state("Buscando perfiles de Instagram…","Consultando fuentes públicas · lote "+(batch+1)+" de "+maxBatches+" · "+resultRows.length+" coincidencias",true);
-  let response;
-  try{
-   const result=await db.functions.invoke("scout-live-search",{body:{searchId:runId,batch,provider:"auto",filters}});
-   if(result.error){
-    let message=result.error.message||"Error en buscador";
-    try{const details=await result.error.context?.json();if(details?.error)message=details.error}catch{}
-    throw Error(message)
-   }
-   response=result.data;
-   if(response?.error)throw Error(response.error);
-  }catch(err){
-   const message=String(err.message||err);
-   $("#error").textContent="El buscador externo no completó la consulta: "+message;
-   networkErrors++;
-   break;
-  }
-  sourcesScanned++;
-  add(response.profiles||[],word,place,true);
-  if(response.errors?.length)lastSources=response.errors.slice(0,2).join(" · ");
-  if(response.done)break;
-  await new Promise(resolve=>setTimeout(resolve,35));
+
+async function callProvider(action,more={}){
+ const {data,error}=await db.functions.invoke("scout-apify-search",{body:{action,...more}});
+ if(error){
+  let details={};
+  try{details=await error.context?.json()||{}}catch{}
+  const ex=new Error(details.error||error.message||"El proveedor no respondió");
+  ex.code=details.code||"PROVIDER_ERROR";
+  throw ex;
  }
- return {sourcesScanned,networkErrors};
+ if(data?.error){const ex=new Error(data.error);ex.code=data.code||"PROVIDER_ERROR";throw ex}
+ return data||{};
+}
+async function providerStatus(){
+ if(!logged)return false;
+ try{
+  const r=await callProvider("status");
+  providerConnected=r.connected===true;
+  $("#connectBox").hidden=providerConnected;
+  if(!providerConnected)state("Conexión pendiente","Para buscar cuentas reales conectá Apify una sola vez en el recuadro de arriba.",false);
+  return providerConnected;
+ }catch(e){
+  $("#error").textContent="No pude comprobar el servicio de Instagram: "+e.message;
+  return false;
+ }
+}
+async function fromNetwork(word,place){
+ let started;
+ try{
+  started=await callProvider("start",{word,place});
+ }catch(e){
+  if(e.code==="SETUP_REQUIRED"){$("#connectBox").hidden=false;providerConnected=false}
+  throw e;
+ }
+ activeJobId=started.jobId;
+ if(!activeJobId)throw Error("El proveedor no generó una búsqueda válida.");
+ // Un run puede continuar en Apify aunque el navegador se cierre;
+ // el proveedor impone un límite de 210 s y USD 0,35.
+ for(let i=0;i<72;i++){
+  if(cancel){
+   try{await callProvider("abort",{jobId:activeJobId})}catch(e){$("#error").textContent="No pude confirmar que Apify haya detenido el cobro: "+e.message}
+   return {sourcesScanned:1,networkErrors:0,canceled:true};
+  }
+  state("Buscando perfiles directamente…","Consultando Instagram con proveedor · "+word+" · "+place+" · consulta "+(i+1),true);
+  if(i)await new Promise(resolve=>setTimeout(resolve,2500));
+  const res=await callProvider("poll",{jobId:activeJobId});
+  if(res.state==="SUCCEEDED"){
+   add(res.profiles||[],word,place,true);
+   const counts=res.counts||{};
+   lastSources=(counts.source||0)+" fichas recibidas, "+(counts.privateExcluded||0)+
+    " privadas excluidas, "+(counts.unknownPrivacyExcluded||0)+" sin privacidad comprobada, "+
+    (counts.placeExcluded||0)+" sin mención de "+place+".";
+   return {sourcesScanned:1,networkErrors:0};
+  }
+  if(res.state==="FAILED"||res.state==="ABORTED")throw Error(res.error||"El proveedor no completó la búsqueda.");
+ }
+ try{await callProvider("abort",{jobId:activeJobId})}catch{}
+ throw Error("El proveedor superó el límite de duración y la consulta fue detenida.");
 }
 async function search(){
  if(running)return;
@@ -224,11 +267,11 @@ async function search(){
   const savedCount=await fromDatabase(word,place);
   state("Buscando nuevos perfiles…",savedCount+" fichas de la base evaluadas. Consultando fuentes en vivo.",true);
   const net=await fromNetwork(word,place);
-  if(cancel)state("Búsqueda detenida",resultRows.length+" coincidencias conservadas.",false);
+  if(cancel)state("Búsqueda detenida","El navegador solicitó detener el procesamiento en Apify.",false);
   else if(net.networkErrors)state("No se pudo completar la búsqueda externa",resultRows.length+" coincidencias disponibles; el proveedor no respondió. Podés abrir el enlace directo a Google.",false);
   else if(resultRows.length)state("Búsqueda terminada",resultRows.length+" perfiles encontrados; "+confirmedInSearch+" no estaban en la base previamente.",false);
   else state("Sin coincidencias verificables","No encontré perfiles que contengan «"+word+"» y mencionen «"+place+"» en las fuentes accesibles. Esto no significa que no existan en Instagram.",false);
-  if(lastSources)$("#error").textContent="Algunas fuentes no respondieron: "+lastSources;
+  if(lastSources)$("#summary").textContent+=(resultRows.length?" ":"")+"Control del proveedor: "+lastSources;
  }catch(err){
   state("Búsqueda no completada","No se pudieron consultar las fuentes con normalidad.",false);
   $("#error").textContent=String(err.message||err);
@@ -247,8 +290,21 @@ async function checkAuth(){
  if(error||!data?.user){$("#login").hidden=false;return}
  const {data:admin,error:adminError}=await db.from("crm_admins").select("user_id").eq("user_id",data.user.id).maybeSingle();
  if(adminError||!admin){$("#login").hidden=false;$("#loginError").textContent="No hay autorización para SCOUT.";return}
- logged=true;$("#login").hidden=true
+ logged=true;$("#login").hidden=true;await providerStatus()
 }
+$("#connectForm").onsubmit=async e=>{
+ e.preventDefault();$("#connectError").textContent="";
+ const token=$("#apifyToken").value.trim(),button=$("#connectButton");
+ button.disabled=true;button.textContent="Conectando…";
+ try{
+  const out=await callProvider("configure",{token});
+  if(out.connected!==true)throw Error("No pude comprobar la conexión.");
+  $("#apifyToken").value="";providerConnected=true;$("#connectBox").hidden=true;
+  state("Buscador conectado","Ya está configurado. Escribí una actividad y una ciudad para consultar perfiles públicos.",false);
+  if($("#word").value.trim()&&$("#where").value.trim())search();
+ }catch(e){$("#connectError").textContent=e.message||String(e)}
+ finally{button.disabled=false;button.textContent="Conectar"}
+};
 $("#searchForm").onsubmit=e=>{e.preventDefault();search()};
 $("#example1").onclick=()=>{$("#word").value="administrativo";$("#where").value="Córdoba";search()};
 $("#example2").onclick=()=>{$("#word").value="nutricionista";$("#where").value="Córdoba";search()};
