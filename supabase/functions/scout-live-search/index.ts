@@ -311,7 +311,9 @@ Deno.serve(async(req:Request)=>{
    return respond({error:"Para verificar la biografía y privacidad real elegí SerpApi y conectá su clave.",code:"KEY_REQUIRED"},422);
   if(f.mode==="linked"&&String(input.provider)!=="serper")
    return respond({error:"Para descubrir Instagram desde páginas personales elegí Serper (Google).",code:"KEY_REQUIRED"},422);
-  const batch=Number(input.batch),provider=["serpapi","serper","tavily","web","directories"].includes(String(input.provider))?String(input.provider):"web";
+  const batch=Number(input.batch),requestedProvider=String(input.provider||"auto");
+  const provider=requestedProvider==="auto"?(Deno.env.get("SERPER_API_KEY")?"serper":"directories"):
+   ["serpapi","serper","tavily","web","directories"].includes(requestedProvider)?requestedProvider:"directories";
   if(!Number.isInteger(batch)||batch<0||batch>39)return respond({error:"Lote inválido"},400);
   const searchId=clean(input.searchId,50);
   if(!/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(searchId))return respond({error:"Identificador inválido"},400);
