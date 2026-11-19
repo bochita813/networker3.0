@@ -31,7 +31,9 @@ function extractPublicMatches(records:unknown[],keyword:string,place:string){
   const businessAddress=isJson(raw.businessAddress)?JSON.stringify(raw.businessAddress).slice(0,600):clean(raw.businessAddress,500);
   const locationEvidence=norm([title,bio,businessAddress].join(" "));
   // Solo lugares mencionados en el propio perfil: la región elegida no prueba residencia.
-  if(!locationEvidence.includes(region)){placeExcluded++;continue;}
+  const regionalMention=locationEvidence.includes(region) ||
+   (region==="cordoba"&&/(^|\W)(cba|cordobes|cordobesa|cordobenses)(\W|$)/.test(locationEvidence));
+  if(!regionalMention){placeExcluded++;continue;}
   const foundIn=norm(handle).includes(activity)?"@usuario":norm(title).includes(activity)?"nombre":"biografía";
   const checkedAt=clean(raw.scrapedAt||new Date().toISOString(),50);
   const checkedDate=Number.isNaN(Date.parse(checkedAt))?new Date().toISOString():new Date(checkedAt).toISOString();
@@ -122,7 +124,7 @@ Deno.serve(async(req:Request)=>{
    if(countError)return reply({error:"No se pudo verificar el límite de consultas"},500);
    if((count||0)>=15)return reply({error:"Alcanzaste el límite de seguridad de 15 consultas por día para evitar cargos inesperados.",code:"DAILY_LIMIT"},429);
    const actorInput={
-    search:word+" "+place,searchType:"user",searchLimit:70,liveSearch:true,
+    search:word+" "+place+(norm(place)==="cordoba"?", "+word+" Cba":""),searchType:"user",searchLimit:70,liveSearch:true,
     enhanceUserSearchWithFacebookPage:false
    };
    const endpoint="https://api.apify.com/v2/acts/apify~instagram-search-scraper/runs?maxTotalChargeUsd=0.35&maxItems=70&timeout=210";
