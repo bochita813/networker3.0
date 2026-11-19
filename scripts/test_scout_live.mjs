@@ -1,73 +1,61 @@
 import fs from "node:fs";
 import vm from "node:vm";
 import assert from "node:assert/strict";
+
 const html=fs.readFileSync("scout/live.html","utf8");
-const m=html.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/i);
-assert.ok(m,"Falta script principal de la búsqueda en vivo");
-new vm.Script(m[1],{filename:"scout/live.html (inline)"});
-const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
-const seen=new Set();
-for(const id of ids){assert.ok(!seen.has(id),"ID duplicado: "+id);seen.add(id)}
-for(const ref of m[1].matchAll(/\$\("#([a-zA-Z0-9_-]+)"\)/g))assert.ok(seen.has(ref[1]),"Elemento no encontrado: "+ref[1]);
-for(const id of ["searchForm","provider","country","province","city","keywords","progress","liveCards","dbCards","dbProvince","dbCity","dbCategory","dbCountry","dbFrom","dbProvider","dbFocus","dbVerification","exportDb","exportLive","stop","loadMore"]){assert.ok(seen.has(id),"Falta filtro/botón: "+id)}
-assert.ok(html.includes('db.functions.invoke("scout-live-search"'),"Falta consulta de función remota");
-assert.ok(html.includes('<option value="directories" selected>'),"Debe permitir encontrar perfiles en fuentes públicas sin API por defecto");
-assert.ok(html.includes('id="showExisting"'),"Debe permitir examinar los perfiles previamente encontrados");
-assert.ok(html.includes('normalize("NFKD")'),"Debe indexar textos de Instagram con tipografías estilizadas");
-assert.ok(html.includes('id="webLink"'),"Debe ofrecer un enlace de búsqueda manual cuando no se conecta una API");
-assert.ok(html.includes('id="advancedSearch"'),"Debe abrirse el bloque de conexión cuando falte clave");
-assert.ok(html.includes('["serper","tavily","serpapi"].includes(provider)'),"Debe exigir clave antes de llamar al buscador");
-assert.ok(html.includes('apiKey:["serper","tavily","serpapi"].includes(p)'),"Debe remitir clave al proveedor correcto");
-assert.equal([...html.matchAll(/<label for="keywords">/g)].length,1,"Debe haber una única palabra o actividad");
-assert.ok(!html.includes('<label for="focus">Persona o actividad</label>'),"No mostrar la selección confusa de tipo de persona");
-assert.ok(!html.includes('id="topics"'),"No mostrar filtros de interés adicionales que cruzan rubros");
-assert.ok(html.includes('const needed=form.keywords.split'),"Los resultados deben filtrarse por palabra solicitada");
+const script=html.match(/<script>\s*([\s\S]*?)<\/script><\/body>/i);
+assert.ok(script,"Falta script principal");
+new vm.Script(script[1],{filename:"scout/live.html"});
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]), unique=new Set(ids);
+assert.equal(ids.length,unique.size,"IDs HTML repetidos");
+for(const r of script[1].matchAll(/\$\("#([A-Za-z0-9_-]+)"\)/g))assert.ok(unique.has(r[1]),"Elemento DOM ausente "+r[1]);
+for(const id of ["word","where","search","searchForm","results","count","export","connectBox","connectForm","apifyToken","status","stop","loginForm"])
+ assert.ok(unique.has(id),"Falta "+id);
+for(const id of ["provider","matchMode","advancedSearch","batches","apiKey"])
+ assert.ok(!unique.has(id),"La interfaz simple no debe mostrar "+id);
+assert.ok(html.includes('callProvider("start"'),"No se inicia una búsqueda real");
+assert.ok(html.includes('callProvider("poll"'),"No se espera el resultado de proveedor");
+assert.ok(html.includes('callProvider("abort"'),"No se detiene proveedor al cancelar");
+assert.ok(html.includes('callProvider("configure"'),"No se puede conectar el proveedor una vez");
+assert.ok(html.includes("scout-apify-search"),"La web no consulta el backend real");
+assert.ok(html.includes("public_account_verified!==true"),"No debe mostrar cuentas de privacidad desconocida");
+assert.ok(!html.includes("localStorage.setItem"),"No guardar la clave de proveedor en navegador");
+assert.ok(html.includes("networker-perfiles-instagram.csv"),"Debe exportar CSV");
 
-assert.ok(html.includes('db.from("scout_live_profiles")'),"Falta tabla acumulativa");
-assert.ok(html.includes('db.from("crm_scout_profiles")'),"Falta vínculo con radar CRM");
-assert.ok(html.includes("source_provider"),"Falta traza de fuente");
-assert.ok(html.includes('id="showExisting"'),"Debe poder ver perfiles de Instagram ya detectados sin comprar consultas");
-assert.ok(html.includes('id="dbOrigin"'),"Debe poder filtrar índice web versus usuarios publicados en directorios");
-assert.ok(html.includes('const publicEvidence=p=>'),"Se debe mostrar procedencia de perfil y no asumir privacidad pública");
-assert.ok(html.includes('$("#showExisting").onclick=async()=>'),"El botón de perfiles existentes debe consultar la base");
-assert.ok(html.includes('Google y los catálogos no pueden comprobar'),"Advertir la diferencia entre indexación web y privacidad real");
-assert.ok(html.includes('id="matchMode"'),"Se requieren tres vías explícitas de descubrimiento");
-assert.ok(html.includes('id="dbPublic"'),"Poder filtrar sólo cuentas públicas verificadas");
-assert.ok(html.includes('matchMode').valueOf()&&html.includes('mode:$("#matchMode").value'),"El modo de búsqueda debe transmitirse al backend");
-assert.ok(html.includes('p.public_account_verified===true'),"No inferir la privacidad de cuentas indexadas");
+const edge=fs.readFileSync("supabase/functions/scout-apify-search/index.ts","utf8");
+for(const s of [
+ "scout_backend_apify_token","scout_admin_store_apify_token","maxTotalChargeUsd=0.35",
+ "apify~instagram-search-scraper","searchType:\"user\"","action===\"configure\"",
+ "action===\"start\"","action===\"poll\"","action===\"abort\"",
+ "isPrivate!==false","locationEvidence.includes(region)","scout_merge_live_profiles"
+])assert.ok(edge.includes(s),"Falta control de backend: "+s);
 
-assert.ok(html.includes("location_confirmed"),"Falta distinción de evidencia geográfica");
-assert.ok(html.includes("networker-base-segmentada.csv"),"Falta exportación");
-assert.ok(html.includes("@media(max-width:560px)"),"Faltan controles mobile");
-for(const name of ["searchName","saveRule","ruleMessage","apiKey"]){assert.ok(seen.has(name),"Falta campo de búsqueda o persistencia: "+name)}
-assert.ok(html.includes("name:$(\"#searchName\").value.trim()"),"La búsqueda no transmite el nombre editado por el administrador");
-assert.ok(html.includes('db.from("scout_search_rules").insert'),"No se pueden guardar configuraciones escritas a mano");
-const backend=fs.readFileSync("supabase/functions/scout-live-search/index.ts","utf8");
-assert.ok(backend.includes('engine:"google"'),"El proveedor debe consultar Google, no un RSS irrelevante");
-assert.ok(backend.includes("function fromBraveResults"),"El buscador gratuito debe extraer perfiles de resultados públicos");
-assert.ok(backend.includes('provider==="serper"||provider==="tavily"'),"Deben existir proveedores gratuitos estables");
-assert.ok(backend.includes("https://google.serper.dev/search"),"Falta Serper");
-assert.ok(backend.includes("https://api.tavily.com/search"),"Falta Tavily");
-assert.ok(backend.includes('if(!needles.some(k=>searchable.includes(k)))continue;'),"No se deben mezclar actividades");
-assert.ok(backend.includes('function queryLinked(f:any,b:number)'),"Se necesita búsqueda Google de páginas personales");
-assert.ok(backend.includes('function checkActualInstagramProfile(handle:string,key:string)'),"Debe consultarse Instagram para comprobar privacidad y biografía");
-assert.ok(backend.includes('actual.is_private!==false'),"No permitir perfiles que no sean explícitamente públicos");
-assert.ok(backend.includes('item.bio_verified=true;item.public_account_verified=true'),"Persistir evidencia de perfiles públicos");
-assert.ok(backend.includes('handles.size!==1'),"Un directorio con muchas cuentas no prueba vinculación de persona");
-
-assert.ok(backend.includes('provider==="web"'),"La búsqueda web gratuita debe estar conectada a la función remota");
-assert.ok(backend.includes('if(!keys.some(k=>relevant.includes(k)))continue;'),"No debe guardar cuentas de rubros que no coincidan");
-assert.ok(backend.includes('start:String((batch%3)*10)'),"No existe paginación real del buscador externo");
-assert.ok(backend.includes("entrepreneur-card"),"Falta extracción por ficha individual del directorio");
-assert.ok(backend.includes("function fromModash"),"Falta nuevo detector de perfiles Instagram de fuente pública");
-assert.ok(backend.includes('const sourceRegion=Boolean(p.source_provider?.startsWith("Modash ·")'),"No perder perfiles de alcance regional sin asumir domicilio");
-assert.ok(backend.includes("Modash · Fitness Córdoba"),"Falta fuente indexada de cuentas de educación física en Córdoba");
-assert.ok(backend.includes('return fromModash(html,label,url,f)'),"El motor debe separar las biografías por perfil");
-assert.ok(backend.includes('normalize("NFKD")'),"El detector debe reconocer letras especiales en la biografía");
-assert.ok(backend.includes("p.handle,p.headline,p.snippet"),"La coincidencia de palabra debe buscar en @usuario y nombre");
-assert.ok(backend.includes('const text=norm(h+" "+title+" "+snippet);'),"El score debe reconocer la palabra en el nombre de usuario");
-assert.ok(backend.includes('if(!h||seen.has(h))continue;'),"No introducir URLs de reels/posts o cuentas duplicadas");
-
-assert.ok(backend.includes("biografía")||html.includes("biografías"),"Debe advertirse que las biografías no están verificadas");
-assert.ok(!html.includes("BRAVE_SEARCH_API_KEY"),"Proveedor no permitido por términos en este caso");
-console.log("SCOUT LIVE QA OK: script, "+ids.length+" controles, búsquedas, filtros y exportación.");
+const start=edge.indexOf("function extractPublicMatches("),end=edge.indexOf("\nasync function apify(",start);
+assert.ok(start>=0&&end>start,"No se encuentra el clasificador real");
+const code=edge.slice(start,end)
+ .replace("records:unknown[],keyword:string,place:string","records,keyword,place")
+ .replace("const matches:any[]=[]","const matches=[]")
+ .replace("new Set<string>()","new Set()");
+const clean=(x,n=140)=>String(x??"").replace(/[\u0000-\u001f<>]/g," ").trim().slice(0,n);
+const norm=x=>clean(x,1500).toLocaleLowerCase("es").normalize("NFKD").replace(/[\u0300-\u036f]/g,"");
+const validHandle=h=>/^[a-z0-9._]{3,30}$/.test(h)&&!h.includes("..");
+const isJson=x=>!!x&&typeof x==="object"&&!Array.isArray(x);
+const extract=new vm.Script(code+"; extractPublicMatches",{}).runInNewContext({clean,norm,validHandle,isJson,Date,JSON,Set});
+const fixture=[
+ {username:"sofi.administrativo",fullName:"Sofia | Córdoba",biography:"Soy administrativo - Córdoba Argentina",private:false,scrapedAt:"2026-11-19T00:00:00Z"},
+ {username:"lucia.admin",fullName:"Lucia Cordoba",biography:"Administrativo en Córdoba",private:true},
+ {username:"cba.admins",fullName:"Administrativo Cordoba",biography:"Servicios administrativos"},
+ {username:"admin.salta",fullName:"Administrativo",biography:"Salta Argentina",private:false},
+ {username:"tucu.nutri",fullName:"Nutricionista Córdoba",biography:"Nutri",private:false}
+];
+const tested=extract(fixture,"administrativo","Córdoba");
+assert.equal(tested.profiles.length,1,"Debe existir una sola cuenta pública que coincida");
+assert.equal(tested.profiles[0].handle,"sofi.administrativo");
+assert.equal(tested.profiles[0].public_account_verified,true);
+assert.equal(tested.profiles[0].bio_verified,true);
+assert.equal(tested.profiles[0].location_confirmed,false,"Una localidad mencionada no prueba domicilio");
+assert.equal(tested.counts.privateExcluded,1);
+assert.equal(tested.counts.unknownPrivacyExcluded,1);
+assert.equal(tested.counts.keywordExcluded,1);
+assert.equal(tested.counts.placeExcluded,1);
+console.log("SCOUT QA OK: interfaz de 2 campos, guardado seguro, límites y coincidencia pública estricta.");
