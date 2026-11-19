@@ -1,291 +1,261 @@
-<!doctype html>
-<html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>NETWORKER SCOUT · Búsqueda en vivo</title>
+<!doctype html><html lang="es-AR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>NETWORKER · Buscar perfiles de Instagram</title>
 <script src="/crm/config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
 <style>
-:root{--orange:#ff5a1f;--black:#111;--paper:#faf8f5;--gray:#6c625c;--line:#e6dfd7;--soft:#f4eee7}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:#25201d;font:14px/1.5 Inter,Montserrat,system-ui,Arial,sans-serif}
-button,input,select{font:inherit;max-width:100%}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}a{color:inherit;text-decoration:none}a:hover{color:var(--orange)}
-.top{background:#151412;color:#fff;padding:16px max(22px,calc((100vw - 1250px)/2));display:flex;gap:14px;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.logo{font-size:16px;font-weight:900;letter-spacing:-.6px}.logo span{color:var(--orange)}nav{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#d7ccc3}
-.wrap{max-width:1250px;margin:auto;padding:36px 20px 65px}.eyebrow{letter-spacing:.15em;font-size:11px;color:var(--orange);font-weight:900;text-transform:uppercase}.headline{font-size:clamp(31px,4vw,49px);line-height:1.07;letter-spacing:-.05em;margin:10px 0}.headline em{font-style:normal;color:var(--orange)}
-.lead{max-width:900px;color:var(--gray);font-size:14px;line-height:1.6}.layout{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:20px;margin-top:25px;align-items:start}
-.panel{background:#fff;border:1px solid var(--line);border-radius:9px;padding:23px;min-width:0}.panel h2{font-size:18px;letter-spacing:-.035em;margin:0 0 16px}.field{display:flex;flex-direction:column;margin-bottom:14px;gap:5px;min-width:0}.field label{font-size:12px;font-weight:800}.field input,.field select,.field textarea{display:block;width:100%;min-width:0;min-height:43px;border:1px solid #d7cfc6;border-radius:7px;padding:10px 11px;background:#fffdfb;color:#2e2823;outline:none}.field input:focus,.field select:focus{border-color:var(--orange);box-shadow:0 0 0 2px #ff5a1f1c}.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.help,.micro{font-size:11px;color:#71685f;line-height:1.5}.pillset{display:flex;gap:7px;flex-wrap:wrap}.pillset label{display:flex;gap:6px;align-items:center;border:1px solid #ded6cf;border-radius:20px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;background:#faf7f2;max-width:100%}.pillset input{accent-color:var(--orange);width:15px;height:15px;flex-shrink:0}.pillset label:has(input:checked){border-color:var(--orange);background:#fff0e8}
-.btn{min-height:40px;background:var(--orange);color:#fff;border:1px solid var(--orange);border-radius:6px;font-size:12px;font-weight:850;padding:10px 15px;display:inline-flex;gap:7px;align-items:center;justify-content:center}.btn.secondary{background:#fff;color:#211d19;border-color:#d6ccc1}.btn.black{background:var(--black);color:#fff;border-color:var(--black)}.btn.small{font-size:11px;min-height:32px;padding:6px 10px}.buttons{display:flex;flex-wrap:wrap;gap:8px}.buttons .btn{flex:1}.note{background:var(--soft);padding:11px 13px;border-radius:7px;font-size:11px;color:#655448;line-height:1.6}.provider{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fcfaf6;margin-bottom:14px}.provider strong{font-size:12px}.provider small{display:block;color:var(--gray);line-height:1.5;margin-top:4px}
-.progress{margin:0 0 15px;padding:15px;background:#f5eee8;border:1px solid #e7d9cc;border-radius:8px;display:flex;align-items:center;gap:12px;min-height:74px}.progress.busy{border-color:#fd9b73;background:#fff2ec}.progress .orb{flex:0 0 32px;width:32px;height:32px;display:grid;place-items:center;background:#fff;border-radius:50%;font-size:19px;color:var(--orange)}.progress.busy .orb{animation:spin 1.3s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.progress strong{display:block;font-size:13px}.progress small{font-size:11px;color:var(--gray)}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}.stat{background:#f7f3ee;border-radius:8px;padding:13px}.stat strong{font-size:27px;font-weight:900;line-height:1.3;display:block;letter-spacing:-.035em}.stat span{font-size:10px;color:#71675e}.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin-bottom:16px}.tab{background:transparent;color:#6c6157;border:0;border-bottom:3px solid transparent;padding:11px 12px;font-size:12px;font-weight:850}.tab.active{color:var(--black);border-bottom-color:var(--orange)}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.toolbar .input{min-height:37px;border:1px solid #ddd4c9;border-radius:6px;padding:8px;min-width:160px;flex:1}.cards{display:grid;gap:9px}.card{border:1px solid var(--line);border-radius:8px;padding:15px;background:#fdfbf8;overflow-wrap:anywhere}.cardhead{display:flex;gap:9px;flex-wrap:wrap;align-items:center;justify-content:space-between}.handle{font-size:14px;font-weight:900}.mini-tag{display:inline-flex;align-items:center;background:#efe9e2;border-radius:14px;font-size:10px;font-weight:700;color:#5c5147;padding:3px 9px}.mini-tag.ok{background:#e9f1e9;color:#305d34}.card .name{font-size:12px;font-weight:750;margin-top:5px}.card p{font-size:11px;margin:8px 0;color:#6d6158;line-height:1.6}.card .detail{font-size:10px;color:#776b60}.card .buttons{margin-top:9px;justify-content:flex-start}.card .buttons .btn{flex:0 1 auto}.empty{border:1px dashed #d8cec1;border-radius:8px;padding:25px;text-align:center;color:#796e64;font-size:12px}.count{font-size:11px;color:#77695e;margin-bottom:10px}.error{background:#fff0e9;color:#9d3e23;border:1px solid #f4c0a7;padding:11px;border-radius:7px;font-size:12px;margin:10px 0}.error:empty{display:none}
-.filtersdb{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:15px}.filtersdb select,.filtersdb input{width:100%;min-width:0;min-height:35px;border:1px solid var(--line);border-radius:6px;background:#fff;padding:7px;font-size:11px}
-.saved-filter{margin:10px 0}.saved-filter select{min-height:40px;width:100%;border:1px solid var(--line);border-radius:6px;padding:8px;background:white}
-#login{position:fixed;inset:0;background:#171614eb;z-index:50;display:flex;align-items:center;justify-content:center;padding:18px}#login[hidden]{display:none}.login-card{background:#fff;max-width:400px;width:100%;padding:25px;border-radius:10px}.login-card h2{margin-top:0}
-.directsearch{display:block;margin-top:12px;text-align:center;color:#dd4d22;font-weight:900;text-decoration:underline}.advanced{margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:8px}.advanced summary{cursor:pointer;font-size:12px;font-weight:800;color:#6c625c}.advanced[open] summary{margin-bottom:12px}footer{border-top:1px solid var(--line);margin-top:30px;padding-top:20px;font-size:11px;color:#70665e}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.wrap{padding:23px 15px}.panel{padding:18px}}
-@media(max-width:560px){.twocol{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:9px}.stat strong{font-size:20px}.filtersdb{grid-template-columns:repeat(2,minmax(0,1fr))}.top{padding:14px}.headline{font-size:33px}.toolbar .input{flex-basis:100%}.card .buttons .btn{flex:1 1 44%}}
-@media(prefers-reduced-motion:reduce){.progress.busy .orb{animation:none}}
-</style></head><body>
-<header class="top"><a class="logo" href="/scout/live.html">NETWORKER <span>SCOUT</span> · LIVE 3.4</a><nav><a href="/scout/personas.html">Personas y redes</a><a href="/scout/nacional.html">Base nacional</a><a href="/scout/configurar.html">Búsquedas guardadas</a><a href="/scout/">Radar</a><a href="/crm/">CRM</a><a href="/">Landing</a></nav></header>
-<main class="wrap"><div class="eyebrow">PROSPECCIÓN · FUENTES EXTERNAS</div><h1 class="headline">Buscá cuentas<br><em>que sí coincidan.</em></h1>
-<p class="lead">Detectá perfiles de Instagram encontrados en fuentes públicas. Podés buscar gratis en catálogos abiertos; para ampliar a buscadores web conectá una clave de un proveedor gratuito.</p>
-<div class="layout"><div><section class="panel"><h2>Detectar perfiles de Instagram</h2>
-<details class="advanced"><summary>Guardar o recuperar una búsqueda (opcional)</summary><div class="field" style="margin-top:13px"><label for="searchName">Nombre para guardarla</label><input id="searchName" maxlength="90" placeholder="Ej.: Nutricionistas de Córdoba"></div>
-<div class="saved-filter"><label class="micro" for="rule">Recuperar una búsqueda anterior (opcional)</label><select id="rule"><option value="">Búsqueda nueva · configurar manualmente</option></select></div>
-<div class="buttons" style="margin-bottom:15px"><button id="saveRule" type="button" class="btn secondary small">Guardar esta configuración</button></div>
-<p id="ruleMessage" class="micro" role="status" style="margin:0 0 15px"></p></details>
-<form id="searchForm"><div class="field"><label for="keywords">Persona o actividad</label><input id="keywords" type="search" maxlength="120" placeholder="Ej.: contador" required autocomplete="off"><small class="help">Encontramos @usuarios de Instagram que aparecen en fuentes públicas y coinciden con tu actividad.</small></div><div class="field"><label for="country">País</label><select id="country"><option>Argentina</option><option>Uruguay</option><option>Chile</option><option>Paraguay</option><option>Bolivia</option><option>Perú</option><option>Colombia</option><option>México</option><option>España</option><option>Brasil</option></select></div>
-<div class="field"><label for="matchMode">Cómo querés encontrar cuentas de Instagram</label>
-<select id="matchMode">
-<option value="catalogs" selected>Catálogos públicos · sin clave, alcance limitado</option>
-<option value="google">Google · perfiles de Instagram indexados</option>
-<option value="linked">Google · páginas de personas con enlace a Instagram</option>
-<option value="bio">Instagram · comprobar biografía y cuenta pública</option>
-</select><small id="modeExplain" class="help">Busca usuarios y biografías reproducidas en catálogos públicos; no verifica la privacidad actual.</small></div>
-<div class="twocol"><div class="field"><label for="province">Provincia / estado</label><input id="province" list="provinces" placeholder="Córdoba"></div><div class="field"><label for="city">Ciudad</label><input id="city" placeholder="Jesús María"></div></div>
-<datalist id="provinces"><option>Córdoba</option><option>Buenos Aires</option><option>Ciudad Autónoma de Buenos Aires</option><option>Santa Fe</option><option>Río Negro</option><option>Mendoza</option><option>Neuquén</option><option>Entre Ríos</option><option>Salta</option></datalist>
-
-
-
-<details class="advanced" id="advancedSearch"><summary>Buscador y opciones</summary><div class="field" style="margin-top:13px"><label for="provider">Motor de búsqueda</label><select id="provider"><option value="serper">Serper · Google (2.500 consultas gratis iniciales)</option><option value="tavily">Tavily · web (1.000 créditos mensuales gratis)</option><option value="serpapi">SerpApi · Google (250 consultas mensuales gratis)</option><option value="web">Buscador experimental · puede bloquearse</option><option value="directories" selected>Fuentes públicas de Instagram · sin clave (cobertura limitada)</option></select></div>
-<div class="provider"><strong id="providerTitle">Directorios públicos · fuentes limitadas</strong><small id="providerInfo">Consulta listados de negocios en este momento. No busca todas las cuentas de Instagram por biografía y ciudad; para búsqueda web amplia seleccioná Google con SerpApi.</small>
-<div id="keyArea"><div class="field" style="margin:10px 0 0"><label id="keyLabel" for="apiKey">Clave de tu buscador gratuito</label><input id="apiKey" type="password" autocomplete="off" placeholder="Pegá la clave acá"></div><small>La clave se usa solo para esta consulta. No se guarda en la base.</small><p class="micro"><a id="keyLink" href="https://serper.dev/" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:900">Crear cuenta gratuita para buscar</a></p></div></div>
-<div class="field"><label for="batches">Consultas</label><select id="batches"><option value="1" selected>1 consulta</option><option value="3">3 consultas</option><option value="6">6 consultas</option><option value="10">10 consultas</option></select></div></details>
-<div class="buttons"><button id="go" type="submit" class="btn black">⌕ Buscar perfiles nuevos</button><button id="stop" type="button" class="btn secondary" disabled>Detener</button></div></form><div class="buttons" style="margin-top:10px"><button id="showExisting" class="btn secondary" type="button">Ver perfiles de Instagram ya encontrados</button></div><a id="webLink" href="https://www.google.com/" class="directsearch" target="_blank" rel="noopener noreferrer">Ver resultados en Google sin clave ↗</a><p class="help" style="margin:6px 0 0">La búsqueda manual abre Google en otra pestaña; no importa datos al CRM.</p>
-<p class="note" style="margin:14px 0 0"><strong>Sobre cuentas públicas:</strong> Google y los catálogos no pueden comprobar que la cuenta siga abierta. En el modo «Instagram · comprobar biografía y cuenta pública» sí se exige que el proveedor devuelva privacidad pública; ese modo necesita clave y consume consultas.</p>
-</section></div>
-<div><section class="panel">
-<div id="progress" class="progress" role="status" aria-live="polite"><span id="orb" class="orb">⌕</span><div><strong id="progressTitle">Listo para explorar</strong><small id="progressDetail">Elegí filtros y ejecutá una búsqueda real.</small></div></div>
-<div class="stats"><div class="stat"><strong id="liveCount">0</strong><span>En esta búsqueda</span></div><div class="stat"><strong id="storedCount">—</strong><span>Base histórica y nueva</span></div><div class="stat"><strong id="batchCount">0</strong><span>Lotes consultados</span></div></div>
-<div id="error" class="error" role="alert"></div>
-<div class="tabs"><button id="tabLive" class="tab active" type="button">Instagram · encontrados ahora</button><button id="tabDb" class="tab" type="button">Perfiles guardados</button></div>
-<div id="livePanel"><p class="help" style="margin:-4px 0 13px">Solo enlaces directos de perfiles de Instagram, no publicaciones ni reels. «Indexado» significa que una fuente pública lo encontró, no privacidad verificada.</p><div class="toolbar"><input id="liveText" class="input" type="search" placeholder="Filtrar resultados visibles…"><button id="exportLive" type="button" class="btn secondary small">Exportar resultados CSV</button></div>
-<div id="liveMeta" class="count">Todavía no realizaste una búsqueda.</div><div class="cards" id="liveCards"><div class="empty">Los perfiles externos aparecerán acá, sin mezclarse con la base anterior.</div></div>
-<div class="buttons" style="margin-top:13px"><button id="loadMore" type="button" class="btn secondary" disabled>Buscar otro lote</button></div></div>
-<div id="dbPanel" hidden><div class="filtersdb">
-<input id="dbText" type="search" placeholder="Texto / @usuario">
-<input id="dbProvince" placeholder="Provincia investigada">
-<input id="dbCity" placeholder="Ciudad investigada">
-<select id="dbFocus"><option value="">Todos los intereses</option><option>Emprendedores</option><option>Estética y belleza</option><option>Salud y bienestar</option><option>Profesionales</option><option>Comercio y ventas</option><option>Marca personal y liderazgo</option><option>Todos los rubros</option></select>
-<select id="dbCategory"><option value="">Todos los rubros identificados</option></select>
-<input id="dbCountry" placeholder="País de la búsqueda / fuente">
-<input id="dbFrom" type="date" title="Descubiertos desde esta fecha">
-<select id="dbProvider"><option value="">Todas las fuentes</option></select><select id="dbOrigin" title="Tipo de procedencia"><option value="">Todas las procedencias</option><option value="indexed">Indexados en buscador web</option><option value="directory">Mencionados o listados en otras webs</option></select>
-<select id="dbStage"><option value="">Todas las etapas</option><option>Por revisar</option><option>Interesante</option><option>Revisado</option><option>Contactado</option><option>Descartado</option></select>
-<select id="dbVerification"><option value="">Todas las ubicaciones</option><option value="true">Ubicación indicada en fuente</option><option value="false">Ubicación sin comprobar</option></select><select id="dbPublic"><option value="">Todas las cuentas, verificadas o no</option><option value="true">Solo cuentas públicas comprobadas</option><option value="false">Privacidad aún no comprobada</option></select></div>
-<div class="toolbar"><button id="refreshDb" class="btn black small" type="button">Actualizar base</button><button id="exportDb" class="btn secondary small" type="button">Exportar base filtrada CSV</button><span class="micro" id="dbMeta">Sin cargar</span></div>
-<div class="cards" id="dbCards"><div class="empty">Seleccioná «Actualizar base» para ver tus perfiles acumulados.</div></div><div class="buttons" style="margin-top:12px"><button id="nextDb" type="button" class="btn secondary" hidden>Mostrar más</button></div>
-</div>
-</section></div></div>
-<footer>NETWORKER SCOUT 3.4 · Investigación manual asistida y CRM privado. El buscador externo solo puede mostrar lo que su índice público encuentre, no todas las cuentas existentes. Las fichas pueden estar desactualizadas o no corresponder exactamente al público buscado. Revisá identidad, ciudad y pertinencia antes de contactar.</footer></main>
-<div id="login"><form id="loginForm" class="login-card"><h2>Acceso privado NETWORKER</h2><p class="micro">Ingresá con el administrador del CRM.</p><div class="field"><label for="email">Email</label><input required id="email" type="email"></div><div class="field"><label for="password">Contraseña</label><input required id="password" type="password"></div><button class="btn black" type="submit">Ingresar</button><p id="loginError" class="error"></p></form></div>
+:root{--ink:#111;--orange:#ff5a1f;--line:#e6e2dc;--muted:#655e58;--paper:#faf9f7}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,Montserrat,system-ui,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:wait}
+a{color:inherit}a:hover{color:var(--orange)}header{background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:16px max(19px,calc((100vw - 1040px)/2))}
+.brand{font-weight:900;text-decoration:none;letter-spacing:-.035em}.brand b{color:var(--orange)}header nav{display:flex;gap:15px;font-size:12px;color:#e6ded8;font-weight:700}
+header nav a{text-decoration:none}main{max-width:1040px;margin:auto;padding:47px 20px 70px}
+.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--orange);font-weight:850}
+h1{font-size:clamp(30px,5.2vw,59px);line-height:1.08;letter-spacing:-.062em;margin:8px 0 14px;font-weight:900}
+h1 span{color:var(--orange)}.subtitle{max-width:760px;margin:0 0 27px;color:var(--muted)}
+.searchbox{background:white;border:1px solid var(--line);border-radius:13px;padding:24px;box-shadow:0 6px 30px #17100608}
+.formgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr) auto;gap:12px;align-items:end}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:12px;font-weight:850}
+.field input{width:100%;height:50px;border:1px solid #d4ccc4;background:#fff;border-radius:7px;padding:12px 13px;outline:none}
+.field input:focus{border-color:var(--orange);box-shadow:0 0 0 3px #ff5a1f20}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:7px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:10px 15px;min-height:48px;font-size:13px;font-weight:900;text-decoration:none;white-space:nowrap}
+.btn.orange{background:var(--orange);border-color:var(--orange)}.btn.secondary{background:white;border-color:#d3cbc2;color:#28221d}
+.examples{font-size:12px;color:#777067;margin-top:12px}.examples button{border:0;background:none;text-decoration:underline;color:#bf4a1c;padding:0 4px;font-size:12px}
+.state{margin:20px 0 0;padding:15px 17px;border:1px solid #e6d3c8;border-radius:9px;background:#fff1e8;display:flex;align-items:start;gap:13px;min-height:74px}
+.state .icon{font-size:20px;line-height:1}.state strong{font-size:13px;display:block}.state small{color:#77685f;display:block;font-size:12px}
+.state.running{border-color:var(--orange)}.state.running .icon{animation:spin 1.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}.state[hidden],#login[hidden]{display:none}
+.controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:24px 0 12px}
+.controls h2{font-size:19px;letter-spacing:-.035em;margin:0}.controls .buttons{display:flex;gap:8px;flex-wrap:wrap}
+.summary{font-size:12px;color:var(--muted);margin:0 0 17px}.results{display:grid;gap:11px}
+.profile{background:white;padding:20px;border:1px solid var(--line);border-radius:10px}
+.profiletop{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}.profiletop strong{font-size:17px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}.tag{background:#f2eee9;border-radius:20px;padding:3px 9px;font-size:11px;font-weight:750;color:#5e5750}
+.tag.good{background:#e7f5ed;color:#17683a}.profile .name{font-size:13px;font-weight:700;margin-top:6px}
+.profile p{font-size:13px;color:#534d46;margin:9px 0;white-space:pre-wrap;word-break:break-word}
+.profile .foot{font-size:11px;color:#807971;margin:10px 0}
+.profile .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.profile .actions .btn{min-height:37px;padding:7px 12px;font-size:11px}
+.empty{padding:26px;background:white;border:1px dashed #d5cec6;border-radius:9px;color:#706962}
+.warning{color:#8e3417;font-size:12px;margin:9px 0}.warning:empty{display:none}
+.note{font-size:11px;color:#726a64;line-height:1.6;margin:20px 0 0;max-width:880px}
+#login{position:fixed;inset:0;background:#13100fe8;display:grid;place-items:center;z-index:100;padding:20px}
+.loginCard{width:min(400px,100%);background:white;border-radius:13px;padding:25px}
+.loginCard h2{margin:0 0 12px}.loginCard .field{margin-bottom:14px}
+@media(max-width:720px){main{padding:30px 13px}.searchbox{padding:17px}.formgrid{grid-template-columns:1fr}.controls{align-items:stretch}.controls .btn{min-height:40px}h1{font-size:35px}}
+</style></head>
+<body><header><a class="brand" href="/scout/live.html">NETWORKER <b>3.0</b> · INSTAGRAM</a>
+<nav><a href="/scout/personas.html">Mis perfiles</a><a href="/crm/">CRM</a></nav></header>
+<main>
+<div class="eyebrow">BUSCADOR DE PERFILES · SIMPLE</div>
+<h1>Encontrá perfiles de <span>Instagram.</span></h1>
+<p class="subtitle">Escribí una palabra que deba aparecer en el usuario, nombre o descripción pública y una ubicación. SCOUT mostrará las coincidencias que encuentre en las fuentes disponibles, con su enlace a Instagram.</p>
+<section class="searchbox">
+<form id="searchForm"><div class="formgrid">
+<div class="field"><label for="word">¿Qué palabra buscás?</label><input id="word" type="search" maxlength="110" placeholder="Ej.: administrativo" required autocomplete="off"></div>
+<div class="field"><label for="where">¿En qué ciudad o provincia?</label><input id="where" maxlength="100" placeholder="Ej.: Córdoba" required autocomplete="address-level1"></div>
+<button class="btn orange" id="search" type="submit">⌕ Buscar</button></div></form>
+<div class="examples">Probá: <button type="button" id="example1">Administrativo · Córdoba</button> o <button type="button" id="example2">Nutricionista · Córdoba</button></div>
+</section>
+<div class="state" id="status" role="status" aria-live="polite" hidden><div class="icon" id="statusIcon">⌕</div><div>
+<strong id="statusTitle">Iniciando búsqueda…</strong><small id="statusDetail">Consultando fuentes de perfiles públicos</small>
+<div style="margin-top:7px"><button type="button" id="stop" class="btn secondary" style="min-height:30px;padding:5px 10px;font-size:11px" hidden>Detener</button></div>
+</div></div>
+<div class="controls"><h2>Resultados <span id="count">0</span></h2><div class="buttons">
+<button class="btn secondary" id="export" type="button" disabled>Exportar CSV</button>
+<a class="btn secondary" id="googleLink" href="https://www.google.com/" target="_blank" rel="noopener noreferrer" hidden>Ver búsqueda en Google</a>
+</div></div>
+<p class="summary" id="summary">Ingresá una palabra y una ubicación para comenzar.</p>
+<p id="error" class="warning" role="alert"></p>
+<div class="results" id="results"><div class="empty">Acá van a aparecer las cuentas que coincidan con tu búsqueda, sin anuncios ni resultados inventados.</div></div>
+<p class="note">**Importante:** Instagram no ofrece un listado completo de todos los perfiles públicos filtrado por profesión y ciudad para prospección comercial. Las cuentas encontradas en páginas públicas pueden haber cambiado a privadas. SCOUT distingue una cuenta verificada de una mención indexada, y la ubicación no se considera confirmada solo porque la pediste.</p>
+</main>
+<div id="login" hidden><form class="loginCard" id="loginForm"><h2>Acceso a NETWORKER</h2><p class="summary">Ingresá con tu cuenta del CRM. No hace falta iniciar sesión en Instagram.</p>
+<div class="field"><label for="email">Correo</label><input id="email" type="email" required autocomplete="username"></div>
+<div class="field"><label for="password">Contraseña</label><input id="password" type="password" required autocomplete="current-password"></div>
+<button class="btn orange" type="submit">Ingresar</button><p id="loginError" class="warning" role="alert"></p></form></div>
 <script>
-(()=>{"use strict";
-const $=s=>document.querySelector(s), config=window.NETWORKER_CRM_CONFIG||{};
-let db=null,user=null,searchRows=[],dbRows=[],runId="",nextBatch=0,provider="directories",busy=false,abort=false,activeTab="live",dbVisible=40,allRules=[],searchFingerprint="";
-const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").trim();
-const txt=(tag,str,cls)=>{const x=document.createElement(tag);x.textContent=String(str??"");if(cls)x.className=cls;return x};
-const valid=h=>/^[a-z0-9._]{3,30}$/.test(h||"")&&!h.includes("..");
-const isWebIndexed=p=>/^(Serper|Tavily|SerpApi|Brave Search)/i.test(String(p.source_provider||""));
-const publicEvidence=p=>p.public_account_verified===true?"Cuenta pública comprobada":p.bio_verified===true?"Biografía consultada":isWebIndexed(p)?"Perfil indexado · privacidad pendiente":"Instagram mencionado públicamente";
-function filters(){return {mode:$("#matchMode").value,name:$("#searchName").value.trim(),country:$("#country").value,province:$("#province").value.trim(),city:$("#city").value.trim(),focus:"Todos los rubros",keywords:$("#keywords").value.trim(),interests:[]}}
-function showProgress(title,detail,loading){$("#progress").classList.toggle("busy",!!loading);$("#orb").textContent=loading?"↻":"⌕";$("#progressTitle").textContent=title;$("#progressDetail").textContent=detail}
-function error(msg){$("#error").textContent=msg||""}
-function csv(rows,name){const body=rows.map(r=>r.map(v=>{let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}).join(",")).join("\r\n");const url=URL.createObjectURL(new Blob(["\ufeff"+body],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
-function asRows(list){return [["usuario","instagram","nombre","descripcion_publica","fuente","pagina_fuente","pais_confirmado","provincia_confirmada","ciudad_confirmada","ubicacion_indicada_en_fuente","pais_busqueda","provincia_busqueda","ciudad_busqueda","interes_busqueda","rubro_estimado","palabras_coincidentes","cuenta_publica_verificada","biografia_verificada","fundamento_coincidencia","fecha_verificacion","etapa","encontrado_primera_vez"],...list.map(p=>[p.handle,p.profile_url,p.headline,p.snippet,p.source_provider,p.source_page,p.country,p.province,p.city,p.location_confirmed?"SI":"NO",p.search_country,p.search_province,p.search_city,p.search_focus,p.category,(p.match_keywords||[]).join("; "),p.public_account_verified===true?"SI":"NO VERIFICADO",p.bio_verified===true?"SI":"NO VERIFICADO",p.match_evidence||"",p.profile_checked_at||"",p.stage||"Por revisar",p.first_seen_at||""])]}
-function card(p,storage){
- const box=txt("article","","card"),head=txt("div","","cardhead"),h=txt("strong","@"+p.handle,"handle"),loc=p.location_confirmed;
- head.append(h,txt("span",publicEvidence(p),"mini-tag"),txt("span",loc?"Ubicación indicada en fuente":"Ubicación por verificar","mini-tag"+(loc?" ok":"")));
- box.append(head,txt("div",p.headline||"Perfil mencionado públicamente","name"));
- if(p.snippet)box.append(txt("p",p.snippet.slice(0,460)));
- if(p.match_evidence)box.append(txt("div",p.match_evidence,"detail"));
- if(p.bio_verified)box.append(txt("div","Biografía consultada en Instagram por proveedor", "detail"));
- if(p.profile_checked_at)box.append(txt("div","Comprobado: "+new Date(p.profile_checked_at).toLocaleDateString("es-AR"),"detail"));
- const details=txt("div","","detail");details.textContent=[loc?[p.city,p.province,p.country].filter(Boolean).join(", "):"Ubicación no demostrada",[p.category,p.search_focus].filter(Boolean).join(" · "),p.source_provider].filter(Boolean).join(" | ");box.append(details);
- if(p.search_city||p.search_province){box.append(txt("div","Buscado para: "+[p.search_city,p.search_province,p.search_country].filter(Boolean).join(", ")+(loc?"":" · ubicación pendiente de comprobar"),"detail"))}
- const actions=txt("div","","buttons"),ig=document.createElement("a");ig.className="btn secondary small";ig.href="https://www.instagram.com/"+p.handle+"/";ig.target="_blank";ig.rel="noopener noreferrer";ig.textContent="Ver Instagram ↗";actions.append(ig);
- if(p.source_page&&/^https:\/\//.test(p.source_page)){const source=document.createElement("a");source.className="btn secondary small";source.href=p.source_page;source.target="_blank";source.rel="noopener noreferrer";source.textContent="Ver fuente ↗";actions.append(source)}
- const copy=txt("button","Copiar usuario","btn secondary small");copy.type="button";copy.onclick=()=>navigator.clipboard?.writeText("@"+p.handle).then(()=>{copy.textContent="Copiado ✓"}).catch(()=>{copy.textContent="@"+p.handle});actions.append(copy);
- const save=txt("button","Guardar en radar CRM","btn black small");save.type="button";save.onclick=async()=>{save.disabled=true;const {error:e}=await db.from("crm_scout_profiles").upsert({handle:p.handle,profile_url:"https://www.instagram.com/"+p.handle+"/",headline:(p.headline||"").slice(0,250),snippet:(p.snippet||"").slice(0,1000),source:(p.source_provider||"Búsqueda en vivo").slice(0,120),score:Math.min(100,p.score||0),stage:"Por revisar",notes:""},{onConflict:"handle",ignoreDuplicates:true});if(e){error("No se pudo guardar en el radar: "+e.message);save.disabled=false}else save.textContent="Guardado ✓"};actions.append(save);
- if(storage){const stage=document.createElement("select");stage.className="btn secondary small";["Por revisar","Interesante","Revisado","Contactado","Descartado"].forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;stage.append(o)});stage.value=p.stage||"Por revisar";stage.title="Etapa del perfil";stage.onchange=async()=>{const {error:e}=await db.from("scout_live_profiles").update({stage:stage.value}).eq("handle",p.handle);if(e){error(e.message)}else p.stage=stage.value};actions.append(stage)}
- box.append(actions);return box;
+(()=>{
+"use strict";
+const $=q=>document.querySelector(q);
+const config=window.NETWORKER_CRM_CONFIG||{};
+let db=null,logged=false,running=false,cancel=false,resultRows=[],existing=new Set(),confirmedInSearch=0,lastSources="",runId="";
+const norm=v=>String(v||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").trim();
+const txt=(tag,text,cls)=>{const e=document.createElement(tag);e.textContent=String(text??"");if(cls)e.className=cls;return e};
+const valid=h=>/^[a-z0-9._]{3,30}$/.test(String(h||""))&&!String(h).includes("..");
+const safeUrl=v=>{try{const u=new URL(String(v||""));return u.protocol==="https:"||u.protocol==="http:"?u.href:""}catch{return""}};
+function state(title,detail,spin=false){$("#status").hidden=false;$("#status").classList.toggle("running",spin);$("#statusIcon").textContent=spin?"↻":"⌕";$("#statusTitle").textContent=title;$("#statusDetail").textContent=detail;$("#stop").hidden=!spin}
+function f(){return {word:$("#word").value.trim(),place:$("#where").value.trim()}}
+function googleUrl(){
+ const {word,place}=f();
+ const query='site:instagram.com/ "'+word+'" "'+place+'" -inurl:/reel/ -inurl:/p/ -inurl:/stories/';
+ return "https://www.google.com/search?q="+encodeURIComponent(query);
 }
-function renderLive(){const q=norm($("#liveText").value),rows=searchRows.filter(p=>!q||norm([p.handle,p.headline,p.snippet,p.category,p.city,p.province,p.source_provider].join(" ")).includes(q));$("#liveCount").textContent=searchRows.length.toLocaleString("es-AR");$("#batchCount").textContent=String(nextBatch);$("#liveMeta").textContent=rows.length+" perfiles visibles · "+searchRows.length+" resultados únicos de esta búsqueda, sin mezclar la base anterior";const list=$("#liveCards");list.replaceChildren();if(!rows.length){list.append(txt("div",searchRows.length?"Tus filtros de texto no coinciden con los resultados.":"Aún no hay perfiles encontrados en esta búsqueda.","empty"));return}rows.slice(0,240).forEach(p=>list.appendChild(card(p,false)));if(rows.length>240)list.append(txt("p","Mostrando 240 de "+rows.length+" fichas. Exportá el CSV para verlas todas.","micro"))}
-function filteredDb(){
- const q=norm($("#dbText").value),province=norm($("#dbProvince").value),city=norm($("#dbCity").value),
- focus=$("#dbFocus").value,stage=$("#dbStage").value,verified=$("#dbVerification").value,origin=$("#dbOrigin").value,
- category=$("#dbCategory").value,country=norm($("#dbCountry").value),from=$("#dbFrom").value,provider=$("#dbProvider").value,publicOnly=$("#dbPublic").value;
- const matchesFocus=p=>{
-  if(!focus)return true;
-  if(p.search_focus===focus)return true;
-  const cat=norm(p.category);
-  if(focus==="Emprendedores")return /emprend|indumentaria|artesan|accesorios|gastronom|decoraci|velas|librer|reposteri|cosmetica/.test(cat);
-  if(focus==="Estética y belleza")return /estetic|cosmet|belleza|peluquer/.test(cat);
-  if(focus==="Salud y bienestar")return /salud|bienestar|nutric/.test(cat);
-  if(focus==="Comercio y ventas")return /comerc|venta|indumentaria|accesorios|gastronom|reposteri|decoraci|librer/.test(cat);
-  if(focus==="Marca personal y liderazgo")return /marca personal|lider/.test(cat);
-  if(focus==="Profesionales")return /profesional/.test(cat);
-  return focus==="Todos los rubros";
- };
- return dbRows.filter(p=>(!q||norm([p.handle,p.headline,p.snippet,p.category,p.source_provider,(p.match_keywords||[]).join(" ")].join(" ")).includes(q))&&(!province||norm(p.search_province).includes(province)||norm(p.province).includes(province))&&(!city||norm(p.search_city).includes(city)||norm(p.city).includes(city))&&matchesFocus(p)&&(!category||p.category===category)&&(!country||norm(p.search_country).includes(country)||norm(p.country).includes(country))&&(!from||String(p.first_seen_at||"").slice(0,10)>=from)&&(!provider||p.source_provider===provider)&&(!origin||(origin==="indexed"?isWebIndexed(p):!isWebIndexed(p)))&&(!stage||p.stage===stage)&&(!verified||String(!!p.location_confirmed)===verified)&&(!publicOnly||String(p.public_account_verified===true)===publicOnly))}
-function renderDb(){const rows=filteredDb();$("#dbMeta").textContent=rows.length.toLocaleString("es-AR")+" de "+dbRows.length.toLocaleString("es-AR")+" fichas cargadas";const list=$("#dbCards");list.replaceChildren();if(!rows.length){list.append(txt("div","Sin perfiles para estos filtros; probá ampliar la búsqueda.","empty"));$("#nextDb").hidden=true;return}rows.slice(0,dbVisible).forEach(p=>list.appendChild(card(p,true)));$("#nextDb").hidden=rows.length<=dbVisible;$("#nextDb").textContent="Mostrar más ("+(rows.length-dbVisible)+")"}
-async function refreshTotal(){const {count,error:e}=await db.from("scout_live_profiles").select("handle",{count:"exact",head:true});if(!e)$("#storedCount").textContent=Number(count||0).toLocaleString("es-AR")}
-async function refreshDb(){error("");showProgress("Leyendo base segmentada","Cargando fichas de tu repositorio privado…",true);dbRows=[];let page=0;while(page<20){const {data,error:e}=await db.from("scout_live_profiles").select("*").order("last_seen_at",{ascending:false}).range(page*500,page*500+499);if(e){error("No se pudo cargar la base: "+e.message);break}dbRows.push(...data);if(data.length<500)break;page++}const setOptions=(id,values,defaultLabel)=>{const sel=$(id),keep=sel.value;sel.replaceChildren();const none=document.createElement("option");none.value="";none.textContent=defaultLabel;sel.append(none);values.filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")).forEach(v=>{const opt=document.createElement("option");opt.value=v;opt.textContent=v;sel.append(opt)});sel.value=values.includes(keep)?keep:""};
- setOptions("#dbCategory",[...new Set(dbRows.map(x=>x.category))],"Todos los rubros identificados");
- setOptions("#dbProvider",[...new Set(dbRows.map(x=>x.source_provider))],"Todas las fuentes");
- dbVisible=40;renderDb();await refreshTotal();showProgress("Base acumulada cargada",dbRows.length+" fichas del CRM. Podés filtrarlas y exportarlas.",false);if(page>=20)error("La vista está limitada a 10.000 fichas; faltan páginas posteriores.")}
-function switchTab(t){activeTab=t;$("#tabLive").classList.toggle("active",t==="live");$("#tabDb").classList.toggle("active",t==="db");$("#livePanel").hidden=t!=="live";$("#dbPanel").hidden=t!=="db";if(t==="db"&&!dbRows.length)refreshDb()}
-function settingsProvider(){
- const p=$("#provider").value;
- $("#keyArea").hidden=!["serper","tavily","serpapi"].includes(p);
- const names={serper:"Serper",tavily:"Tavily",serpapi:"SerpApi",web:"Motor experimental",directories:"Directorios"};
- const urls={serper:"https://serper.dev/",tavily:"https://tavily.com/",serpapi:"https://serpapi.com/"};
- const n=p==="directories"?"Fuentes públicas de Instagram":names[p]||names.serper;
- $("#providerTitle").textContent=n;
- $("#providerInfo").textContent=$("#matchMode").value==="bio"?
- "Consulta Google para descubrir cuentas y SerpApi Instagram Profile para comprobar hasta 5 biografías y privacidad por lote. Consume créditos por cada perfil; solo devuelve los públicos verificados.":
- $("#matchMode").value==="linked"?
- "Busca en Google páginas personales que publican un enlace a una única cuenta de Instagram. No verifica su privacidad.":
- p==="web"?"Este buscador abierto está bloqueando consultas (HTTP 429); no es estable.":
- p==="directories"?"Busca @usuarios de Instagram en directorios y catálogos públicos; cobertura parcial, sin acceder a cuentas privadas.":
- "Este proveedor permite búsquedas nuevas con su clave gratuita. Su cuota depende del plan seleccionado.";
- $("#keyLabel").textContent="Clave de "+n;$("#apiKey").placeholder="Pegá tu clave de "+n;
- $("#keyLink").href=urls[p]||"https://serper.dev/";$("#keyLink").textContent="Crear cuenta gratuita en "+n;
- $("#batches").value=(p==="web"||p==="tavily")?"1":"3";
- updateSearchLink();
+function evidence(r){
+ if(r.public_account_verified===true&&r.bio_verified===true)return "Cuenta pública y biografía verificadas";
+ if(r.bio_verified===true)return "Biografía consultada";
+ if(/Serper|SerpApi|Tavily|Google/i.test(r.source_provider||""))return "Perfil indexado en Google · privacidad no comprobada";
+ return "Instagram publicado por tercero · privacidad no comprobada";
 }
-function settingsMode(){
- const mode=$("#matchMode").value;
- if(mode==="catalogs")$("#provider").value="directories";
- else if(mode==="linked")$("#provider").value="serper";
- else if(mode==="bio")$("#provider").value="serpapi";
- else if(mode==="google"&&$("#provider").value==="directories")$("#provider").value="serper";
- const descriptions={
-  catalogs:"Fuentes abiertas: @usuario, nombre y descripciones reproducidas por terceros. Privacidad no verificada.",
-  google:"Busca perfiles de Instagram que aparecen en Google. Coincidencias por @usuario, nombre o extracto indexado; privacidad no verificada.",
-  linked:"Busca personas en Google, visita páginas públicas de enlaces personales y extrae un único Instagram vinculado a cada página.",
-  bio:"Descubre cuentas en Google y consulta la biografía real y la privacidad con SerpApi. Solo muestra cuentas públicas con coincidencia en usuario, nombre o biografía."
- };
- $("#modeExplain").textContent=descriptions[mode]||"";
- $("#advancedSearch").open=mode!=="catalogs";
- settingsProvider();
+function geo(p,place){
+ if(!place)return {found:true,level:"unknown",label:"Ubicación sin comprobar"};
+ const t=norm(place),local=norm([p.city,p.province].filter(Boolean).join(" "));
+ if(p.location_confirmed===true&&local.includes(t))return {found:true,level:"documented",label:"Ubicación indicada en fuente: "+[p.city,p.province].filter(Boolean).join(", ")};
+ const text=norm([p.headline,p.snippet].filter(Boolean).join(" "));
+ if(text.includes(t))return {found:true,level:"mentioned",label:"La ubicación aparece en la descripción pública; residencia por comprobar"};
+ const url=norm(decodeURIComponent(String(p.source_page||"")).replaceAll("-"," "));
+ if(url.includes(t))return {found:true,level:"catalog",label:"Listado regional "+place+" · residencia por comprobar"};
+ return {found:false,level:"none",label:""};
 }
-function updateSearchLink(){
- const f=filters(),q=[f.mode==="linked"?'site:linktr.ee "'+f.keywords+'" instagram':'site:instagram.com/ "'+f.keywords+'"',f.city?'"'+f.city+'"':"",f.province?'"'+f.province+'"':"",f.country?'"'+f.country+'"':""].filter(Boolean).join(" ");
- $("#webLink").href="https://www.google.com/search?q="+encodeURIComponent(q);
+function matched(p,word,place){
+ if(!p||!valid(p.handle))return null;
+ const w=norm(word),hay=norm([p.handle,p.headline,p.snippet].join(" "));
+ if(!w||!hay.includes(w))return null;
+ const location=geo(p,place);if(!location.found)return null;
+ return {...p,_geo:location, _wordField:norm(p.handle).includes(w)?"usuario":norm(p.headline).includes(w)?"nombre":"descripción"};
 }
-function setBusy(b){busy=b;$("#go").disabled=b;$("#stop").disabled=!b;$("#loadMore").disabled=b||!runId;$("#provider").disabled=b;$("#batches").disabled=b}
-async function batchSearch(id,b,form,p){const {data,error:e}=await db.functions.invoke("scout-live-search",{body:{searchId:id,batch:b,provider:p,filters:form,apiKey:["serper","tavily","serpapi"].includes(p)?$("#apiKey").value.trim():""}});if(e){let message=e.message;try{const x=await e.context?.json();if(x?.error)message=x.error}catch{}throw Error(message)}if(data?.error)throw Error(data.error);return data}
-async function start(restart=true,onlyOne=false){
- if(busy||!user)return;error("");if(!filters().keywords.trim()){error("Escribí una persona o actividad para buscar.");$("#keywords").focus();return}
- if(restart){runId=crypto.randomUUID();nextBatch=0;searchRows=[];searchFingerprint=JSON.stringify({filters:filters(),provider:$("#provider").value});renderLive()}
- else if(searchFingerprint!==JSON.stringify({filters:filters(),provider:$("#provider").value})){error("Cambiaste los parámetros: pulsá «Buscar en vivo» para iniciar una búsqueda nueva.");return}
- if(!runId)runId=crypto.randomUUID();
- provider=$("#provider").value;
- const form=filters();
- if(["serper","tavily","serpapi"].includes(provider)&&!$("#apiKey").value.trim()){
-  $("#advancedSearch").open=true;
-  error("Falta conectar el buscador. Creá una cuenta gratuita en "+$("#provider").selectedOptions[0].textContent.split(" ")[0]+" y pegá su clave en Opciones.");
-  showProgress("Falta conectar el buscador gratuito","Tus filtros están listos, pero sin una clave no se puede buscar automáticamente con este proveedor.",false);
-  $("#apiKey").focus();return
- }
- switchTab("live");abort=false;setBusy(true);
- const howMany=onlyOne?1:Number($("#batches").value);
- let finished=false;
- try{
-  for(let i=0;i<howMany&&!abort;i++){
-   showProgress("Consultando fuentes externas…","Lote "+(nextBatch+1)+" · "+[form.city,form.province,form.country].filter(Boolean).join(", ")+" · resultados en vivo",true);
-   const data=await batchSearch(runId,nextBatch,form,provider);
-   if(data.errors?.length)error("Algunas fuentes no respondieron: "+data.errors.slice(0,2).join(" · "));
-   const known=new Set(searchRows.map(p=>p.handle));
-   const needed=form.keywords.split(",").map(norm).filter(Boolean);
-   for(const p of (data.profiles||[])){
-    if(!valid(p.handle)||known.has(p.handle))continue;
-    if(!needed.some(w=>norm([p.handle,p.headline,p.snippet].join(" ")).includes(w)))continue;
-    known.add(p.handle);searchRows.push(p)
-   }
-   nextBatch++;renderLive();await refreshTotal();
-   showProgress("Lote "+nextBatch+" completado",data.fetched+" menciones externas inspeccionadas. "+(data.profiles||[]).length+" perfiles del lote guardados, "+searchRows.length+" únicos en esta búsqueda.",false);
-   if(data.done){finished=true;break}
-   // Dejar pintar cada lote y permitir detener la exploración.
-   await new Promise(r=>setTimeout(r,80));
+function add(rows,word,place,newRun){
+ const known=new Map(resultRows.map(x=>[x.handle,x]));
+ for(const p of rows||[]){
+  const ok=matched(p,word,place);
+  if(!ok)continue;
+  const previous=known.get(ok.handle);
+  if(!previous){
+   ok._discovery=newRun&&!existing.has(ok.handle)?"Nueva en esta búsqueda":"Ya guardada";
+   if(ok._discovery==="Nueva en esta búsqueda")confirmedInSearch++;
+   known.set(ok.handle,ok);
+  }else if((ok.public_account_verified?5:0)+(ok.bio_verified?3:0)+(ok._geo.level==="documented"?2:0)>(previous.public_account_verified?5:0)+(previous.bio_verified?3:0)+(previous._geo.level==="documented"?2:0)){
+   ok._discovery=previous._discovery;known.set(ok.handle,ok)
   }
-  if(abort)showProgress("Búsqueda detenida",searchRows.length+" perfiles conservados en la base.",false);
-  else if(!searchRows.length)showProgress("Sin cuentas coincidentes","La fuente consultada no devolvió perfiles que mencionen esa actividad y lugar. No se mezclaron cuentas de otras búsquedas.",false);
-  else showProgress(finished?"Fuentes disponibles agotadas":"Exploración completada",searchRows.length+" perfiles únicos encontrados. Podés seguir explorando o exportar.",false);
- }catch(e){
- const msg=e.message||String(e);
- error(msg);
- showProgress("Búsqueda no completada",/limitó temporalmente|429|agotó las consultas/i.test(msg)?
- "El buscador rechazó la consulta. No busques más lotes: usá Serper o Tavily con una clave gratis, o abrí Google.":
- "No se agregaron perfiles. Revisá la clave o la disponibilidad del proveedor.",false);
- finished=true;
  }
- finally{setBusy(false);$("#loadMore").disabled=finished||nextBatch>=40}
+ resultRows=[...known.values()].sort((a,b)=>
+  (Number(b.public_account_verified===true)-Number(a.public_account_verified===true))||
+  ((b._geo.level==="documented"?2:b._geo.level==="mentioned"?1:0)-(a._geo.level==="documented"?2:a._geo.level==="mentioned"?1:0))||
+  a.handle.localeCompare(b.handle,"es"));
+ draw()
 }
-async function loadRules(){const {data,error:e}=await db.from("scout_search_rules").select("id,name,country,province,city,focus,interests,keywords").order("created_at",{ascending:false}).limit(50);if(e)return;allRules=data||[];const select=$("#rule");for(const r of allRules){const o=document.createElement("option");o.value=r.id;o.textContent=r.name;select.append(o)}}
-async function auth(){const {data,error:e}=await db.auth.getUser();if(e||!data?.user){$("#login").hidden=false;return}const {data:admin}=await db.from("crm_admins").select("user_id").eq("user_id",data.user.id).maybeSingle();if(!admin){$("#login").hidden=false;$("#loginError").textContent="Tu usuario no está autorizado para SCOUT.";return}user=data.user;$("#login").hidden=true;await Promise.all([loadRules(),refreshTotal()])}
-$("#rule").onchange=()=>{
- const r=allRules.find(x=>x.id===$("#rule").value);if(!r)return;
- $("#searchName").value=r.name||"";
- ["country","province","city","keywords"].forEach(k=>{if(r[k]!=null)$("#"+k).value=r[k]});
- $("#ruleMessage").textContent="Configuración cargada: podés editarla, buscar o guardar cambios.";
-};
-$("#searchName").addEventListener("input",()=>{$("#ruleMessage").textContent=""});
-$("#saveRule").onclick=async()=>{
- if(!user){error("Ingresá primero al CRM.");return}
- const f=filters();
- if(f.name.length<3){$("#ruleMessage").textContent="Escribí un nombre de al menos 3 caracteres para guardar.";$("#searchName").focus();return}
- const btn=$("#saveRule");btn.disabled=true;$("#ruleMessage").textContent="Guardando…";
+function link(parent,label,href,primary=false){
+ const url=safeUrl(href);if(!url)return;
+ const a=txt("a",label,primary?"btn orange":"btn secondary");a.href=url;a.target="_blank";a.rel="noopener noreferrer";parent.append(a)
+}
+function draw(){
+ const div=$("#results");div.replaceChildren();$("#count").textContent=resultRows.length.toLocaleString("es-AR");$("#export").disabled=!resultRows.length;
+ $("#summary").textContent=resultRows.length
+ ?resultRows.length+" cuentas vinculadas a tu búsqueda · "+confirmedInSearch+" no estaban en la base antes de consultar las fuentes. Se indican por separado las ubicaciones comprobadas y las menciones de terceros."
+ :"Sin coincidencias cargadas todavía. Se muestran únicamente perfiles con palabra y ubicación mencionadas en una fuente.";
+ if(!resultRows.length){div.append(txt("div","Todavía no aparecieron perfiles que cumplan ambos filtros en las fuentes consultadas.","empty"));return}
+ for(const p of resultRows.slice(0,250)){
+  const card=txt("article","","profile"),head=txt("div","","profiletop"),meta=txt("div","","tags");
+  head.append(txt("strong","@"+p.handle));
+  meta.append(txt("span",p._discovery,"tag"),txt("span",p.public_account_verified===true?"Pública comprobada":"Privacidad sin verificar",p.public_account_verified===true?"tag good":"tag"));
+  head.append(meta);card.append(head);
+  if(p.headline)card.append(txt("div",p.headline,"name"));
+  if(p.snippet)card.append(txt("p",p.snippet.slice(0,550)));
+  card.append(txt("div","Coincide en "+p._wordField+" · "+p._geo.label,"foot"));
+  card.append(txt("div",evidence(p),"foot"));
+  if(p.match_evidence)card.append(txt("div",p.match_evidence,"foot"));
+  const actions=txt("div","","actions");link(actions,"Abrir Instagram","https://www.instagram.com/"+p.handle+"/",true);link(actions,"Ver fuente",p.source_page);
+  card.append(actions);div.append(card);
+ }
+ if(resultRows.length>250)div.append(txt("p","Se muestran 250 de "+resultRows.length+" perfiles. Podés exportar todos.","note"));
+}
+async function fromDatabase(word,place){
+ // Buscar con índice de usuario, nombre y texto previamente guardado; NO considerar
+ // que el campo de ubicación de la búsqueda pasada prueba la residencia del perfil.
+ let all=[];
+ const term=word.replace(/[,()%*]/g," ").slice(0,95);
+ for(let page=0;page<4;page++){
+  const {data,error}=await db.from("scout_live_profiles").select("*")
+   .or("handle.ilike.%"+term+"%,headline.ilike.%"+term+"%,snippet.ilike.%"+term+"%")
+   .order("last_seen_at",{ascending:false}).range(page*500,page*500+499);
+  if(error)throw error;
+  all.push(...(data||[]));if(!data||data.length<500)break;
+ }
+ // Guardar handles de base ANTES del escaneo para distinguir los nuevos.
+ for(const row of all)existing.add(row.handle);
+ add(all,word,place,false);
+ return all.length;
+}
+async function fromNetwork(word,place){
+ const filters={keywords:word,country:"Argentina",province:place,city:"",focus:"Todos los rubros",interests:[],name:"Búsqueda simple"};
+ const maxBatches=7;let sourcesScanned=0,networkErrors=0;
+ for(let batch=0;batch<maxBatches&&!cancel;batch++){
+  state("Buscando perfiles de Instagram…","Consultando fuentes públicas · lote "+(batch+1)+" de "+maxBatches+" · "+resultRows.length+" coincidencias",true);
+  let response;
+  try{
+   const result=await db.functions.invoke("scout-live-search",{body:{searchId:runId,batch,provider:"auto",filters}});
+   if(result.error){
+    let message=result.error.message||"Error en buscador";
+    try{const details=await result.error.context?.json();if(details?.error)message=details.error}catch{}
+    throw Error(message)
+   }
+   response=result.data;
+   if(response?.error)throw Error(response.error);
+  }catch(err){
+   const message=String(err.message||err);
+   $("#error").textContent="El buscador externo no completó la consulta: "+message;
+   networkErrors++;
+   break;
+  }
+  sourcesScanned++;
+  add(response.profiles||[],word,place,true);
+  if(response.errors?.length)lastSources=response.errors.slice(0,2).join(" · ");
+  if(response.done)break;
+  await new Promise(resolve=>setTimeout(resolve,35));
+ }
+ return {sourcesScanned,networkErrors};
+}
+async function search(){
+ if(running)return;
+ if(!logged){$("#login").hidden=false;return}
+ const {word,place}=f();
+ if(!word||!place){$("#error").textContent="Completá palabra y ciudad o provincia.";return}
+ $("#error").textContent="";
+ resultRows=[];existing=new Set();confirmedInSearch=0;lastSources="";runId=crypto.randomUUID();cancel=false;running=true;
+ $("#search").disabled=true;$("#googleLink").hidden=false;$("#googleLink").href=googleUrl();
+ draw();
  try{
-  const data={name:f.name,country:f.country,province:f.province,city:f.city,focus:f.focus,interests:f.interests,keywords:f.keywords,min_affinity:0,updated_at:new Date().toISOString()};
-  const current=allRules.find(x=>x.id===$("#rule").value);
-  let out;
-  if(current){out=await db.from("scout_search_rules").update(data).eq("id",current.id)}
-  else{out=await db.from("scout_search_rules").insert({...data,enabled:false,created_by:user.id})}
-  if(out.error)throw out.error;
-  $("#ruleMessage").textContent="Configuración guardada. Podés ejecutar la búsqueda ahora.";
-  $("#rule").replaceChildren();const o=document.createElement("option");o.value="";o.textContent="Búsqueda nueva · configurar manualmente";$("#rule").append(o);
-  await loadRules();
-  const newer=allRules.find(x=>x.name===f.name);
-  if(newer)$("#rule").value=newer.id;
- }catch(e){$("#ruleMessage").textContent="No se pudo guardar: "+(e.message||e)}
- finally{btn.disabled=false}
-};
-$("#provider").onchange=()=>{
- const p=$("#provider").value,mode=$("#matchMode").value;
- if(p==="directories")$("#matchMode").value="catalogs";
- else if(mode==="bio"&&p!=="serpapi"||mode==="linked"&&p!=="serper"||mode==="catalogs"&&p!=="directories")$("#matchMode").value="google";
- settingsMode();
-};
-$("#matchMode").onchange=settingsMode;
-["keywords","country","province","city"].forEach(id=>$("#"+id).addEventListener("input",updateSearchLink));
-$("#searchForm").onsubmit=e=>{e.preventDefault();start(true,false)};
-$("#stop").onclick=()=>{abort=true;$("#stop").disabled=true};
-$("#loadMore").onclick=()=>start(false,true);
-$("#showExisting").onclick=async()=>{
- if(!user){error("Iniciá sesión en SCOUT para consultar la base.");return}
- const f=filters();
- if(!f.keywords){error("Indicá primero una actividad para buscar entre los perfiles guardados.");$("#keywords").focus();return}
- $("#dbText").value=f.keywords;
- $("#dbProvince").value=f.province;
- $("#dbCity").value=f.city;
- $("#dbCountry").value=f.country;
- $("#dbCategory").value="";
- $("#dbProvider").value="";
- $("#dbOrigin").value="";
- $("#dbPublic").value="";
- $("#dbFocus").value="";
- await refreshDb();
- switchTab("db");
- const count=filteredDb().length;
- showProgress("Cuentas de Instagram ya detectadas",count+" perfiles coincidentes con los filtros de tu base. Son fichas existentes, no una búsqueda nueva.",false);
-};
-$("#tabLive").onclick=()=>switchTab("live");$("#tabDb").onclick=()=>switchTab("db");
-$("#liveText").oninput=renderLive;
-$("#refreshDb").onclick=refreshDb;
-$("#nextDb").onclick=()=>{dbVisible+=40;renderDb()};
-["dbText","dbProvince","dbCity","dbFocus","dbCategory","dbCountry","dbFrom","dbProvider","dbOrigin","dbStage","dbVerification","dbPublic"].forEach(id=>$("#"+id).addEventListener("input",()=>{dbVisible=40;renderDb()}));
-$("#exportLive").onclick=()=>{if(!searchRows.length){error("Primero buscá perfiles para exportar.");return}csv(asRows(searchRows),"networker-busqueda-en-vivo.csv")};
-$("#exportDb").onclick=()=>{const rows=filteredDb();if(!rows.length){error("No hay perfiles con estos filtros para exportar.");return}csv(asRows(rows),"networker-base-segmentada.csv")};
-$("#loginForm").onsubmit=async e=>{e.preventDefault();$("#loginError").textContent="";const {error:x}=await db.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});if(x){$("#loginError").textContent=x.message;return}await auth()};
-settingsMode();
-if(config.url&&config.publishableKey&&window.supabase){db=window.supabase.createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});auth().catch(e=>$("#loginError").textContent=e.message)}
-else $("#loginError").textContent="No se pudo establecer la conexión del CRM.";
+  state("Iniciando búsqueda…","Revisando las coincidencias ya identificadas, antes de consultar fuentes nuevas.",true);
+  const savedCount=await fromDatabase(word,place);
+  state("Buscando nuevos perfiles…",savedCount+" fichas de la base evaluadas. Consultando fuentes en vivo.",true);
+  const net=await fromNetwork(word,place);
+  if(cancel)state("Búsqueda detenida",resultRows.length+" coincidencias conservadas.",false);
+  else if(net.networkErrors)state("No se pudo completar la búsqueda externa",resultRows.length+" coincidencias disponibles; el proveedor no respondió. Podés abrir el enlace directo a Google.",false);
+  else if(resultRows.length)state("Búsqueda terminada",resultRows.length+" perfiles encontrados; "+confirmedInSearch+" no estaban en la base previamente.",false);
+  else state("Sin coincidencias verificables","No encontré perfiles que contengan «"+word+"» y mencionen «"+place+"» en las fuentes accesibles. Esto no significa que no existan en Instagram.",false);
+  if(lastSources)$("#error").textContent="Algunas fuentes no respondieron: "+lastSources;
+ }catch(err){
+  state("Búsqueda no completada","No se pudieron consultar las fuentes con normalidad.",false);
+  $("#error").textContent=String(err.message||err);
+ }finally{running=false;$("#search").disabled=false;$("#stop").hidden=true}
+}
+function csvCell(v){let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
+function exportCsv(){
+ if(!resultRows.length)return;
+ const cols=["usuario","instagram","nombre","descripcion_publica","campo_que_coincide","localizacion_evidencia","cuenta_publica_comprobada","biografia_verificada","fuente","pagina_fuente","encontrado_en_esta_busqueda"];
+ const lines=[cols.map(csvCell).join(",")];
+ for(const p of resultRows)lines.push([p.handle,"https://www.instagram.com/"+p.handle+"/",p.headline,p.snippet,p._wordField,p._geo.label,p.public_account_verified===true?"SI":"NO VERIFICADO",p.bio_verified===true?"SI":"NO VERIFICADO",p.source_provider,p.source_page,p._discovery].map(csvCell).join(","));
+ const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download="networker-perfiles-instagram.csv";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
+async function checkAuth(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data?.user){$("#login").hidden=false;return}
+ const {data:admin,error:adminError}=await db.from("crm_admins").select("user_id").eq("user_id",data.user.id).maybeSingle();
+ if(adminError||!admin){$("#login").hidden=false;$("#loginError").textContent="No hay autorización para SCOUT.";return}
+ logged=true;$("#login").hidden=true
+}
+$("#searchForm").onsubmit=e=>{e.preventDefault();search()};
+$("#example1").onclick=()=>{$("#word").value="administrativo";$("#where").value="Córdoba";search()};
+$("#example2").onclick=()=>{$("#word").value="nutricionista";$("#where").value="Córdoba";search()};
+$("#stop").onclick=()=>{cancel=true;$("#stop").disabled=true};
+$("#export").onclick=exportCsv;
+$("#loginForm").onsubmit=async e=>{e.preventDefault();$("#loginError").textContent="";
+ const {error}=await db.auth.signInWithPassword({email:$("#email").value.trim(),password:$("#password").value});
+ if(error){$("#loginError").textContent=error.message;return}await checkAuth()};
+if(config.url&&config.publishableKey&&window.supabase){
+ db=window.supabase.createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});
+ checkAuth().catch(e=>$("#loginError").textContent=String(e.message||e));
+}else{
+ $("#login").hidden=false;$("#loginError").textContent="No se encontró la configuración del CRM.";
+}
 })();
 </script></body></html>
