@@ -159,8 +159,16 @@ function draw(){
  if(resultRows.length>250)div.append(txt("p","Se muestran 250 de "+resultRows.length+" perfiles. Podés exportar todos.","note"));
 }
 async function fromDatabase(word,place){
- // Buscar con índice de usuario, nombre y texto previamente guardado; NO considerar
- // que el campo de ubicación de la búsqueda pasada prueba la residencia del perfil.
+ // Guardar todos los usuarios existentes ANTES de la búsqueda externa:
+ // distinguir cuentas NUEVAS de viejas incluso si cambió su biografía.
+ for(let page=0;page<15;page++){
+  const {data,error}=await db.from("scout_live_profiles").select("handle")
+   .order("handle",{ascending:true}).range(page*1000,page*1000+999);
+  if(error)throw error;
+  for(const row of data||[])existing.add(row.handle);
+  if(!data||data.length<1000)break;
+ }
+ // Buscar por @usuario, nombre y descripción; el lugar de búsqueda no prueba residencia.
  let all=[];
  const term=word.replace(/[,()%*]/g," ").slice(0,95);
  for(let page=0;page<4;page++){
@@ -170,8 +178,6 @@ async function fromDatabase(word,place){
   if(error)throw error;
   all.push(...(data||[]));if(!data||data.length<500)break;
  }
- // Guardar handles de base ANTES del escaneo para distinguir los nuevos.
- for(const row of all)existing.add(row.handle);
  add(all,word,place,false);
  return all.length;
 }
