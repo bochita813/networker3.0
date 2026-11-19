@@ -41,7 +41,7 @@ button{font:inherit;cursor:pointer}.btn{border-radius:7px;border:1px solid #1515
 <div class="field"><label for="q">Actividad, profesión, nombre o @usuario</label><input id="q" placeholder="Ej.: fitness, creador UGC, emprendedor" maxlength="85"></div>
 <div class="field"><label for="platform">Red social</label><select id="platform"><option value="">Todas las redes</option><option value="instagram">Instagram</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option></select></div>
 <div class="field"><label for="sector">Actividad de la fuente</label><input id="sector" placeholder="Ej.: negocios, estética" maxlength="80"></div>
-<div class="field"><label for="region">Provincia documentada</label><input id="region" placeholder="Ej.: Córdoba" maxlength="90"></div>
+<div class="field"><label for="region">Provincia documentada</label><input id="region" placeholder="Ej.: Córdoba" maxlength="90"></div><div class="field"><label for="regionHint">Región en el catálogo (sin confirmar domicilio)</label><input id="regionHint" placeholder="Ej.: Córdoba, Argentina" maxlength="90"></div>
 <div class="field"><label for="person">Tipo de ficha</label><select id="person"><option value="">Todas (pendientes incluidas)</option><option value="individual_evidenced">Persona individual con evidencia</option><option value="needs_review">Identidad por revisar</option><option value="business_or_group">Marca o grupo</option><option value="not_a_person">No es persona</option></select></div>
 <div class="field"><label for="age">Edad</label><select id="age"><option value="">Incluir edad no comprobada</option><option value="true">Solo mayores de 25 comprobados</option></select></div>
 <div class="field"><label for="opportunity">Interés en nuevas actividades</label><select id="opportunity"><option value="">Interés por comprobar</option><option value="true">Solo quienes lo declararon públicamente</option></select></div>
@@ -71,13 +71,14 @@ const el=(name,txt,cls)=>{const x=document.createElement(name);x.textContent=Str
 const text=x=>String(x??"").trim().slice(0,80).replace(/[,%"()]/g," ");
 const url=x=>{try{const u=new URL(String(x||""));return ["https:","http:"].includes(u.protocol)?u.href:""}catch{return""}};
 const filters=()=>({q:text($("#q").value),platform:$("#platform").value,sector:text($("#sector").value),
- region:text($("#region").value),person:$("#person").value,age:$("#age").value,opportunity:$("#opportunity").value});
+ region:text($("#region").value),regionHint:text($("#regionHint").value),person:$("#person").value,age:$("#age").value,opportunity:$("#opportunity").value});
 function buildQuery(){
  const f=filters();let q=db.from("scout_social_people").select("*",{count:"exact"});
  if(f.q)q=q.or("handle.ilike.%"+f.q+"%,display_name.ilike.%"+f.q+"%,profile_bio.ilike.%"+f.q+"%,sector.ilike.%"+f.q+"%");
  if(f.platform)q=q.eq("platform",f.platform);
  if(f.sector)q=q.ilike("sector","%"+f.sector+"%");
  if(f.region)q=q.ilike("province","%"+f.region+"%");
+ if(f.regionHint)q=q.ilike("region_hint","%"+f.regionHint+"%");
  if(f.person)q=q.eq("person_assessment",f.person);
  if(f.age)q=q.eq("age_25_plus_verified",true);
  if(f.opportunity)q=q.eq("seeking_other_activity_verified",true);
@@ -93,6 +94,8 @@ function card(p){
  root.append(el("p",place,"small"));
  const status=p.person_assessment==="individual_evidenced"?"Identidad individual documentada":p.person_assessment==="business_or_group"?"Marca o grupo":p.person_assessment==="not_a_person"?"No es persona":"Persona por revisar";
  root.append(el("p",status+" · +25: "+(p.age_25_plus_verified?"con evidencia":"sin comprobar")+" · busca otra actividad: "+(p.seeking_other_activity_verified?"declarado":"sin comprobar"),"small"));
+ if(p.age_25_plus_verified&&p.age_evidence)root.append(el("p","Edad documentada: "+p.age_evidence,"small"));
+ if(p.seeking_other_activity_verified&&p.opportunity_evidence)root.append(el("p","Interés documentado: "+p.opportunity_evidence,"small"));
  const links=el("div","","links");
  for(const [label,source] of [["Abrir "+p.platform,p.profile_url],["Ver la fuente",p.discovery_url]]){
   const href=url(source);if(!href)continue;const a=el("a",label+" ↗");a.href=href;a.target="_blank";a.rel="noopener noreferrer";links.append(a)
@@ -131,7 +134,7 @@ async function load(reset=true){
 function cell(v){let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
 async function exportCsv(){
  if(!ok||exporting)return;exporting=true;$("#export").disabled=true;$("#error").textContent="";
- const fields=["platform","handle","profile_url","display_name","profile_bio","sector","province","city","country","region_hint","person_assessment","age_25_plus_verified","seeking_other_activity_verified","discovery_source","discovery_url","relevance_reason","first_seen_at"];
+ const fields=["platform","handle","profile_url","display_name","profile_bio","sector","province","city","country","region_hint","person_assessment","age_25_plus_verified","age_evidence","seeking_other_activity_verified","opportunity_evidence","discovery_source","discovery_url","relevance_reason","first_seen_at"];
  const output=[fields.map(cell).join(",")];let from=0;
  try{
   while(from<150000){
