@@ -382,6 +382,9 @@ content:
             type: file
             options:
               media: videos
+          - name: replay_url
+            label: "URL alternativa de la grabación (YouTube, Vimeo, Instagram, TikTok o MP4)"
+            type: string
       - name: items
         label: "Biblioteca de contenidos"
         type: object
@@ -440,5 +443,5 @@ content:
             options:
               media: videos
           - name: video_url
-            label: "Alternativa: URL HTTPS directa a MP4"
+            label: "URL del video (YouTube, Vimeo, Instagram, TikTok o MP4 directo)"
             type: string
