@@ -365,6 +365,207 @@ content:
       delete: false
       rename: false
     fields:
+      - name: copy
+        label: "Textos y portadas de Punto Aparte"
+        type: object
+        fields:
+          - name: hero
+            label: "01 · Portada y manifiesto"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+              - name: tagline
+                label: "Frase destacada"
+                type: string
+              - name: paragraph1
+                label: "No es punto seguido"
+                type: text
+              - name: paragraph2
+                label: "No es punto final"
+                type: text
+              - name: paragraph3
+                label: "Es punto aparte"
+                type: text
+              - name: paragraph4
+                label: "Presentación del espacio"
+                type: text
+              - name: explore
+                label: "Botón explorar"
+                type: string
+              - name: live_button
+                label: "Botón en vivo"
+                type: string
+          - name: sections
+            label: "02 · Título de los cuatro espacios"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+          - name: mate
+            label: "03 · Un mate conmigo"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+              - name: tagline
+                label: "Frase destacada"
+                type: string
+              - name: description
+                label: "Descripción"
+                type: text
+              - name: button
+                label: "Texto del botón"
+                type: string
+              - name: image
+                label: "Imagen de portada (opcional; reemplaza el diseño actual)"
+                type: image
+                required: false
+                options:
+                  media: images
+          - name: pildoras
+            label: "04 · Píldoras de aprendizaje"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+              - name: tagline
+                label: "Frase destacada"
+                type: string
+              - name: description
+                label: "Descripción"
+                type: text
+              - name: button
+                label: "Texto del botón"
+                type: string
+              - name: image
+                label: "Imagen de portada (opcional; reemplaza el diseño actual)"
+                type: image
+                required: false
+                options:
+                  media: images
+          - name: plan_ve
+            label: "05 · PLAN VE"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+              - name: tagline
+                label: "Frase destacada"
+                type: string
+              - name: description
+                label: "Descripción"
+                type: text
+              - name: button
+                label: "Texto del botón"
+                type: string
+              - name: image
+                label: "Imagen de portada (opcional; reemplaza el diseño actual)"
+                type: image
+                required: false
+                options:
+                  media: images
+          - name: vivo
+            label: "06 · Punto Aparte en vivo (portada)"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+              - name: tagline
+                label: "Frase destacada"
+                type: string
+              - name: description
+                label: "Descripción"
+                type: text
+              - name: button
+                label: "Texto del botón"
+                type: string
+              - name: image
+                label: "Imagen de portada (opcional; reemplaza el diseño actual)"
+                type: image
+                required: false
+                options:
+                  media: images
+          - name: library
+            label: "07 · Biblioteca y navegación"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+              - name: description
+                label: "Descripción"
+                type: text
+              - name: search
+                label: "Texto del buscador"
+                type: string
+              - name: empty
+                label: "Mensaje sin contenidos"
+                type: string
+              - name: category_title
+                label: "Título de biblioteca por sección"
+                type: string
+              - name: category_description
+                label: "Descripción de biblioteca por sección"
+                type: text
+              - name: back
+                label: "Enlace de regreso"
+                type: string
+          - name: live_intro
+            label: "08 · Textos de encuentros en vivo"
+            type: object
+            fields:
+              - name: eyebrow
+                label: "Texto superior"
+                type: string
+              - name: title
+                label: "Título"
+                type: string
+              - name: description
+                label: "Descripción"
+                type: text
+              - name: empty
+                label: "Mensaje sin contenidos"
+                type: string
+              - name: button
+                label: "Texto del botón"
+                type: string
+              - name: note
+                label: "Nota al pie de encuentros"
+                type: text
+              - name: archive_title
+                label: "Título de grabaciones anteriores"
+                type: string
+              - name: archive_description
+                label: "Descripción de grabaciones anteriores"
+                type: text
       - name: live
         label: "Punto Aparte en vivo"
         type: object
