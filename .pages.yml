@@ -341,3 +341,104 @@ content:
           - name: whatsapp
             label: "Número WhatsApp (549 + código + número, sin signos)"
             type: string
+
+  - name: punto_aparte
+    label: "Punto Aparte · Videos y vivos"
+    type: file
+    path: content/punto-aparte.json
+    format: json
+    operations:
+      delete: false
+      rename: false
+    fields:
+      - name: live
+        label: "Punto Aparte en vivo"
+        type: object
+        fields:
+          - name: state
+            label: "Estado"
+            type: select
+            options:
+              values: [none, upcoming, live, replay]
+          - name: title
+            label: "Título del encuentro"
+            type: string
+          - name: description
+            label: "Descripción"
+            type: text
+          - name: date
+            label: "Fecha y hora (indicar zona horaria)"
+            type: string
+          - name: url
+            label: "Enlace de Instagram"
+            type: string
+          - name: poster
+            label: "Portada"
+            type: image
+            options:
+              media: images
+          - name: replay
+            label: "Grabación MP4"
+            type: file
+            options:
+              media: videos
+      - name: items
+        label: "Biblioteca de contenidos"
+        type: object
+        list: true
+        fields:
+          - name: id
+            label: "Identificador permanente (ej. mate-001)"
+            type: string
+            required: true
+          - name: title
+            label: "Título"
+            type: string
+            required: true
+          - name: description
+            label: "Descripción"
+            type: text
+          - name: category
+            label: "Categoría (mate, pildoras, plan-ve)"
+            type: select
+            options:
+              values: [mate, pildoras, plan-ve]
+          - name: format
+            label: "Formato"
+            type: select
+            options:
+              values: [video, vivo, reflexion]
+          - name: visibility
+            label: "Visibilidad (public = público, unlisted = por enlace, draft = borrador)"
+            type: select
+            options:
+              values: [draft, unlisted, public]
+            default: draft
+          - name: temperature
+            label: "Etapa comercial (orientativa; no se muestra en la interfaz pública)"
+            type: select
+            options:
+              values: [general, frio, curioso, interesado, evaluando, caliente]
+          - name: date
+            label: "Fecha (AAAA-MM-DD)"
+            type: string
+          - name: duration
+            label: "Duración (ej. 4 min)"
+            type: string
+          - name: featured
+            label: "Destacar contenido"
+            type: boolean
+            default: false
+          - name: poster
+            label: "Portada"
+            type: image
+            options:
+              media: images
+          - name: video
+            label: "Video MP4"
+            type: file
+            options:
+              media: videos
+          - name: video_url
+            label: "Alternativa: URL HTTPS directa a MP4"
+            type: string
