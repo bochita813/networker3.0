@@ -283,6 +283,36 @@ content:
             type: image
             options:
               media: images
+          - name: extras
+            label: "Testimonios adicionales (agregar todos los que quieras)"
+            type: object
+            list: true
+            fields:
+              - name: id
+                label: "Identificador único permanente (ej. maria-cordoba)"
+                type: string
+                required: true
+              - name: published
+                label: "Publicar testimonio autorizado"
+                type: boolean
+                default: false
+              - name: title
+                label: "Nombre o título de la historia"
+                type: string
+                required: true
+              - name: text
+                label: "Testimonio / descripción"
+                type: text
+              - name: photo
+                label: "Foto autorizada o portada del video"
+                type: image
+                options:
+                  media: images
+              - name: video
+                label: "Video MP4 autorizado"
+                type: file
+                options:
+                  media: videos
           - name: button
             label: "Botón"
             type: string
