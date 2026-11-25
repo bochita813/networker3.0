@@ -359,7 +359,8 @@ document.getElementById('lead-form').addEventListener('submit',async e=>{
       const card=stories[i],title=card.querySelector('strong'),desc=card.querySelector('p'),media=card.querySelector('.visual');
       if(title&&s[prefix+'_title']!==undefined)title.textContent=s[prefix+'_title'];
       if(desc&&s[prefix+'_text']!==undefined)desc.textContent=s[prefix+'_text'];
-      const src=s[prefix+'_photo'];
+      const src=s[prefix+'_remove_photo']===true?'':s[prefix+'_photo'];
+      if(media&&s[prefix+'_remove_photo']===true){media.replaceChildren();media.hidden=true;const share=card.querySelector('.story-share');if(share)share.hidden=false;}
       if(media&&typeof src==='string'&&src){
         media.textContent='';
         const img=document.createElement('img');
