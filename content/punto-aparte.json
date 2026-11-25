@@ -8,5 +8,70 @@
     "poster": "",
     "replay": ""
   },
-  "items": []
+  "items": [],
+  "copy": {
+    "hero": {
+      "eyebrow": "MI ESPACIO DE CONTENIDOS",
+      "title": "punto aparte.",
+      "tagline": "Porque tu historia todavía se está escribiendo.",
+      "paragraph1": "No es punto seguido, porque no se trata de seguir haciendo lo mismo.",
+      "paragraph2": "No es punto final, porque no estamos hablando de terminar.",
+      "paragraph3": "Es punto aparte, porque a veces necesitamos terminar un párrafo para empezar a escribir uno diferente.",
+      "paragraph4": "Creé este espacio para compartir ideas, aprendizajes y conversaciones que quizás nos permitan mirar la vida desde otro lugar.",
+      "explore": "Explorar contenidos →",
+      "live_button": "Punto Aparte en vivo"
+    },
+    "sections": {
+      "eyebrow": "ELEGÍ TU PRÓXIMO PUNTO APARTE",
+      "title": "¿Qué te gustaría explorar hoy?"
+    },
+    "library": {
+      "eyebrow": "CONTENIDO PARA CUANDO VOS QUIERAS",
+      "title": "La biblioteca de Punto Aparte.",
+      "description": "Elegí un contenido, disfrutalo a tu ritmo y compartilo con alguien a quien creas que le puede sumar.",
+      "search": "Buscar un contenido...",
+      "empty": "Próximamente, nuevos contenidos.",
+      "category_title": "Contenidos disponibles",
+      "category_description": "Elegí un video o reflexión y disfrutalo a tu ritmo.",
+      "back": "← Explorar todos los espacios"
+    },
+    "live_intro": {
+      "eyebrow": "NOS ENCONTRAMOS EN DIRECTO",
+      "title": "Punto Aparte en vivo.",
+      "description": "Hay conversaciones que no se pueden editar. Se viven.",
+      "empty": "Próximamente, nuevos encuentros en Instagram.",
+      "button": "Seguir en Instagram ↗",
+      "note": "Si no pudiste estar, vas a encontrar los encuentros que publique en la biblioteca.",
+      "archive_title": "Encuentros anteriores",
+      "archive_description": "Volvé a disfrutar los encuentros que ya compartimos."
+    },
+    "mate": {
+      "eyebrow": "01 · CONECTAR",
+      "title": "Un mate conmigo.",
+      "tagline": "Hay conversaciones que merecen un mate.",
+      "description": "Un espacio para compartir reflexiones, experiencias y aprendizajes sobre la vida. Sin formalidades, sin grandes discursos. Simplemente vos, yo y una buena conversación.",
+      "button": "Tomemos un mate"
+    },
+    "pildoras": {
+      "eyebrow": "02 · APRENDER",
+      "title": "Píldoras de aprendizaje.",
+      "tagline": "Pequeñas dosis de conocimiento para grandes cambios.",
+      "description": "Liderazgo, mentalidad, carisma, influencia y habilidades humanas. Contenidos breves para aprender algo nuevo y llevarlo a tu vida cotidiana.",
+      "button": "Explorar aprendizajes"
+    },
+    "plan_ve": {
+      "eyebrow": "03 · CONSTRUIR",
+      "title": "PLAN VE.",
+      "tagline": "No es un Plan B. Es el plan de ir por más.",
+      "description": "Emprendimiento, nuevas economías, herramientas digitales y oportunidades. Porque no necesitás que algo salga mal para empezar a construir algo nuevo.",
+      "button": "VE por tus proyectos"
+    },
+    "vivo": {
+      "eyebrow": "04 · ENCONTRARNOS",
+      "title": "Punto Aparte en vivo.",
+      "tagline": "Hay conversaciones que no se pueden editar. Se viven.",
+      "description": "Nuestros encuentros en directo por Instagram. Ideas, debates, preguntas y conversaciones reales. También vas a poder revivir los encuentros anteriores.",
+      "button": "Explorar los encuentros"
+    }
+  }
 }
