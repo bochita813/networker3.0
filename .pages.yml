@@ -313,6 +313,14 @@ content:
                 type: file
                 options:
                   media: videos
+              - name: remove_photo
+                label: "Quitar imagen de esta publicación"
+                type: boolean
+                default: false
+              - name: remove_video
+                label: "Quitar video de esta publicación"
+                type: boolean
+                default: false
           - name: button
             label: "Botón"
             type: string
@@ -385,6 +393,14 @@ content:
           - name: replay_url
             label: "URL alternativa de la grabación (YouTube, Vimeo, Instagram, TikTok o MP4)"
             type: string
+          - name: remove_photo
+            label: "Quitar portada del vivo"
+            type: boolean
+            default: false
+          - name: remove_video
+            label: "Quitar grabación del vivo (archivo y URL)"
+            type: boolean
+            default: false
       - name: items
         label: "Biblioteca de contenidos"
         type: object
@@ -445,3 +461,11 @@ content:
           - name: video_url
             label: "URL del video (YouTube, Vimeo, Instagram, TikTok o MP4 directo)"
             type: string
+          - name: remove_photo
+            label: "Quitar portada de esta publicación"
+            type: boolean
+            default: false
+          - name: remove_video
+            label: "Quitar video de esta publicación (archivo y URL)"
+            type: boolean
+            default: false
