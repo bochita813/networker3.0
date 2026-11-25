@@ -376,7 +376,7 @@ document.getElementById('lead-form').addEventListener('submit',async e=>{
       for(const item of s.extras){
         if(!item||item.published!==true||typeof item.title!=='string'||!item.title.trim())continue;
         const k=String(item.id||'').trim().toLowerCase();if(!/^[a-z0-9][a-z0-9-]{0,79}$/.test(k)||used.has(k))continue;
-        const photo=safeMedia(item.photo),video=safeMedia(item.video),description=typeof item.text==='string'?item.text.trim():'';if(!photo&&!video&&!description)continue;used.add(k);
+        const photo=item.remove_photo===true?'':safeMedia(item.photo),video=item.remove_video===true?'':safeMedia(item.video),description=typeof item.text==='string'?item.text.trim():'';used.add(k);
         const card=document.createElement('article');card.className='story';card.id='historia-'+k;
         if(photo||video){const media=document.createElement('div');media.className='visual';media.style.cssText='height:auto;aspect-ratio:16/9;overflow:hidden';const el=document.createElement(video?'video':'img');el.src=video||photo;el.style.cssText='width:100%;height:100%;object-fit:contain;border-radius:11px';if(video){el.controls=true;el.playsInline=true;el.preload='none';if(photo)el.poster=photo}else{el.alt=item.title;el.loading='lazy'}media.append(el);card.append(media)}
         const title=document.createElement('strong');title.textContent=item.title;card.append(title);if(description){const p=document.createElement('p');p.textContent=description;p.style.whiteSpace='pre-line';card.append(p)}
