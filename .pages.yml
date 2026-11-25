@@ -261,6 +261,10 @@ content:
             type: image
             options:
               media: images
+          - name: first_remove_photo
+            label: "Historia 1 - Quitar imagen de la publicación"
+            type: boolean
+            default: false
           - name: second_title
             label: "Historia 2 - título"
             type: string
@@ -272,6 +276,10 @@ content:
             type: image
             options:
               media: images
+          - name: second_remove_photo
+            label: "Historia 2 - Quitar imagen de la publicación"
+            type: boolean
+            default: false
           - name: third_title
             label: "Historia 3 - título"
             type: string
@@ -283,6 +291,10 @@ content:
             type: image
             options:
               media: images
+          - name: third_remove_photo
+            label: "Historia 3 - Quitar imagen de la publicación"
+            type: boolean
+            default: false
           - name: extras
             label: "Testimonios adicionales (agregar todos los que quieras)"
             type: object
