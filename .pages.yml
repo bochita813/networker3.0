@@ -73,6 +73,8 @@ content:
           - name: photo
             label: "Foto de Hernán"
             type: image
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: images
           - name: photo_note
@@ -137,6 +139,8 @@ content:
           - name: video
             label: "Video de presentación MP4"
             type: file
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: videos
           - name: quote
@@ -259,12 +263,10 @@ content:
           - name: first_photo
             label: "Historia 1 - foto autorizada"
             type: image
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: images
-          - name: first_remove_photo
-            label: "Historia 1 - Quitar imagen de la publicación"
-            type: boolean
-            default: false
           - name: second_title
             label: "Historia 2 - título"
             type: string
@@ -274,12 +276,10 @@ content:
           - name: second_photo
             label: "Historia 2 - foto autorizada"
             type: image
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: images
-          - name: second_remove_photo
-            label: "Historia 2 - Quitar imagen de la publicación"
-            type: boolean
-            default: false
           - name: third_title
             label: "Historia 3 - título"
             type: string
@@ -289,12 +289,10 @@ content:
           - name: third_photo
             label: "Historia 3 - foto autorizada"
             type: image
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: images
-          - name: third_remove_photo
-            label: "Historia 3 - Quitar imagen de la publicación"
-            type: boolean
-            default: false
           - name: extras
             label: "Testimonios adicionales (agregar todos los que quieras)"
             type: object
@@ -318,21 +316,17 @@ content:
               - name: photo
                 label: "Foto autorizada o portada del video"
                 type: image
+                required: false
+                description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
                 options:
                   media: images
               - name: video
                 label: "Video MP4 autorizado"
                 type: file
+                required: false
+                description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
                 options:
                   media: videos
-              - name: remove_photo
-                label: "Quitar imagen de esta publicación"
-                type: boolean
-                default: false
-              - name: remove_video
-                label: "Quitar video de esta publicación"
-                type: boolean
-                default: false
           - name: button
             label: "Botón"
             type: string
@@ -395,24 +389,20 @@ content:
           - name: poster
             label: "Portada"
             type: image
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: images
           - name: replay
             label: "Grabación MP4"
             type: file
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: videos
           - name: replay_url
             label: "URL alternativa de la grabación (YouTube, Vimeo, Instagram, TikTok o MP4)"
             type: string
-          - name: remove_photo
-            label: "Quitar portada del vivo"
-            type: boolean
-            default: false
-          - name: remove_video
-            label: "Quitar grabación del vivo (archivo y URL)"
-            type: boolean
-            default: false
       - name: items
         label: "Biblioteca de contenidos"
         type: object
@@ -463,21 +453,17 @@ content:
           - name: poster
             label: "Portada"
             type: image
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: images
           - name: video
             label: "Video MP4"
             type: file
+            required: false
+            description: "Para eliminar o reemplazar, pulsá la papelera del archivo y luego Upload o Select. Guardá con Save."
             options:
               media: videos
           - name: video_url
             label: "URL del video (YouTube, Vimeo, Instagram, TikTok o MP4 directo)"
             type: string
-          - name: remove_photo
-            label: "Quitar portada de esta publicación"
-            type: boolean
-            default: false
-          - name: remove_video
-            label: "Quitar video de esta publicación (archivo y URL)"
-            type: boolean
-            default: false
