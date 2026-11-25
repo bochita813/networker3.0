@@ -79,11 +79,14 @@
     "intro": "Me gustaría que conozcas a personas reales, cómo llegaron, qué aprendieron, como se han superado y cómo viven esta experiencia. No solamente sus logros.",
     "first_title": "Alguien que empezó desde cero",
     "first_text": "Acá irá su historia en primera persona, con nombre y autorización.",
+    "first_remove_photo": false,
     "second_title": "Alguien que ya tenía experiencia",
     "second_text": "Su mirada sobre el sistema, los desafíos y el trabajo cotidiano.",
     "second_photo": "/media/images/Captura de pantalla -2026-11-25 10-18-05.png",
+    "second_remove_photo": true,
     "third_title": "Alguien que habla del equipo",
     "third_text": "Qué significa sentirse acompañado, sin guiones ni testimonios inventados.",
+    "third_remove_photo": false,
     "button": "Quiero hacerte una pregunta →"
   },
   "contact": {
