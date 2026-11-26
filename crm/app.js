@@ -19,21 +19,34 @@ function setTab(next){
 }
 function filtered(){
  const q=$('#search').value.trim().toLocaleLowerCase('es'),src=$('#filterSource').value,pr=$('#filterPriority').value;
- return leads.filter(l=>(!src||l.source===src)&&(!pr||l.priority===pr)&&(!q||[l.name,l.phone,l.email,l.note,l.interest].join(' ').toLocaleLowerCase('es').includes(q)));
+ return leads.filter(l=>(!src||l.source===src)&&(!pr||l.priority===pr)&&(!q||[l.name,l.phone,l.email,l.note,l.interest,l.entry_content,l.campaign,l.entry_channel].join(' ').toLocaleLowerCase('es').includes(q)));
 }
 function render(){
- $('#pageTitle').textContent=tab==='tablero'?'Tablero comercial':tab==='contactos'?'Todos los contactos':'Agenda de seguimiento';
+ $('#pageTitle').textContent=tab==='tablero'?'Tablero comercial':tab==='contactos'?'Todos los contactos':tab==='conversion'?'Conversión y campañas':'Agenda de seguimiento';
  $('#sectionTitle').textContent=tab==='tablero'?'Embudo de reclutamiento':tab==='contactos'?'Base de prospectos':'Próximas conversaciones';
  $('#statTotal').textContent=leads.length;
  $('#statActive').textContent=leads.filter(l=>!['Nuevo','Socio','Descartado'].includes(l.stage)).length;
  $('#statDue').textContent=leads.filter(isDue).length;
  $('#statWon').textContent=leads.filter(l=>l.stage==='Socio').length;
  $('#board').hidden=tab!=='tablero';$('#tablePanel').hidden=tab!=='contactos';$('#followPanel').hidden=tab!=='seguimientos';
+ $('#conversionPanel').hidden=tab!=='conversion';$('#sectionTitle').hidden=tab==='conversion';$('.filters').hidden=tab==='conversion';if(tab==='conversion')drawConversion();
  const items=filtered();
  if(tab==='tablero')drawBoard(items);
  if(tab==='contactos')drawTable(items);
  if(tab==='seguimientos')drawFollow(items);
 }
+function drawConversion(){
+ const total=leads.length,active=leads.filter(l=>['Conversación','Interés confirmado','Presentación','Evaluación','Socio'].includes(l.stage)).length,qualified=leads.filter(l=>['Interés confirmado','Presentación','Evaluación','Socio'].includes(l.stage)).length,presented=leads.filter(l=>['Presentación','Evaluación','Socio'].includes(l.stage)).length,won=leads.filter(l=>l.stage==='Socio').length;const rate=(n,d)=>d?((n/d)*100).toFixed(1)+'%':'—';
+ const stats=[['Contactos registrados',total],['Conversación o etapa posterior',active],['Interés confirmado o posterior',qualified],['Presentación o posterior',presented],['Socios',won],['Socios / contactos',rate(won,total)]];
+ $('#conversionMetrics').innerHTML=stats.map(([label,n])=>'<div class="stat"><small>'+escape(label)+'</small><b>'+escape(n)+'</b></div>').join('');
+ const grouped=new Map();for(const l of leads){const source=l.source||'Landing',campaign=l.campaign||'Sin campaña',key=JSON.stringify([source,campaign]);if(!grouped.has(key))grouped.set(key,{source,campaign,count:0,active:0,won:0});const g=grouped.get(key);g.count++;if(['Conversación','Interés confirmado','Presentación','Evaluación','Socio'].includes(l.stage))g.active++;if(l.stage==='Socio')g.won++}
+ $('#campaignMetrics').innerHTML='<table><thead><tr><th>Origen</th><th>Campaña</th><th>Contactos</th><th>Conversación o posterior</th><th>Socios</th></tr></thead><tbody>'+[...grouped.values()].sort((a,b)=>b.count-a.count).map(g=>'<tr><td>'+escape(g.source)+'</td><td>'+escape(g.campaign)+'</td><td>'+g.count+'</td><td>'+g.active+'</td><td>'+g.won+'</td></tr>').join('')+'</tbody></table>';
+ $('#conversionCoverage').textContent='Métricas de '+total+' contactos cargados. Las etapas representan el estado actual, no un historial de conversiones. Los descartados no permiten reconstruir etapas previas.'+(total>=1000?' Se alcanzó el límite de 1.000 contactos.':'');
+}
+function generateCampaign(){try{const base='https://networker3.netlify.app',raw=$('#campaignCustom').value.trim()||$('#campaignDestination').value,u=new URL(raw,base);if(u.origin!==base||!['/','/propuesta-microcta.html','/punto-aparte.html'].includes(u.pathname))throw Error('Usá un enlace de la landing o de Punto Aparte.');if(u.pathname==='/')u.pathname='/propuesta-microcta.html';u.searchParams.set('utm_source',$('#campaignSource').value);u.searchParams.set('utm_medium',$('#campaignMedium').value);const campaign=$('#campaignName').value.trim(),content=$('#campaignContent').value.trim();if(campaign)u.searchParams.set('utm_campaign',campaign);else u.searchParams.delete('utm_campaign');if(content)u.searchParams.set('utm_content',content);else u.searchParams.delete('utm_content');$('#campaignUrl').value=u.href;$('#campaignStatus').textContent='Enlace listo para compartir.';return u.href}catch(e){$('#campaignStatus').textContent=e.message;return ''}}
+$('#campaignGenerate').onclick=generateCampaign;
+$('#campaignCopy').onclick=async()=>{const url=generateCampaign();if(!url)return;try{await navigator.clipboard.writeText(url);$('#campaignStatus').textContent='¡Enlace copiado!'}catch(e){$('#campaignUrl').focus();$('#campaignUrl').select();$('#campaignStatus').textContent='Copiá el enlace seleccionado.'}};
+
 function drawBoard(items){
  const root=$('#board');root.replaceChildren();
  for(const stage of stages){
@@ -42,7 +55,7 @@ function drawBoard(items){
   lane.innerHTML='<div class="laneheading"><span>'+escape(stage)+'</span><span class="counter">'+subset.length+'</span></div>';
   for(const l of subset){
    const article=document.createElement('article');article.className='lead';article.draggable=true;
-   article.innerHTML='<strong>'+escape(l.name)+'</strong><div class="leadnote">'+escape(l.source)+' · '+escape(l.interest)+'</div>'
+   article.innerHTML='<strong>'+escape(l.name)+'</strong><div class="leadnote">'+escape(l.source)+' · '+escape(l.interest)+'</div>'+(l.entry_content?'<div class="leadnote">'+escape(l.entry_content)+'</div>':'')
    +'<span class="pill'+(l.priority==='Alta'?' hot':'')+'">'+escape(l.priority)+'</span>'
    +(isDue(l)?'<span class="pill late">Pendiente</span>':'')
    +'<div class="leadfoot"><span>'+escape(fmtDate(l.follow_up))+'</span><span>Editar ↗</span></div>';
@@ -90,7 +103,7 @@ function edit(id){
  set('source',l?.source||'Landing');set('interest',l?.interest||'Explorando');
  set('stage',l?.stage||'Nuevo');set('priority',l?.priority||'Media');
  set('follow_up',l?.follow_up||'');set('last_contact',l?.last_contact||'');
- set('contact_email',l?.email||'');set('note',l?.note||'');
+ set('contact_email',l?.email||'');set('note',l?.note||'');set('entry_channel',l?.entry_channel||'');set('campaign',l?.campaign||'');set('entry_content',l?.entry_content||'');
  $('#editorTitle').textContent=l?'Editar contacto':'Nuevo contacto';
  $('#deleteLead').hidden=!l;
  const p=phone(l?.phone);const wa=$('#waLink');
@@ -106,7 +119,7 @@ async function saveLead(e){
   name:$('#name').value.trim(),phone:p,source:$('#source').value,
   interest:$('#interest').value,stage:$('#stage').value,priority:$('#priority').value,
   follow_up:$('#follow_up').value||null,last_contact:$('#last_contact').value||null,
-  email:$('#contact_email').value.trim()||null,note:$('#note').value.trim(),
+  email:$('#contact_email').value.trim()||null,note:$('#note').value.trim(),entry_channel:$('#entry_channel').value.trim(),campaign:$('#campaign').value.trim(),entry_content:$('#entry_content').value.trim(),
   updated_at:new Date().toISOString()
  };
  if(payload.name.length<2){notify('Ingresá un nombre válido.');return}
@@ -136,7 +149,7 @@ async function deleteLead(){
 }
 function exportCSV(){
  if(!leads.length){notify('No hay contactos para exportar');return}
- const keys=['name','phone','email','source','interest','stage','priority','note','follow_up','last_contact','created_at'];
+ const keys=['name','phone','email','source','entry_channel','campaign','entry_content','interest','stage','priority','note','follow_up','last_contact','created_at'];
  const csvCell=v=>{let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
  const rows=[keys.join(',')].concat(leads.map(l=>keys.map(k=>csvCell(l[k])).join(',')));
  const blob=new Blob(['\ufeff'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'});
