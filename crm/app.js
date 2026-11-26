@@ -35,7 +35,11 @@ function render(){
  if(tab==='contactos')drawTable(items);
  if(tab==='seguimientos')drawFollow(items);
 }
+function audience(channel){const key=channel==='email'?'email':'phone',permission=channel==='email'?'email_marketing':'whatsapp_marketing',groups=new Map();for(const l of leads){const val=channel==='email'?String(l.email||'').trim().toLowerCase():phone(l.phone);if(!val)continue;if(!groups.has(val))groups.set(val,[]);groups.get(val).push(l)}return [...groups.entries()].filter(([v,rows])=>rows.every(l=>l[permission]===true&&l.marketing_opt_in_at)&& (channel==='email'?/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v):/^\d{9,15}$/.test(v))).map(([v,rows])=>({name:rows[0].name,[key]:v,permission:'true',opt_in_at:rows[0].marketing_opt_in_at}));}
+function exportAudience(channel){if(!signedIn)return;if(leads.length>=1000){notify('La base supera el límite de carga; no se puede garantizar una exportación completa.');return}const rows=audience(channel);if(!rows.length){notify('No hay contactos autorizados para este canal.');return}const keys=['name',channel==='email'?'email':'phone','permission','opt_in_at'];const cell=v=>{let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};const blob=new Blob(['\ufeff'+[keys.join(','),...rows.map(r=>keys.map(k=>cell(r[k])).join(','))].join('\r\n')],{type:'text/csv;charset=utf-8'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='audiencia-'+channel+'-'+dateToday()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+$('#exportEmailAudience').onclick=()=>exportAudience('email');$('#exportWaAudience').onclick=()=>exportAudience('whatsapp');
 function drawConversion(){
+ $('#audEmail').textContent=audience('email').length;$('#audWa').textContent=audience('whatsapp').length;
  const total=leads.length,active=leads.filter(l=>['Conversación','Interés confirmado','Presentación','Evaluación','Socio'].includes(l.stage)).length,qualified=leads.filter(l=>['Interés confirmado','Presentación','Evaluación','Socio'].includes(l.stage)).length,presented=leads.filter(l=>['Presentación','Evaluación','Socio'].includes(l.stage)).length,won=leads.filter(l=>l.stage==='Socio').length;const rate=(n,d)=>d?((n/d)*100).toFixed(1)+'%':'—';
  const stats=[['Contactos registrados',total],['Conversación o etapa posterior',active],['Interés confirmado o posterior',qualified],['Presentación o posterior',presented],['Socios',won],['Socios / contactos',rate(won,total)]];
  $('#conversionMetrics').innerHTML=stats.map(([label,n])=>'<div class="stat"><small>'+escape(label)+'</small><b>'+escape(n)+'</b></div>').join('');
@@ -103,7 +107,7 @@ function edit(id){
  set('source',l?.source||'Landing');set('interest',l?.interest||'Explorando');
  set('stage',l?.stage||'Nuevo');set('priority',l?.priority||'Media');
  set('follow_up',l?.follow_up||'');set('last_contact',l?.last_contact||'');
- set('contact_email',l?.email||'');set('note',l?.note||'');set('entry_channel',l?.entry_channel||'');set('campaign',l?.campaign||'');set('entry_content',l?.entry_content||'');
+ set('contact_email',l?.email||'');set('note',l?.note||'');set('entry_channel',l?.entry_channel||'');set('campaign',l?.campaign||'');set('entry_content',l?.entry_content||'');$('#email_marketing').checked=!!l?.email_marketing;$('#whatsapp_marketing').checked=!!l?.whatsapp_marketing;
  $('#editorTitle').textContent=l?'Editar contacto':'Nuevo contacto';
  $('#deleteLead').hidden=!l;
  const p=phone(l?.phone);const wa=$('#waLink');
@@ -115,11 +119,12 @@ async function saveLead(e){
  const id=$('#leadId').value;
  const p=phone($('#phone').value);
  if(p.length<9||p.length>15){notify('Revisá WhatsApp: usá 9 a 15 dígitos, con código de país.');return}
+ const prior=leads.find(x=>x.id===id);const em=$('#email_marketing').checked,wm=$('#whatsapp_marketing').checked;if(em&&!$('#contact_email').value.trim()){notify('Ingresá un email antes de activar su permiso.');return;}
  const payload={
   name:$('#name').value.trim(),phone:p,source:$('#source').value,
   interest:$('#interest').value,stage:$('#stage').value,priority:$('#priority').value,
   follow_up:$('#follow_up').value||null,last_contact:$('#last_contact').value||null,
-  email:$('#contact_email').value.trim()||null,note:$('#note').value.trim(),entry_channel:$('#entry_channel').value.trim(),campaign:$('#campaign').value.trim(),entry_content:$('#entry_content').value.trim(),
+  email:$('#contact_email').value.trim()||null,note:$('#note').value.trim(),entry_channel:$('#entry_channel').value.trim(),campaign:$('#campaign').value.trim(),entry_content:$('#entry_content').value.trim(),email_marketing:em,whatsapp_marketing:wm,marketing_opt_in_at:(em||wm)?((prior?.email_marketing===em&&prior?.whatsapp_marketing===wm&&prior?.marketing_opt_in_at)||new Date().toISOString()):null,
   updated_at:new Date().toISOString()
  };
  if(payload.name.length<2){notify('Ingresá un nombre válido.');return}
