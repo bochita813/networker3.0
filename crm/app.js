@@ -10,26 +10,27 @@ const isDue=l=>!!(l.follow_up&&l.follow_up<=dateToday()&&!['Socio','Descartado']
 const logError=err=>{console.error('CRM:',err);notify('Ocurrió un problema. Revisá la conexión y volvé a intentar.')};
 let client=null,leads=[],tab='tablero',signedIn=false,signupMode=false;
 let toastTimer;
+let marketing=null;
 function notify(msg){const e=$('#toast');e.textContent=msg;e.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.style.display='none',4600)}
 function notice(msg){const e=$('#notice');e.textContent=msg||'';e.hidden=!msg}
 function setTab(next){
  tab=next;
  $$('.navbutton').forEach(e=>e.classList.toggle('active',e.dataset.tab===tab));
- render();
+ render();if(tab==='marketing'&&marketing)marketing.load();
 }
 function filtered(){
  const q=$('#search').value.trim().toLocaleLowerCase('es'),src=$('#filterSource').value,pr=$('#filterPriority').value;
  return leads.filter(l=>(!src||l.source===src)&&(!pr||l.priority===pr)&&(!q||[l.name,l.phone,l.email,l.note,l.interest,l.entry_content,l.campaign,l.entry_channel].join(' ').toLocaleLowerCase('es').includes(q)));
 }
 function render(){
- $('#pageTitle').textContent=tab==='tablero'?'Tablero comercial':tab==='contactos'?'Todos los contactos':tab==='conversion'?'Conversión y campañas':'Agenda de seguimiento';
+ $('#pageTitle').textContent=tab==='tablero'?'Tablero comercial':tab==='contactos'?'Todos los contactos':tab==='conversion'?'Conversión y campañas':tab==='marketing'?'Central de campañas':'Agenda de seguimiento';
  $('#sectionTitle').textContent=tab==='tablero'?'Embudo de reclutamiento':tab==='contactos'?'Base de prospectos':'Próximas conversaciones';
  $('#statTotal').textContent=leads.length;
  $('#statActive').textContent=leads.filter(l=>!['Nuevo','Socio','Descartado'].includes(l.stage)).length;
  $('#statDue').textContent=leads.filter(isDue).length;
  $('#statWon').textContent=leads.filter(l=>l.stage==='Socio').length;
  $('#board').hidden=tab!=='tablero';$('#tablePanel').hidden=tab!=='contactos';$('#followPanel').hidden=tab!=='seguimientos';
- $('#conversionPanel').hidden=tab!=='conversion';$('#sectionTitle').hidden=tab==='conversion';$('.filters').hidden=tab==='conversion';if(tab==='conversion')drawConversion();
+ $('#conversionPanel').hidden=tab!=='conversion';$('#sectionTitle').hidden=tab==='conversion'||tab==='marketing';$('.filters').hidden=tab==='conversion'||tab==='marketing';$('#marketingPanel').hidden=tab!=='marketing';if(tab==='marketing'&&marketing)marketing.refresh();if(tab==='conversion')drawConversion();
  const items=filtered();
  if(tab==='tablero')drawBoard(items);
  if(tab==='contactos')drawTable(items);
@@ -194,7 +195,7 @@ async function login(e){
 $$('.navbutton').forEach(el=>el.addEventListener('click',()=>setTab(el.dataset.tab)));
 ['search','filterSource','filterPriority'].forEach(id=>$('#'+id).addEventListener('input',render));
 $('#add').addEventListener('click',()=>edit(null));
-$('#refresh').addEventListener('click',load);
+$('#refresh').addEventListener('click',async()=>{await load();if(tab==='marketing'&&marketing)await marketing.load()});
 $('#export').addEventListener('click',exportCSV);
 $('#leadForm').addEventListener('submit',saveLead);
 $('#cancelEditor').addEventListener('click',closeEditor);
@@ -202,7 +203,7 @@ $('#closeEditor').addEventListener('click',closeEditor);
 $('#editorOverlay').addEventListener('click',e=>{if(e.target===$('#editorOverlay'))closeEditor()});
 $('#deleteLead').addEventListener('click',deleteLead);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEditor()});
-$('#logout').addEventListener('click',async e=>{e.preventDefault();if(client){await client.auth.signOut();leads=[];signedIn=false;render();$('#loginOverlay').classList.add('open')}});
+$('#logout').addEventListener('click',async e=>{e.preventDefault();if(client){await client.auth.signOut();leads=[];signedIn=false;if(marketing)marketing.clear();render();$('#loginOverlay').classList.add('open')}});
 $('#loginForm').addEventListener('submit',login);
 $('#switchAuth').addEventListener('click',()=>{
  signupMode=!signupMode;$('#loginAction').textContent=signupMode?'Crear cuenta':'Ingresar';
@@ -215,5 +216,6 @@ if(!conf.url||!conf.publishableKey||!window.supabase){
  $('#loginAction').disabled=true;return;
 }
 client=window.supabase.createClient(conf.url,conf.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});
+if(typeof window.createNetworkerMarketing==='function')marketing=window.createNetworkerMarketing({getClient:()=>client,getLeads:()=>leads,isSignedIn:()=>signedIn,notify,dateToday});
 checkAuth().catch(logError);
 })();
