@@ -217,5 +217,5 @@ if(!conf.url||!conf.publishableKey||!window.supabase){
 }
 client=window.supabase.createClient(conf.url,conf.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});
 if(typeof window.createNetworkerMarketing==='function')marketing=window.createNetworkerMarketing({getClient:()=>client,getLeads:()=>leads,isSignedIn:()=>signedIn,notify,dateToday});
-checkAuth().catch(logError);
+checkAuth().then(()=>{if(signedIn&&location.hash==='#marketing')setTab('marketing')}).catch(logError);
 })();
