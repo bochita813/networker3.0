@@ -1,7 +1,7 @@
 // NETWORKER MAIL 3.0 — Google Apps Script, sin claves públicas.
 // Proyecto > Configuración > Propiedades del script: NW_MAIL_TOKEN (clave del CRM).
 const NW_ENDPOINT='https://uhdkmgljczeuxzrimfaf.supabase.co/functions/v1/networker-mail-worker';
-const NW_SITE='https://networker3.netlify.app';
+const NW_SITE='https://hernanbocci.netlify.app';
 function nwRequest(body){
   const token=PropertiesService.getScriptProperties().getProperty('NW_MAIL_TOKEN');
   if(!token||!/^[a-f0-9]{64}$/.test(token))throw new Error('Configurá NW_MAIL_TOKEN en las propiedades del script.');
