@@ -1,0 +1,53 @@
+// NETWORKER MAIL 3.0 — Google Apps Script, sin claves públicas.
+// Proyecto > Configuración > Propiedades del script: NW_MAIL_TOKEN (clave del CRM).
+const NW_ENDPOINT='https://uhdkmgljczeuxzrimfaf.supabase.co/functions/v1/networker-mail-worker';
+const NW_SITE='https://networker3.netlify.app';
+function nwRequest(body){
+  const token=PropertiesService.getScriptProperties().getProperty('NW_MAIL_TOKEN');
+  if(!token||!/^[a-f0-9]{64}$/.test(token))throw new Error('Configurá NW_MAIL_TOKEN en las propiedades del script.');
+  const res=UrlFetchApp.fetch(NW_ENDPOINT,{method:'post',contentType:'application/json',headers:{'x-nw-token':token},payload:JSON.stringify(body),muteHttpExceptions:true});
+  const status=res.getResponseCode();
+  if(status!==200)throw new Error('El CRM respondió HTTP '+status+'. Revisá la conexión.');
+  return JSON.parse(res.getContentText());
+}
+function checkNetworker(){
+  const s=nwRequest({action:'status'});
+  console.log('Conexión OK. Motor '+(s.enabled?'habilitado':'pausado')+'. Límite CRM: '+s.limit+'. Cuota disponible Google: '+MailApp.getRemainingDailyQuota());
+}
+function testNetworker(){
+  const to=PropertiesService.getScriptProperties().getProperty('NW_TEST_EMAIL');
+  if(!to||!/^[A-Za-z0-9._%+!-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(to))throw new Error('Configurá tu propio correo de prueba NW_TEST_EMAIL.');
+  checkNetworker();
+  if(MailApp.getRemainingDailyQuota()<1)throw new Error('Sin cuota de correo.');
+  MailApp.sendEmail({to:to,subject:'NETWORKER MAIL 3.0 | Prueba de conexión',body:'Tu cuenta Gmail ya puede enviar correos desde Apps Script. Este mensaje es una prueba solicitada por el administrador.',name:'Hernán Bocci · Punto Aparte'});
+}
+function runNetworker(){
+  const lock=LockService.getScriptLock();if(!lock.tryLock(1000))return;
+  try{
+    const state=nwRequest({action:'status'});if(!state.enabled)return;
+    const count=Math.min(8,Math.max(0,MailApp.getRemainingDailyQuota()-2));
+    for(let i=0;i<count;i++){
+      if(MailApp.getRemainingDailyQuota()<=2)break;
+      const res=nwRequest({action:'claim'}),job=res.job;if(!job)break;
+      // Una única dirección; no se permite una lista de destinatarios.
+      if(!/^[A-Za-z0-9._%+!-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(job.email)){nwRequest({action:'ack',id:job.id,status:'cancelled'});continue;}
+      const unsubscribe=NW_SITE+'/baja-email.html#'+encodeURIComponent(job.unsubscribe_token);
+      const body=job.body+'\n\n---\nRecibís este correo porque elegiste recibir contenidos de Punto Aparte.\nPara darte de baja: '+unsubscribe;
+      let result='accepted';
+      try{MailApp.sendEmail({to:job.email,subject:String(job.subject).replace(/[\r\n]+/g,' ').slice(0,160),body:body,name:'Hernán Bocci · Punto Aparte'});}catch(err){result='uncertain';}
+      // Si el resultado es ambiguo, no reintentar: evita enviar el mismo correo dos veces.
+      nwRequest({action:'ack',id:job.id,status:result});
+      if(result!=='accepted')break;
+    }
+  }finally{lock.releaseLock();}
+}
+function installNetworker(){
+  checkNetworker();
+  ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='runNetworker').forEach(t=>ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('runNetworker').timeBased().everyMinutes(15).create();
+  console.log('Motor instalado. Activá los envíos desde el CRM solo después de comprobar el correo de prueba.');
+}
+function stopNetworker(){
+  ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='runNetworker').forEach(t=>ScriptApp.deleteTrigger(t));
+  console.log('Activador eliminado.');
+}
