@@ -36,10 +36,10 @@ const topics=[
 const welcome=[
 ['Qué bueno que llegaste','Gracias por elegir seguir en contacto. Este espacio es para compartir ideas sobre relaciones, aprendizaje y nuevas posibilidades.'],
 ['Hablemos de vos','¿Qué te gustaría que pasara en esta etapa de tu vida? Si te sirve, respondeme con una idea que estés explorando.'],
-['Una herramienta para conocerte','Te invito a hacer el diagnóstico orientativo: https://networker3.netlify.app/propuesta-microcta.html#diagnostico'],
+['Una herramienta para conocerte','Te invito a hacer el diagnóstico orientativo: https://hernanbocci.netlify.app/propuesta-microcta.html#diagnostico'],
 ['Una idea para llevarte','Elegí una habilidad que quieras mejorar y dedicále quince minutos hoy.'],
-['Preguntas que vale la pena hacer','Conocé las tareas, costos y condiciones antes de decidir: https://networker3.netlify.app/propuesta-microcta.html#detalles'],
-['Punto Aparte','Te comparto mi espacio de contenidos: https://networker3.netlify.app/punto-aparte.html'],
+['Preguntas que vale la pena hacer','Conocé las tareas, costos y condiciones antes de decidir: https://hernanbocci.netlify.app/propuesta-microcta.html#detalles'],
+['Punto Aparte','Te comparto mi espacio de contenidos: https://hernanbocci.netlify.app/punto-aparte.html'],
 ['¿Tomamos un mate?','Si te interesa conversar sobre tu situación, escribime sin compromiso: https://wa.me/5492920596695']
 ];
 function suffix(){return '\n\nHernán Bocci · Punto Aparte\nSi preferís no recibir más contenidos, respondé solicitando la baja.'}
