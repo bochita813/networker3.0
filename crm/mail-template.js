@@ -1,0 +1,14 @@
+function nwRenderMail(subject,body,unsubscribe){
+  const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const url=s=>{try{if(!/^https:\/\/[^\s<>"']+$/i.test(s))return '';const u=new URL(s);return u.protocol==='https:'&&!u.username&&!u.password?u.href:''}catch{return /^https:\/\/[a-z0-9.-]+(?:\/[^\s<>"']*)?$/i.test(s)?s:''}};
+  const inline=s=>String(s).split(/(https:\/\/[^\s<>"']+)/g).map(x=>url(x)?'<a href="'+escape(url(x))+'" style="color:#A83915;word-break:break-word">'+escape(x)+'</a>':escape(x)).join('');
+  const rows=String(body??'').split(/\r?\n/).map(line=>{
+    const image=line.match(/^Imagen:\s*(https:\/\/\S+)\s*$/i);
+    if(image&&url(image[1]))return '<img src="'+escape(url(image[1]))+'" alt="Imagen de Punto Aparte" width="520" style="display:block;max-width:100%;height:auto;border-radius:10px;margin:14px auto">';
+    const btn=line.match(/^Botón:\s*(.{1,80}?)\s*\|\s*(https:\/\/\S+)\s*$/i);
+    if(btn&&url(btn[2]))return '<p style="margin:22px 0;text-align:center"><a href="'+escape(url(btn[2]))+'" style="display:inline-block;padding:14px 24px;background:#FF5A1F;color:#111111;font-weight:bold;text-decoration:none;border-radius:7px">'+escape(btn[1])+'</a></p>';
+    if(!line.trim())return '<div style="height:12px">&nbsp;</div>';
+    return '<div style="line-height:1.7;overflow-wrap:anywhere">'+inline(line)+'</div>';
+  }).join('');
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#F4EFE7;font-family:Arial,Helvetica,sans-serif;color:#242424"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#F4EFE7"><tr><td align="center" style="padding:18px 8px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#FFFFFF"><tr><td style="padding:26px 24px;background:#111111;color:#FFFFFF"><div style="font-size:12px;letter-spacing:2px;color:#FF875D">HERNÁN BOCCI</div><div style="font-weight:bold;font-size:26px;margin-top:8px">PUNTO<span style="color:#FF875D"> APARTE.</span></div></td></tr><tr><td style="padding:28px 24px;font-size:16px"><h1 style="margin:0 0 24px;font-size:26px;line-height:1.25;color:#111111">'+escape(subject)+'</h1>'+rows+'</td></tr><tr><td style="border-top:3px solid #FF5A1F;padding:22px 24px;background:#F9F7F3;font-size:12px;line-height:1.6;color:#666">Recibís este mensaje porque elegiste recibir contenidos de Punto Aparte.<br>'+(unsubscribe&&url(unsubscribe)?'<a style="color:#555" href="'+escape(url(unsubscribe))+'">Dejar de recibir emails</a>':'Dejar de recibir emails (enlace individual al enviar)')+'</td></tr></table></td></tr></table></body></html>';
+}
