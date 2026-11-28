@@ -84,7 +84,8 @@
     "second_photo": "",
     "third_title": "Alguien que habla del equipo",
     "third_text": "Qué significa sentirse acompañado, sin guiones ni testimonios inventados.",
-    "button": "Quiero hacerles una pregunta →"
+    "button": "Quiero hacerles una pregunta →",
+    "extras": []
   },
   "contact": {
     "eyebrow": "Si llegaste hasta acá...",
