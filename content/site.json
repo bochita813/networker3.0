@@ -3,8 +3,8 @@
     "tagline": "EMPRENDER EN COMUNIDAD"
   },
   "navigation": {
-    "conoceme": "Conoceme",
-    "mi_gente": "Mi equipo",
+    "conoceme": "Conocenos",
+    "mi_gente": "Nuestro equipo",
     "lo_que_hago": "Lo que hacemos",
     "hablemos": "Hablemos ↗"
   },
@@ -13,17 +13,17 @@
     "title_before": "¿Y si lo mejor de lo que viene ",
     "title_accent": "todavía no lo conocés?",
     "lead": "A veces no estamos buscando cambiar nuestra vida entera, solo necesitamos descubrir que todavía hay cosas que nos pueden entusiasmar de VERDAD.",
-    "about": "Soy Hernán, me encanta conocer personas con impulso, entusiastas y soñadoras. Pero, sobre todo, me gusta escuchar historias, compartir lo que aprendí en todos estos años, aprender de otros y descubrir lo que podemos construir cuando nos cruzamos con las personas adecuadas.",
-    "primary_button": "Contame qué estás buscando →",
-    "secondary_button": "Conoceme un poquito",
+    "about": "Somos Hernán y Soledad. Nos encanta conocer personas con impulso, entusiastas y soñadoras. Pero, sobre todo, nos gusta escuchar historias, compartir lo que aprendimos en todos estos años, aprender de otros y descubrir lo que podemos construir cuando nos cruzamos con las personas adecuadas.",
+    "primary_button": "Contanos qué estás buscando →",
+    "secondary_button": "Conocenos un poquito",
     "micro": "Sin presiones, sin promesas mágicas. Una conversación REAL entre personas.",
     "photo_note": "Un café y una buena charla."
   },
   "paths": {
-    "eyebrow": "Antes de hablar de mí, hablemos de vos",
+    "eyebrow": "Antes de hablar de nosotros, hablemos de vos",
     "title_before": "¿Qué te gustaría que pasara ",
     "title_accent": "en esta etapa de tu vida?",
-    "intro": "No llegamos todos al mismo lugar ni estamos buscando lo mismo, por eso te propongo que elijas la situación que más se parece a la tuya HOY. Lo importante es que te lleves algo útil de esta visita.",
+    "intro": "No llegamos todos al mismo lugar ni estamos buscando lo mismo, por eso te proponemos que elijas la situación que más se parece a la tuya HOY. Lo importante es que te lleves algo útil de esta visita.",
     "first_title": "Estoy bien, pero tengo curiosidad de cosas nuevas.",
     "first_text": "Ya tengo mi trabajo o profesión, pero siento que me falta algo; me gustaría explorar qué más podría construir.",
     "second_title": "Siempre emprendí, pero siento que quiero evolucionar.",
@@ -32,34 +32,34 @@
     "third_text": "Quiero saber que es una franquicia DIGITAL, porque es la mejor opción del momento en latinoamerica,  qué tendría que hacer y cómo se empieza."
   },
   "about": {
-    "eyebrow": "Un poco de mí, de verdad",
-    "title_before": "Me gustan los negocios. ",
-    "title_accent": "Pero mucho mas me gusta hacerlo en equipo",
-    "first_text": "Soy de esos que pueden quedarse conversando horas con alguien que recién conocen. Me interesan las personas que tienen ganas de hacer cosas, las que están empezando algo nuevo y también las que alguna vez tuvieron que volver a empezar. ",
-    "second_text": "No es importante que pienses como yo, tampoco busco convencerte de nada. A mi me entusiasma compartir lo que sé y lo que aprendí en toda mi carrera profesional, escuchar lo que te pasa y ver si podemos aportarnos algo de manera reciproca y genuina.",
-    "button": "Me gustaría charlar con vos →",
+    "eyebrow": "Un poco de nosotros, de verdad",
+    "title_before": "Nos gustan los negocios. ",
+    "title_accent": "Pero mucho más nos gusta hacerlo en equipo",
+    "first_text": "Somos de esas personas que pueden quedarse conversando horas con alguien que recién conocen. Nos interesan las personas que tienen ganas de hacer cosas, las que están empezando algo nuevo y también las que alguna vez tuvieron que volver a empezar.",
+    "second_text": "No es importante que pienses como nosotros, tampoco buscamos convencerte de nada. Nos entusiasma compartir lo que sabemos y lo que aprendimos en nuestras carreras profesionales, escuchar lo que te pasa y ver si podemos aportarnos algo de manera recíproca y genuina.",
+    "button": "Nos gustaría charlar con vos →",
     "quote": "«Hay personas que llegan a tu vida y te muestran posibilidades que antes ni estabas mirando».",
-    "bottom_text": "Eso es lo que más disfruto de esta actividad: las conversaciones que no habría tenido de otra manera, y como cada una nos abren un mundo de nuevas oportunidades."
+    "bottom_text": "Eso es lo que más disfrutamos de esta actividad: las conversaciones que no habríamos tenido de otra manera y cómo cada una nos abre un mundo de nuevas oportunidades."
   },
   "reflection": {
     "eyebrow": "Una idea para llevarte hoy",
     "title_before": "No todas las oportunidades ",
     "title_accent": "son para todas las personas.",
-    "introduction": "Antes de decirle que sí a un negocio o un proyecto —al mío o a cualquier otro— hay tres preguntas que SIEMPRE tenes que hacerte y que te merecés responder con tranquilidad.",
+    "introduction": "Antes de decirle que sí a un negocio o un proyecto —al nuestro o a cualquier otro— hay tres preguntas que SIEMPRE tenes que hacerte y que te merecés responder con tranquilidad.",
     "first_title": "¿Qué querés sumar a tu vida?",
     "first_text": "¿Más y mejores relaciones? ¿Un desafío? ¿un nuevo rumbo? ¿Una actividad adicional?",
     "second_title": "¿Qué estás dispuesto a poner vos?",
-    "second_text": "No hablo de dinero hablo de cosas mas valiosas. Tiempo, constancia, energía y ganas reales de aprender.",
+    "second_text": "No hablamos de dinero, hablamos de cosas mas valiosas. Tiempo, constancia, energía y ganas reales de aprender.",
     "third_title": "¿Con quién querés construirlo?",
     "third_text": "Un buen sistema de trabajo importa y es condición básica, pero las personas con las que lo desarrollás, también.",
     "conclusion": "Si hoy te llevás estas tres preguntas, nuestra primera conversación ya valió la pena."
   },
   "business": {
-    "eyebrow": "Si te interesa saber qué estoy construyendo",
-    "title_before": "No te voy a pedir que creas en una promesa. ",
-    "title_accent": "Te voy a mostrar un sistema real, validado y funcionando en mas de 50 paises.",
-    "first_text": "Desarrollo franquicias digitales  de manera independiente asociado estratégicamente con el laboratorio Pharmanex perteneciente a la empresa Nuskin. Somos mas de 1000 profesionales distribuidos en varios países que nos convoca el compromiso de diseñar una carrera empresarial de mediano y largo plazo; priorizando la relación con los clientes y sobre todo potencializando el trabajo ( verdadero y genuino) de equipo.",
-    "second_text": "Si te interesa de verdad , te muestro qué y como comercializamos, cómo organizamos el trabajo, cual es nuestro sistema validado e incluso como vas a tener resultados reales en menos de una semana. Con todo lo bueno y sin todo lo malo del networking.",
+    "eyebrow": "Si te interesa saber qué estamos construyendo",
+    "title_before": "No te vamos a pedir que creas en una promesa. ",
+    "title_accent": "Te vamos a mostrar un sistema real, validado y funcionando en mas de 50 paises.",
+    "first_text": "Desarrollamos franquicias digitales de manera independiente, asociados estratégicamente con el laboratorio Pharmanex perteneciente a la empresa Nuskin. Somos mas de 1000 profesionales distribuidos en varios países que nos convoca el compromiso de diseñar una carrera empresarial de mediano y largo plazo; priorizando la relación con los clientes y sobre todo potencializando el trabajo ( verdadero y genuino) de equipo.",
+    "second_text": "Si te interesa de verdad , te mostramos qué y como comercializamos, cómo organizamos el trabajo, cual es nuestro sistema validado e incluso como vas a tener resultados reales en menos de una semana. Con todo lo bueno y sin todo lo malo del networking.",
     "primary_button": "Quiero conocer el negocio →",
     "secondary_button": "Primero quiero conocer el equipo",
     "disclosure": "Es una actividad independiente; no un empleo ni una promesa de ingresos. ",
@@ -73,10 +73,10 @@
     "benefit4_text": "Para que realmente tengas éxito vas a necesitar entusiamo y enfoque. De lo demás nos ocupamos nosotros."
   },
   "stories": {
-    "eyebrow": "Más allá de lo que yo pueda contarte",
+    "eyebrow": "Más allá de lo que podamos contarte",
     "title_before": "Las historias más lindas ",
     "title_accent": "son las que cuentan sus protagonistas.",
-    "intro": "Me gustaría que conozcas a personas reales, cómo llegaron, qué aprendieron, como se han superado y cómo viven esta experiencia. No solamente sus logros.",
+    "intro": "Nos gustaría que conozcas a personas reales, cómo llegaron, qué aprendieron, como se han superado y cómo viven esta experiencia. No solamente sus logros.",
     "first_title": "Alguien que empezó desde cero",
     "first_text": "Acá irá su historia en primera persona, con nombre y autorización.",
     "second_title": "Alguien que ya tenía experiencia",
@@ -84,15 +84,15 @@
     "second_photo": "",
     "third_title": "Alguien que habla del equipo",
     "third_text": "Qué significa sentirse acompañado, sin guiones ni testimonios inventados.",
-    "button": "Quiero hacerte una pregunta →"
+    "button": "Quiero hacerles una pregunta →"
   },
   "contact": {
     "eyebrow": "Si llegaste hasta acá...",
-    "title_before": "Me gustaría saber ",
+    "title_before": "Nos gustaría saber ",
     "title_accent": "qué te trajo.",
     "first_text": "Tal vez estás buscando un negocio, un cambio de aire,  algo que te devuelva el entusiasmos.\nTal vez necesitas una segunda actividad, algo que puedas hacer de manera digital, un ingreso extra en tu economía, o simplemente conectaste con algo de lo que  leíste. ",
-    "second_text": "Sea lo que sea, me gusta más una pregunta sincera que un formulario interminable. Contame un poquito sobre vos.",
-    "button": "Hablemos, Hernán →",
+    "second_text": "Sea lo que sea, nos gusta más una pregunta sincera que un formulario interminable. Contanos un poquito sobre vos.",
+    "button": "Hablemos →",
     "whatsapp": "+542920596695"
   }
 }
