@@ -294,7 +294,7 @@ content:
             options:
               media: images
           - name: extras
-            label: "Testimonios adicionales (agregar todos los que quieras)"
+            label: "Testimonios adicionales por segmento (sin límite)"
             type: object
             list: true
             fields:
@@ -302,6 +302,18 @@ content:
                 label: "Identificador único permanente (ej. maria-cordoba)"
                 type: string
                 required: true
+              - name: category
+                label: "Segmento del testimonio"
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: desde-cero
+                      label: "Personas que están empezando"
+                    - name: experiencia
+                      label: "Personas con experiencia"
+                    - name: equipo
+                      label: "Personas que hablan del equipo"
               - name: published
                 label: "Publicar testimonio autorizado"
                 type: boolean
